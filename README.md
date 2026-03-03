@@ -1,2 +1,2 @@
 # TFG DAW
-Trabajo definal de grado de DAW
+Trabajo de final de grado de DAW
