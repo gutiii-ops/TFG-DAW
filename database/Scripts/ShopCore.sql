@@ -11,7 +11,6 @@ dependen de la tabla 'users' para establecer relaciones de clave foránea.
 Descripción: Almacena todos los artículos disponibles para la venta (suplementos, ropa, etc.).
 Notas: 
 - 'product_category' usa TINYINT para optimizar espacio (hasta 255 categorías).
-- 'product_price' usa DECIMAL para evitar errores de redondeo de moneda.
 */
 CREATE TABLE [dbo].[products] (
 	[product_id] INT IDENTITY(1,1) PRIMARY KEY,

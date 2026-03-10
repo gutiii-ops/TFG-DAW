@@ -77,8 +77,7 @@ CREATE TABLE [dbo].[roles] (
 
 /* Tabla: role_permissions (Permisos por Rol)
 Descripción: Tabla puente que define qué acciones exactas puede realizar cada rol.
-Relación (N:M): Une 'roles' con 'permissions'. Si mañana un "Entrenador" pierde el permiso 
-de borrar usuarios, se elimina aquí y aplica a todos los entrenadores a la vez.
+Relación (N:M): Une 'roles' con 'permissions'.
 Nota: Usa clave primaria compuesta para evitar asignar el mismo permiso dos veces al mismo rol.
 */
 CREATE TABLE [dbo].[role_permissions] (
