@@ -1,26 +1,22 @@
-// Orquestador general para ejecutar los diferentes modulos de React según los eventos que se produzcan en la página
-import { useState } from 'react'
+/* =======================================================================================================================
+                        App.jsx - Orquestador general para ejecutar los diferentes módulos de React
+======================================================================================================================= */
+// Import base de React
+import React from 'react';
+// Import de los módulos necesarios para el enrutamiento
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// Import de las páginas a mostrar
+import Home from './pages/Public/home.jsx';
 
-
+// Componente principal de la aplicación que maneja el enrutamiento entre las diferentes páginas
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
-export default App
+export default App;

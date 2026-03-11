@@ -1,0 +1,36 @@
+/* =======================================================================================================================
+                                  navbar.css - Estilos para la barra de navegación superior
+======================================================================================================================= */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(13,13,13,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+
+.nav-logo {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:28px;font-weight:900;
+  letter-spacing:-1px;color:var(--text);
+  text-decoration:none;
+}
+.nav-logo span{color:var(--y)}
+
+.nav-links {display:flex;gap:4px;align-items:center}
+.nav-links a {
+  font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--muted);text-decoration:none;padding:6px 14px;border-radius:4px;
+  transition:color .2s,background .2s;
+}
+.nav-links a:hover {color:var(--y);background:rgba(240,224,0,.07)}
+.nav-links a.active {color:var(--y)}
+
+.nav-cta {
+  background:var(--y);color:#000;font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1px;
+  padding:9px 22px;border-radius:4px;border:none;cursor:pointer;
+  text-decoration:none;transition:background .2s,transform .1s;
+}
+.nav-cta:hover {background:var(--y2);transform:translateY(-1px)}
