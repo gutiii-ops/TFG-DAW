@@ -9,7 +9,9 @@ import { Navbar } from '../../components/navbar.jsx';
 // Componente funcional que representa la página de inicio pública
 const Home = () => {
   return (
-    <Navbar />
+    <header>
+      <Navbar />
+    </header>
   );
 };
 
