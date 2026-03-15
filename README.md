@@ -1,4 +1,4 @@
-# GymBooSTR
+# GymMgmt
 
 ## Resumen
 Una App Web destinada a los gimnasios para eliminar el uso de múltiples empresas externas que gestionen como servicios web la página oficial, las reservas del propio gimnasio y la posibilidad de una tienda para el propio dueño.
@@ -38,4 +38,4 @@ El proyecto está dividido en los siguientes módulos o directorios principales:
 - **`frontend/`**: Aplicación web del lado del cliente, construida con React (usando Vite). Contiene toda la interfaz de usuario, componentes y assets públicos.
 - **`backend/`**: Servidor desarrollado en Node.js para implementar la API REST. Gestionará la lógica de negocio y las peticiones enviadas desde el cliente.
 - **`database/`**: Contiene scripts y archivos relacionados con la definición, creación y poblado de la base de datos corporativa (Microsoft SQL Server).
-- **`docs/`**: Documentación adicional del proyecto. Actualmente incluye diagramas y modelos relacionales de la base de datos de GymBooSTR en formato visual e imprimible (PNG, PDF).
+- **`docs/`**: Documentación adicional del proyecto. Actualmente incluye diagramas y modelos relacionales de la base de datos de GymMgmt en formato visual e imprimible (PNG, PDF).

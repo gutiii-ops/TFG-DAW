@@ -1,5 +1,5 @@
 /* =======================================================================================================================
-                                  navbar.css - Estilos para la barra de navegación superior
+                                  navbar.css - Estilos para la navbar de la aplicación
 ======================================================================================================================= */
 nav {
   position:fixed; top:0; left:0; right:0; z-index:100;
@@ -39,15 +39,19 @@ nav {
 .nav-cta:active { transform:translateY(0); background:var(--y2); }
 
 .nav-cart {
-  background:var(--y); padding:4px 18px; border-radius:4px; border:none; cursor:pointer; text-decoration:none; transition:background .2s, transform .1s;
+  background:var(--y); padding:4px 18px; 
+  border-radius:4px; border:none; cursor:pointer; 
+  text-decoration:none; transition:background .2s, transform .1s;
 }
 .nav-cart:hover { transform:translateY(-1px); }
 .nav-cart:active { transform:translateY(0); background:var(--y2); }
 .nav-cart-badge {
   position:absolute; top:8px; right:8px;
   background:var(--red); color:#fff; font-size:10px; font-weight:700;
-  width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  width:16px; height:16px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center;
 }
 .nav-cart-icon {
   width:20px; height:24px; fill:var(--bg);
+  padding-top: 25%;
 }

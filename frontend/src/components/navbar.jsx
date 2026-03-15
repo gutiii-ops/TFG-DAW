@@ -12,11 +12,11 @@ import CartIcon from '../assets/icons/shopping-cart_icon.svg?react';
 export const Navbar = () => {
   return (
     <nav>
-      <a className="nav-logo" href="/"><span>Gym</span>BooSTR</a>
+      <a className="nav-logo" href="/"><span>Gym</span>Mgmt</a>
       <ul className="nav-links">
         <li><a href="">Sobre Nosotros</a></li>
+        <li><a href="">Servicios</a></li>
         <li><a href="">Tienda</a></li>
-        <li><a href="">Reservas</a></li>
         <li><a href="">Contacto</a></li>
       </ul>
       <button className="nav-cta" href="">Log In</button>
