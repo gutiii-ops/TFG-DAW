@@ -1,7 +1,7 @@
 /* =======================================================================================================================
                                       global.css - Estilos globales para toda la aplicación
 ======================================================================================================================= */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
 :root{
   --y:#f0e000;
   --y2:#ffd000;
@@ -16,23 +16,27 @@
   --green:#39d97a;
 }
 
-html{scroll-behavior:smooth}
-body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+html { scroll-behavior:smooth }
+body {
+  font-family:'Barlow',sans-serif;
+  background:var(--bg); color:var(--text);
+  overflow-x:hidden
+}
 
 /* ── RESPONSIVE ── */
-@media(max-width:900px){
-  nav{padding:0 20px}
-  .nav-links{display:none}
-  .hero h1{font-size:clamp(48px,16vw,90px)}
-  .hero-stats{gap:24px}
-  section{padding:70px 20px}
-  .nutrition-layout,.calendar-layout{grid-template-columns:1fr}
-  .footer-top{grid-template-columns:1fr 1fr}
-  .nutrition-text{position:static}
+@media(max-width:900px) {
+  nav { padding:0 20px }
+  .nav-links { display:none }
+  .hero h1 { font-size:clamp(48px,16vw,90px) }
+  .hero-stats { gap:24px} 
+  section { padding:70px 20px }
+  .nutrition-layout,.calendar-layout { grid-template-columns:1fr }
+  .footer-top { grid-template-columns:1fr 1fr }
+  .nutrition-text { position:static }
 }
-@media(max-width:600px){
-  .footer-top{grid-template-columns:1fr}
-  .shop-grid{grid-template-columns:1fr}
-  .hero-stats{gap:20px}
-  .stat-num{font-size:32px}
+@media(max-width:600px) {
+  .footer-top { grid-template-columns:1fr }
+  .shop-grid { grid-template-columns:1fr }
+  .hero-stats { gap:20px }
+  .stat-num { font-size:32px }
 }

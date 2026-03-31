@@ -19,8 +19,8 @@ export const Navbar = () => {
         <li><a href="">Tienda</a></li>
         <li><a href="">Contacto</a></li>
       </ul>
-      <button className="nav-cta" href="">Log In</button>
-      <button className="nav-cart" href="">
+      <button className="nav-cta" href="/">Log In</button>
+      <button className="nav-cart" href="/">
         <CartIcon className="nav-cart-icon"/>
         <span className="nav-cart-badge">0</span>
       </button>
