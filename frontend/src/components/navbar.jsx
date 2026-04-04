@@ -26,4 +26,5 @@ export const Navbar = () => {
       </button>
     </nav>
   );
+  
 };

@@ -1,3 +1,7 @@
+import '../styles/components/footer.css';
+import FacebookIcon from '../assets/icons/facebook-color_icon.svg?react';
+import InstagramIcon from '../assets/icons/instagram-color_icon.svg?react';
+import TwitterIcon from '../assets/icons/twitter-color_icon.svg?react';
 
 export const Footer = () => {
   return (
@@ -5,13 +9,12 @@ export const Footer = () => {
       <div className="footer-inner">
         <article className="footer-top">
           <section className="footer-brand">
-            <a className="nav-logo" href="/"><span>Gym</span>BooSTR</a>
+            <a className="nav-logo" href="/"><span>Gym</span>Mgmt</a>
             <p>El gimnasio que te empuja a ir más lejos. Entrena fuerte, come bien, viste diferente.</p>
             <section className="footer-social">
-              <a className="social-btn" href="/">📸</a>
-              <a className="social-btn" href="/">🎵</a>
-              <a className="social-btn" href="/">🐦</a>
-              <a className="social-btn" href="/">📘</a>
+              <a className="social-btn" href="/"><InstagramIcon className="social-icon"/></a>
+              <a className="social-btn" href="/"><TwitterIcon className="social-icon"/></a>
+              <a className="social-btn" href="/"><FacebookIcon className="social-icon"/></a>
             </section>
           </section>
           <section className="footer-col">

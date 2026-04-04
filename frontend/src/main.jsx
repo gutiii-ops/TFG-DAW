@@ -8,11 +8,13 @@ import { createRoot } from 'react-dom/client'
 // Import de la Aplicación
 import App from './App.jsx'
 // Import de estilos globales para la página
-import './styles/global.css';
+import './styles/global.css'
 
 // Definición Root para uso de React
-createRoot(document.getElementById('root')).render(
+const root = createRoot(document.getElementById('root'))
+
+root.render(
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 )
