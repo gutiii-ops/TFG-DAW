@@ -72,7 +72,8 @@
   color: var(--muted);
 }
 
-.login-form input {
+.login-form input,
+.login-form select {
   width: 100%;
   padding: 0.875rem 1rem;
   border-radius: 1rem;
@@ -80,9 +81,17 @@
   background: rgba(255, 255, 255, 0.04);
   color: var(--text);
   outline: none;
+  font-family: inherit;
+  font-size: 0.95rem;
 }
 
-.login-form input:focus {
+.login-form select option {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.login-form input:focus,
+.login-form select:focus {
   border-color: var(--y2);
   box-shadow: 0 0 0 0.25rem rgba(255, 208, 0, 0.12);
 }
@@ -125,4 +134,99 @@
     top: 0.875rem;
     right: 0.875rem;
   }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.
+
+/* ─── Estilos para usuario autenticado ─── */
+.login-authenticated {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-user-link {
+  appearance: none;
+  border: none;
+  background: linear-gradient(135deg, var(--y), var(--y2));
+  color: var(--bg3);
+  font-weight: 700;
+  padding: 0.95rem 1.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.login-user-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.875rem 1.875rem rgba(0, 0, 0, 0.18);
+}
+
+.login-logout-button {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.login-logout-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+login-row {
+  display: flex;
+  gap: 1.125rem;
+  width: 100%;
+}
+
+.login-row > * {
+  flex: 1;
+}
+
+@media (max-width: 500px) {
+  .login-row {
+    flex-direction: column;
+  }
+}
+
+.login-toggle-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+.login-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--y);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1em;
+  text-decoration: underline;
+  transition: color 0.15s;
+}
+
+.login-toggle-btn:hover {
+  color: var(--y2);
 }

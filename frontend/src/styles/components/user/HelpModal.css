@@ -1,0 +1,154 @@
+/* ── Modal de Ayuda ── */
+.help-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: grid;
+  place-items: center;
+  z-index: 1200;
+  padding: 1.5rem;
+}
+
+.help-modal-content {
+  width: min(600px, 100%);
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  position: relative;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(240, 224, 0, 0.2);
+  color: var(--y);
+}
+
+.help-modal-content h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.help-modal-content > p {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.help-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.help-option {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.help-option:hover {
+  border-color: var(--y);
+  background: rgba(240, 224, 0, 0.05);
+}
+
+.help-option.selected {
+  border-color: var(--y);
+  background: rgba(240, 224, 0, 0.12);
+}
+
+.help-icon {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.help-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.help-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.help-form {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.help-textarea {
+  width: 100%;
+  padding: 1rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  color: var(--text);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s ease;
+}
+
+.help-textarea:focus {
+  outline: none;
+  border-color: var(--y);
+  box-shadow: 0 0 0 3px rgba(240, 224, 0, 0.1);
+}
+
+.btn-send-help {
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--y), var(--y2));
+  color: var(--bg3);
+  border: none;
+  border-radius: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-send-help:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1000px) {
+  .help-options {
+    grid-template-columns: 1fr;
+  }
+}

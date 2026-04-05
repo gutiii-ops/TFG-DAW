@@ -3,19 +3,49 @@
               Punto de entrada del backend (orquestador)
    ================================================================== */
 
-const express = require('express');
-const app = express();
+// Cargar las variables de entorno desde el archivo .env lo primero de todo
+require('dotenv').config()
 
-// 1. Importamos el archivo de rutas
-const userRoutes = require('./api/routes/userRoutes');
+const express = require('express')
+const cors = require('cors')
 
+const app = express()
+
+// ── MIDDLEWARES GLOBALES ──
 // Importante para leer el JSON que envías desde React
-app.use(express.json());
+app.use(express.json())
+
+// Habilitar CORS para permitir peticiones del cliente (React usualmente en 5173 o 3000)
+app.use(cors())
+const authRoutes = require('./api/routes/authRoutes')
+const userRoutes = require('./api/routes/userRoutes')
+const productRoutes = require('./api/routes/productRoutes')
+const orderRoutes = require('./api/routes/orderRoutes')
+const reservationRoutes = require('./api/routes/reservationRoutes')
+
+// 1. Importamos los archivos de rutas
 
 // 2. ENCHUFAMOS LAS RUTAS (Aquí está la magia)
-// Le decimos: "Todo lo que empiece por /api/users, gestiónalo con userRoutes"
-app.use('/api/users', userRoutes);
+app.use('/api/login', authRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/products', productRoutes)
+app.use('/api/orders', orderRoutes)
+app.use('/api/reservations', reservationRoutes)
 
-app.listen(8000, () => {
-    console.log('Servidor corriendo en puerto 8000');
-});
+// 3. MIDDLEWARE: MANEJADOR DE RUTAS INEXISTENTES (404)
+app.use((req, res, next) => {
+  res.status(404).json({ error: 'Ruta no encontrada' })
+})
+
+// 4. MIDDLEWARE: GLOBAL ERROR HANDLER
+// Atrapa de forma centralizada cualquier throw o excepción no gestionada de los endpoints
+app.use((err, req, res, next) => {
+  console.error('[Error Crítico Servidor]:', err.stack || err.message)
+  res.status(500).json({ error: 'Ocurrió un error inesperado en el servidor' })
+})
+
+// 5. INICIAR EL SERVIDOR
+const PORT = process.env.PORT || 8000
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor backend corriendo en puerto ${PORT}`)
+})

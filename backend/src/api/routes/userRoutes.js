@@ -1,12 +1,13 @@
 // routes/userRoutes.js
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-// Importamos el guardia (middleware) y el cocinero (controlador)
-const { authUserToken } = require('../middlewares/authMiddleware.js');
-const { updateUser } = require('../controllers/userController');
+const { authUserToken } = require('../middlewares/authMiddleware.js')
+const { getUser, updateUser } = require('../controllers/userController')
 
 // DEFINICIÓN DEL FLUJO: Ruta -> Middleware -> Controlador
-router.put('/perfil', authUserToken, updateUser);
+router.get('/:id', authUserToken, getUser)
+router.put('/:id', authUserToken, updateUser)
+router.put('/perfil', authUserToken, updateUser)
 
-module.exports = router;
+module.exports = router

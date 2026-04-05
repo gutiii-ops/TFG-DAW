@@ -3,26 +3,24 @@
         Servicio para manejar la autenticación de usuarios.
 ================================================================ */
 
-export const authUser = async (type, email, password) => {
-  const credentials = { type, email, password };
+export const authUser = async (email, password) => {
   try {
-    // Mandamos una solicitud POST al backend para autenticar al usuario
-    console.log('Enviando solicitud de autenticación al backend con:', credentials);
     const response = await fetch('http://localhost:8000/api/login', {
-      method: 'POST', 
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ credentials }),
-    });
+      body: JSON.stringify({ email, password })
+    })
 
     if (!response.ok) {
-      throw new Error('Error en la autenticación');
-    } else {
-      const data = await response.json();
-      return data; // Devuelve el token de autenticación
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.error || 'Error en la autenticación')
     }
+
+    const data = await response.json()
+    return data
   } catch (error) {
-    return { error: error.message };
+    return { error: error.message }
   }
-};
+}

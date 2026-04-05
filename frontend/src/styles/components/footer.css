@@ -2,11 +2,7 @@ footer {
   background: var(--bg);
   border-top: 1px solid var(--border);
   padding: 3.75rem 2.5rem 1.875rem;
-  position: fixed;
-  bottom: 0;
   width: 100%;
-  left: 0;
-  right: 0;
 }
 .footer-inner {
   max-width: 75rem;
@@ -50,13 +46,12 @@ footer {
     background 0.15s,
     border-color 0.15s;
 }
-.social-icon{
+.social-icon {
   width: 2.25rem;
   height: 2.25rem;
 }
 .social-btn:hover {
-  background: var(--y);
-  border-color: var(--y);
+  transform: scale(1.1);
 }
 .footer-col h4 {
   font-family: 'Barlow Condensed', sans-serif;

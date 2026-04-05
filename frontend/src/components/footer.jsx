@@ -1,8 +1,14 @@
+/* =======================================================================================================================
+          footer.jsx - Componente funcional que muestra el pie de página con enlaces y redes sociales
+======================================================================================================================= */
+// Import de estilos específicos para el pie de página
 import '../styles/components/footer.css';
+// Imports de iconos SVG como componentes de React
 import FacebookIcon from '../assets/icons/facebook-color_icon.svg?react';
 import InstagramIcon from '../assets/icons/instagram-color_icon.svg?react';
 import TwitterIcon from '../assets/icons/twitter-color_icon.svg?react';
 
+// Componente funcional que agrupa todo el bloque inferior de la aplicación (Footer)
 export const Footer = () => {
   return (
     <footer>
@@ -43,7 +49,7 @@ export const Footer = () => {
           </section>
         </article>
         <section className="footer-bottom">
-          <span>&copy; {new Date().getFullYear()} GymBooSTR · Todos los derechos reservados</span>
+          <span>&copy; {new Date().getFullYear()} GymMgmt · Todos los derechos reservados</span>
           <span>Diseñado para romper límites ⚡</span>
         </section>
       </div>
