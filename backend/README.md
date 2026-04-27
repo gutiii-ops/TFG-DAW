@@ -1,52 +1,69 @@
-# Core Backend (Node.js/Express) - GymMgmt 🚀
+# GymMgmt Core Backend (Node.js/Express)
 
-Este directorio aloja toda la lógica del lado del servidor de la aplicación **GymMgmt**. Está construido principalmente usando **Node.js** y **Express.js**, exponiendo una API RESTful completamente asíncrona capaz de comunicarse con una base de datos **MS SQL Server** y suministrar información persistente a la aplicación React (`frontend`).
+Este directorio aloja el motor del lado del servidor de la aplicación **GymMgmt**. Está construido principalmente usando **Node.js** y **Express.js**, exponiendo una API RESTful asíncrona capaz de comunicarse con una base de datos **MS SQL Server** y suministrar información persistente al ecosistema global.
+
+---
+
+## 🏛️ Filosofía Arquitectónica
+El proyecto sigue una **Arquitectura Orientada a Capas** (Layered Architecture) estricta para garantizar la escalabilidad, la facilidad de pruebas y el desacoplamiento total de la base de datos (con soporte actual para Mocks y SQL Server).
+
+> [!NOTE]
+> Para una explicación técnica detallada sobre cómo funcionan las capas y las reglas de diseño para desarrolladores, consulta el documento: [**ARCHITECTURE.md**](./ARCHITECTURE.md).
+
+### Capas Principales:
+1.  **Capa de Presentación (Controllers):** Gestiona exclusivamente el ciclo de vida de la petición HTTP.
+2.  **Capa de Negocio (Services):** Contiene las reglas, validaciones y lógica de dominio.
+3.  **Capa de Datos/Infraestructura (Repositories):** Único punto de acceso a los datos (ya sean Mocks o SQL Server).
+
+---
+
+## 🖥️ Servicios y Tareas en Segundo Plano (Scheduler)
+GymMgmt cuenta con un **Orquestador de Tareas** (`src/services/scheduler.js`) diseñado para ejecutar procesos de sincronización, limpieza y mantenimiento de forma independiente al flujo de la API.
+
+- **Instalación como Servicio de Windows (Producción):**
+  Puedes desplegar el scheduler como un servicio nativo de Windows (usando `node-windows`) ejecutando:
+  ```bash
+  node src/scripts/installService.js
+  ```
+  Esto permite que las tareas críticas se ejecuten de forma persistente incluso si el servidor API se detiene.
+
+---
+
+## 🪵 Registro de Eventos (Logging)
+Utilizamos **Winston** para un sistema de logging robusto y dinámico.
+- **Ubicación:** Los logs se generan automáticamente en la carpeta `/logs`, clasificados por tipo de componente (ej: `logs/services/authService.log`).
+- **Nivel de trazabilidad:** Diferenciación entre `info` y `error`, con estampado de tiempo y modo consola colorizado para desarrollo.
 
 ---
 
 ## 🛠 Tecnología y Stack Usado
 
-La arquitectura del ecosistema Node se conforma en base a una estricta modularidad orientada a controladores (`MVC-like`), usando las siguientes dependencias vitales:
-
-### 1. `express` (v5.2+)
-Es el **Framework principal** sobre el que corre nuestro servidor web. Lo usamos porque es altamente ligero y minimalista, permitiéndonos crear una API en escasos minutos mediante la asiganción de manejadores de rutas (routers).
-
-### 2. `mssql`
-El driver oficial para permitir la lectura y escritura del servidor en bases de datos **Microsoft SQL Server**. Se configura mediante promesas y pools de conexión para mantener un flujo de datos asíncrono no-bloqueante y eficiente.
-
-### 3. `cors`
-Módulo de seguridad (**Cross-Origin Resource Sharing**). Como React (frontend) y Express (backend) se ejecutan en puertos distintos localmente, los navegadores por defecto bloquean sus comunicaciones cruzadas por medidas de seguridad. Este middleware rebaja esas barreras explícitamente para peticiones de confianza.
-
-### 4. `dotenv`
-Gestor seguro de secretos. Lee un archivo oculto llamado literalmente `.env` (que jamás se sube a los repositorios públicos) donde viven contraseñas de bases de datos, tokens de facturación, o puertos secretos, y los expone como `process.env.*`.
-
-### 5. `bcrypt`
-Módulo de ciberseguridad crítico diseñado para el **Hashing algorítmico**. Su función exclusiva es coger las contraseñas planas de los usuarios registrados (ej. *'Hola123'*) y aplicarles funciones exponenciales hiper-complejas matemáticas antes de guardarse en el disco duro de la base de datos SQL (ej. *'$2b$10$wI5kXjU/dExsO...'*), mitigando cualquier fuga de seguridad incluso si la base de datos se corrompe.
-
-### 6. C/C++ Addons (`cpp_addons/`)
-Se ha configurado y detectado un esqueleto base optimizado de **código nativo (C++ compilado estáticamente)** a través del ecosistema de compatibilidad de Node (`N-API`). Esta sección está diseñada para escenarios de carga computacional absurdos donde Javascript es demasiado lento, por ende el procesamiento se migra temporalmente al procesador compilado en base binaria de C++ para cálculos intensivos (Machine Learning, algoritmos genéticos pesados...).
+- **Framework:** `express` (v5.2+).
+- **Base de Datos:** `mssql` (v12.x+) para Microsoft SQL Server.
+- **Seguridad:** `bcrypt` para hashing algorítmico y `cors` para comunicaciones seguras.
+- **Configuración:** `dotenv` para gestión de secretos y variables de entorno.
+- **Logging:** `winston` para trazabilidad profesional.
 
 ---
 
-## 📁 Arquitectura Mapeada del Código (`src/`)
+## 📂 Organización de carpetas (`src/`)
 
 ```plaintext
 /backend/src/
- ├── /api
- │    ├── /routes        # (Los Puntos de Entrada REST: Define la URL (ej. /login), el método HTTP (ej. POST) y envía la bola al Controlador)
- │    ├── /controllers   # (Cerebro Lógico: Extraje las IDs, validan que los roles sean correctos y mandan la petición de datos).
- │    ├── /middlewares   # (Guardias de Seguridad: Código que se ejecuta a *mitad de camino*, validando Tokens JWT para ver si el usuario es VIP).
- ├── /config             # Configuraciones pesadas (Iniciadores de la base de datos mssql)
- ├── /services           # Logica pura y cruda (Las interacciones SQL puras como 'SELECT * FROM...', totalmente separadas del router).
- ├── main.js             # ORQUESTADOR MAESTRO. Junta absolutamente todo e inicializa el agujero negro de eventos de Node en el PUERTO 8000.
+ ├── /api            # Rutas, controladores y middlewares (Presentación).
+ ├── /services       # Lógica de negocio y orquestación de tareas (Negocio).
+ ├── /repositories   # Abstracción y acceso a datos (Datos).
+ ├── /utils          # Utilidades globales (Logger, Helpers).
+ ├── /scripts        # Scripts de utilidad (Instalación de servicio, Generación de usuarios).
+ ├── /models         # Esquemas de datos y clases de dominio.
+ └── main.js         # Punto de entrada maestro de la API (Puerto 8000).
 ```
 
-## 💻 Instrucciones de Arranque para Desarrollo
-1. Situarse en la carpeta raíz `/backend`.
-2. Renombrar o configurar un archivo `.env` en la raíz copiando las credenciales secretas compartidas del equipo (SQL User y Contraseñas).
-3. Lanzar:
-   ```bash
-   npm install
-   npm run dev
-   ```
-*(Usamos `npm run dev` para que el `nodemon` vigile los archivos y si cambias 1 línea de código en caliente, tu backend se auto-reinicie como por arte de magia ✨).*
+## 🚀 Guía de Inicio Rápido
+1. Asegúrate de tener configurado tu archivo `.env` en la raíz (basado en `.env.example`).
+2. Instala las dependencias: `npm install`.
+3. Iniciar API en desarrollo: `npm run dev`.
+4. Iniciar Scheduler en consola: `node src/services/scheduler.js`.
+
+---
+© 2026 GymMgmt Development Team - TFG DAW

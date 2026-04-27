@@ -1,40 +1,45 @@
-const bcrypt = require('bcrypt')
-const { users } = require('../data/mockData')
+const authService = require('../../services/authService');
 
-const validTokens = new Map()
-
+/**
+ * Controlador de login.
+ * Captura la petición, extrae los parámetros y delega todo al servicio.
+ */
 const login = async (req, res) => {
-  const { email, password } = req.body
-
-  if (!email || !password) {
-    return res
-      .status(400)
-      .json({ error: 'Email y contraseña son obligatorios' })
+  try {
+    const { email, password } = req.body;
+    
+    // El servicio se encarga de todo el proceso de negocio y generación de tokens
+    const result = await authService.login(email, password);
+    
+    return res.json(result);
+  } catch (error) {
+    // Si el servicio detecta un error de negocio (ej: mala contraseña = 401),
+    // lo atrapamos aquí para responder limpiamente al cliente.
+    const statusCode = error.status || 500;
+    return res.status(statusCode).json({ error: error.message });
   }
-
-  const user = users.find((item) => item.user_email === email)
-
-  if (!user) {
-    return res.status(401).json({ error: 'Credenciales incorrectas' })
-  }
-
-  const isValid = await bcrypt.compare(password, user.password_hash)
-
-  if (!isValid) {
-    return res.status(401).json({ error: 'Credenciales incorrectas' })
-  }
-
-  const token = `mock-token-user-${user.user_id}`
-  validTokens.set(token, user.user_id)
-
-  return res.json({ token, userId: user.user_id })
 }
 
-const validateToken = (token) => {
-  return validTokens.get(token) || null
+/**
+ * Endpoint interno o middleware-helper si es necesario en un futuro.
+ */
+const validateToken = async (req, res) => {
+  try {
+    // Aquí iría `req.headers.authorization` típicamente
+    const { token } = req.body; 
+    const userId = await authService.validateToken(token);
+    
+    if(!userId) {
+      return res.status(401).json({ error: 'Token inválido' });
+    }
+    
+    return res.json({ userId });
+  } catch(error) {
+    return res.status(500).json({ error: 'Error del servidor' });
+  }
 }
 
 module.exports = {
   login,
   validateToken
-}
+};

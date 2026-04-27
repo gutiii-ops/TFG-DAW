@@ -1,58 +1,40 @@
-const { users } = require('../data/mockData')
+const userService = require('../../services/userService');
 
-const getUser = (req, res) => {
-  const userId = Number(req.params.id)
-  const user = users.find((item) => item.user_id === userId)
-
-  if (!user) {
-    return res.status(404).json({ error: 'Usuario no encontrado' })
+/**
+ * Controlador para obtener los datos de un usuario.
+ */
+const getUser = async (req, res) => {
+  try {
+    const userId = Number(req.params.id);
+    const user = await userService.getUser(userId);
+    
+    return res.json(user);
+  } catch (error) {
+    const statusCode = error.status || 500;
+    return res.status(statusCode).json({ error: error.message });
   }
+};
 
-  return res.json(user)
-}
-
-const updateUser = (req, res) => {
-  const userId = Number(req.params.id)
-  const userIndex = users.findIndex((item) => item.user_id === userId)
-
-  if (userIndex === -1) {
-    return res.status(404).json({ error: 'Usuario no encontrado' })
+/**
+ * Controlador para actualizar los datos de un usuario.
+ */
+const updateUser = async (req, res) => {
+  try {
+    const targetUserId = Number(req.params.id);
+    
+    // req.userId vendría de un posible middleware de autenticación que valida el token
+    const requestingUserId = req.userId ? Number(req.userId) : null; 
+    
+    const updatedUser = await userService.updateUser(targetUserId, requestingUserId, req.body);
+    
+    return res.json(updatedUser);
+  } catch (error) {
+    const statusCode = error.status || 500;
+    return res.status(statusCode).json({ error: error.message });
   }
-
-  const currentUser = users[userIndex]
-
-  if (req.userId && Number(req.userId) !== userId) {
-    return res
-      .status(403)
-      .json({ error: 'No autorizado para actualizar este usuario' })
-  }
-
-  const allowedFields = [
-    'user_name',
-    'user_surname',
-    'user_phone',
-    'user_email',
-    'user_region',
-    'user_IdDocument',
-    'user_date'
-  ]
-
-  const updates = Object.keys(req.body).reduce((acc, key) => {
-    if (allowedFields.includes(key)) {
-      acc[key] = req.body[key]
-    }
-    return acc
-  }, {})
-
-  users[userIndex] = {
-    ...currentUser,
-    ...updates
-  }
-
-  return res.json(users[userIndex])
-}
+};
 
 module.exports = {
   getUser,
   updateUser
-}
+};
