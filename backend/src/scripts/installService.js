@@ -7,7 +7,7 @@ const logger = getLogger('scripts', 'serviceInstallation');
 
 // 1. Configurar el servicio
 const svc = new Service({
-    name: 'GymMgmt Scheduler', 
+    name: 'GymMgmt Scheduler',
     description: 'Orquestador principal de tareas en segundo plano de GymMgmt',
 
     // RUTA ABSOLUTA a tu orquestador
@@ -22,7 +22,7 @@ const svc = new Service({
 svc.on('install', () => {
     logger.info('Servicio de GymMgmt para Windows instalado correctamente.');
     logger.info('Inicializando el Scheduler...');
-    svc.start(); 
+    svc.start();
 });
 
 svc.on('start', () => {
@@ -36,8 +36,10 @@ svc.on('alreadyinstalled', () => {
 });
 
 svc.on('uninstall', () => {
-    logger.info('Servicio anterior desinstalado. Reinstalando con la nueva configuración...');
-    svc.install();
+    logger.info('Servicio anterior desinstalado. Reinstalando con la nueva configuración en 2 segundos...');
+    setTimeout(() => {
+        svc.install();
+    }, 2000);
 });
 
 // 4. Ejecutar el flujo

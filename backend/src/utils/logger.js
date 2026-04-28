@@ -17,8 +17,8 @@ const getLogger = (folderName, fileName) => {
     ),
     transports: [
       // Aquí está la magia: la ruta ahora usa 'folderName' y 'fileName'
-      new transports.File({ 
-        filename: path.join('logs', folderName, `${fileName}.log`) 
+      new transports.File({
+        filename: path.join(__dirname, '../../logs', folderName, `${fileName}.log`)
       }),
       // Consola para desarrollo
       new transports.Console({

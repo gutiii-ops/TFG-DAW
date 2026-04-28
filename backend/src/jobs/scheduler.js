@@ -1,4 +1,5 @@
 // src/scripts/scheduler.js
+require('dotenv').config({ path: require('path').join(__dirname, '../../.env') });
 const { fork } = require('child_process');
 const path = require('path');
 const getLogger = require('../utils/logger');
@@ -10,16 +11,16 @@ const SECONDS = 15;
 const MILISECONDS = SECONDS * 1000;
 
 // 2. Definimos array de nombres de archivos a ejecutar
-const scriptsToRun = ['goliveService.js', 'dbService.js']; 
+const scriptsToRun = ['goliveService.js', 'dbService.js'];
 
 logger.info(`Scheduler iniciado.`);
 
 // 3. Creamos una función encargada de ejecutar un script específico
 const runScript = (scriptName) => {
     logger.info(`Lanzando proceso independiente: ${scriptName}...`);
-    
+
     // 3.1. Definimos la ruta exacta del archivo que queremos ejecutar
-    const scriptPath = path.join(__dirname, '../services', scriptName);
+    const scriptPath = path.join(__dirname, scriptName);
     const childProcess = fork(scriptPath);
 
     // 3.2. Escuchamos cuándo termina el archivo
@@ -38,7 +39,7 @@ const runScript = (scriptName) => {
     // 3.3. Capturar errores graves al intentar lanzar el archivo
     childProcess.on('error', (err) => {
         logger.error(`Error al lanzar el servicio ${scriptName}: ${err.message}`);
-        
+
         // Si no se pudo ni siquiera abrir el archivo, también esperamos para reintentar
         setTimeout(() => { runScript(scriptName); }, MILISECONDS);
     });
