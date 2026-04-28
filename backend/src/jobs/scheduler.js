@@ -4,7 +4,7 @@ const { fork } = require('child_process');
 const path = require('path');
 const getLogger = require('../utils/logger');
 
-const logger = getLogger('services', 'scheduler');
+const logger = getLogger('jobs', 'scheduler');
 
 // 1. Definimos el tiempo
 const SECONDS = 15;

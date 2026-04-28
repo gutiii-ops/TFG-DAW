@@ -45,18 +45,18 @@ async function monitorServer() {
     return true;
   } else {
     logger.warn(`El servidor NO está levantado. Iniciando proceso...`);
-    
+
     const mainScriptPath = path.join(__dirname, '..', 'main.js');
     const backendDir = path.join(__dirname, '..', '..');
-    
+
     const serverProcess = spawn('node', [mainScriptPath], {
       cwd: backendDir,
       detached: true,
       stdio: 'ignore'
     });
 
-    serverProcess.unref(); 
-    
+    serverProcess.unref();
+
     logger.info('Servidor iniciado en segundo plano.');
     return false;
   }

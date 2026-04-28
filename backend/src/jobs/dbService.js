@@ -16,7 +16,7 @@ const config = {
         encrypt: false,
         trustServerCertificate: true
     }
-};  
+};
 
 // Crear un pool de conexiones
 const pool = new sql.ConnectionPool(config);
