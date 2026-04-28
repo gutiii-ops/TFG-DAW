@@ -2,9 +2,12 @@ require('dotenv').config();
 const net = require('net');
 const { spawn } = require('child_process');
 const path = require('path');
+const getLogger = require('../utils/logger');
+
+const logger = getLogger('services', 'goliveService');
 
 const PORT = process.env.PORT || 8000;
-const HOST = '127.0.0.1';
+const HOST = 'localhost';
 
 /**
  * Intenta conectarse al puerto del servidor para verificar si está activo.
@@ -34,14 +37,14 @@ function checkServer() {
  * Función principal que orquesta la verificación y el reinicio si es necesario.
  */
 async function monitorServer() {
-  console.log(`[LiveService] Verificando estado del servidor en ${HOST}:${PORT}...`);
+  logger.info(`Verificando estado del servidor en ${HOST}:${PORT}...`);
   const isRunning = await checkServer();
 
   if (isRunning) {
-    console.log(`[LiveService] ✅ El servidor ya está corriendo y escuchando en el puerto ${PORT}.`);
+    logger.info(`El servidor ya está levantado y escuchando en el puerto ${PORT}.`);
     return true;
   } else {
-    console.log(`[LiveService] ❌ El servidor NO está corriendo. Iniciando proceso...`);
+    logger.warn(`El servidor NO está levantado. Iniciando proceso...`);
     
     const mainScriptPath = path.join(__dirname, '..', 'main.js');
     const backendDir = path.join(__dirname, '..', '..');
@@ -54,7 +57,7 @@ async function monitorServer() {
 
     serverProcess.unref(); 
     
-    console.log('[LiveService] 🚀 Servidor iniciado en segundo plano.');
+    logger.info('Servidor iniciado en segundo plano.');
     return false;
   }
 }
