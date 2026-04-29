@@ -69,3 +69,13 @@ module.exports = {
     pool,
     responseTime
 };
+
+// Permitir que el scheduler lo ejecute como proceso independiente
+if (require.main === module) {
+    responseTime()
+        .then(() => closeDB())
+        .catch(err => {
+            logger.error(`Fallo crítico ejecutando dbService de forma autónoma: ${err.message}`);
+            process.exit(1);
+        });
+}
