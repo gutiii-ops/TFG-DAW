@@ -28,14 +28,14 @@ const getLogger = (folderName, fileName) => {
       })
     ),
     transports: [
-      // Rotación de logs centralizada: Todo va directo a la carpeta 'logs'
+      // Logs descentralizados por componente y agrupados por fecha
       new DailyRotateFile({
-        // Guarda en backend/logs/services-authService-2023-10-25.log
-        filename: path.join(__dirname, '../../logs', `${cacheKey}-%DATE%.log`),
+        // Crea la ruta src/folderName/logs/YYYY-MM-DD/fileName.log
+        filename: path.join(__dirname, '../../src', folderName, 'logs', '%DATE%', `${fileName}.log`),
         datePattern: 'YYYY-MM-DD',
-        zippedArchive: true, // Comprime en .zip los logs de días anteriores
-        maxSize: '20m',      // Límite de 20MB por archivo
-        maxFiles: '31d'      // Elimina los logs con más de 14 días de antigüedad
+        zippedArchive: false, // Ahora logManagerService.js se encarga de la compresión por carpetas
+        maxSize: '20m',       // Mantenemos el límite de tamaño por archivo diario
+        // Se omiten maxFiles y opciones de retención nativas; el logManagerService limpiará los antiguos
       }),
       // Consola para desarrollo
       new transports.Console({

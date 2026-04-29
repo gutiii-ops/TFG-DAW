@@ -47,3 +47,19 @@ const runScript = (scriptName) => {
 
 // 4. Iniciamos el ciclo para cada script en nuestro array
 for (const scriptName of scriptsToRun) { runScript(scriptName); }
+
+// 5. Iniciamos la limpieza de logs diaria (sin fork, se ejecuta aquí mismo)
+const { runLogRotation } = require('./logManagerService');
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+const runDailyLogRotation = () => {
+    logger.info('Lanzando tarea diaria de rotación de logs...');
+    runLogRotation()
+        .catch(err => logger.error(`Fallo crítico en rotación de logs: ${err.message}`))
+        .finally(() => {
+            logger.info('Programando siguiente rotación para dentro de 24 horas.');
+            setTimeout(runDailyLogRotation, ONE_DAY_MS);
+        });
+};
+
+runDailyLogRotation();
