@@ -62,7 +62,17 @@ async function monitorServer() {
   }
 }
 
-// Exportamos la función para que el Scheduler la llame en lugar de ejecutarla aquí
+// Exportamos la función, pero también permitimos que se ejecute directamente
+// si es llamada desde el scheduler mediante un fork.
+if (require.main === module) {
+  monitorServer()
+    .then(() => process.exit(0))
+    .catch(err => {
+      logger.error(`Error en goliveService: ${err.message}`);
+      process.exit(1);
+    });
+}
+
 module.exports = {
   monitorServer
 };
