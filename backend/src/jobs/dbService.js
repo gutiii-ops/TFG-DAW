@@ -3,7 +3,7 @@ const getLogger = require('../utils/logger');
 require('dotenv').config();
 
 // Configuración del logger
-const logger = getLogger('services', 'dbService');
+const logger = getLogger('jobs', 'dbService');
 
 // Configuración de la conexión a la base de datos
 const config = {

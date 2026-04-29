@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const getLogger = require('../utils/logger');
 
-const logger = getLogger('services', 'goliveService');
+const logger = getLogger('jobs', 'goliveService');
 
 const PORT = process.env.PORT || 8000;
 const HOST = 'localhost';

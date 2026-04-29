@@ -2,6 +2,10 @@
 logs
 *.log
 
+# Environment variables
+*.env
+
+# Node modules
 node_modules
 *.local
 
@@ -14,4 +18,3 @@ node_modules
 *.njsproj
 *.sln
 *.sw?
-*.env
