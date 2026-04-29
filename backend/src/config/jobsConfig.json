@@ -1,0 +1,21 @@
+{
+  "global": {
+    "enabled": true
+  },
+  "forkedJobs": {
+    "goliveService.js": {
+      "enabled": true,
+      "intervalSeconds": 300
+    },
+    "dbService.js": {
+      "enabled": true,
+      "intervalSeconds": 60
+    }
+  },
+  "internalJobs": {
+    "logRotation": {
+      "enabled": true,
+      "intervalHours": 24
+    }
+  }
+}
