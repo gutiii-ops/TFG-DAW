@@ -1,8 +1,9 @@
-require('dotenv').config();
 const net = require('net');
 const { spawn } = require('child_process');
 const path = require('path');
 const getLogger = require('../utils/logger');
+
+require('dotenv').config({ path: path.join(__dirname, '../config/.env') });
 
 const logger = getLogger('jobs', 'goliveService');
 
