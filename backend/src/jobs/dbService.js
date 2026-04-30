@@ -31,6 +31,7 @@ const connectDB = async () => {
         logger.info('Conexión a la base de datos exitosa');
     } catch (error) {
         logger.error('Error al conectar a la base de datos:', error);
+        throw error;
     }
 };
 
