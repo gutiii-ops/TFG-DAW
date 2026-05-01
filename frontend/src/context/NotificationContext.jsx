@@ -1,9 +1,12 @@
-import React, { createContext, useState, useContext, useCallback } from 'react';
-
-const NotificationContext = createContext();
+import React, { useState, useCallback } from 'react';
+import { NotificationContext } from './NotificationContext.js';
 
 export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
+
+    const removeNotification = useCallback((id) => {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+    }, []);
 
     const addNotification = useCallback((message, type = 'info', duration = 4000) => {
         const id = Math.random().toString(36).substr(2, 9);
@@ -13,14 +16,10 @@ export const NotificationProvider = ({ children }) => {
         setTimeout(() => {
             removeNotification(id);
         }, duration);
-    }, []);
-
-    const removeNotification = useCallback((id) => {
-        setNotifications((prev) => prev.filter((n) => n.id !== id));
-    }, []);
+    }, [removeNotification]);
 
     return (
-        <NotificationContext.Provider value={{ addNotification }}>
+        <NotificationContext.Provider value={{ addNotification, removeNotification }}>
             {children}
             <div className="notification-container">
                 {notifications.map((n) => (
@@ -31,12 +30,4 @@ export const NotificationProvider = ({ children }) => {
             </div>
         </NotificationContext.Provider>
     );
-};
-
-export const useNotification = () => {
-    const context = useContext(NotificationContext);
-    if (!context) {
-        throw new Error('useNotification debe usarse dentro de un NotificationProvider');
-    }
-    return context;
 };

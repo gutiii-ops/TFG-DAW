@@ -22,20 +22,44 @@ const findUserByEmail = async (email) => {
   return result.recordset[0] || null;
 };
 
-// Nota: El manejo de tokens sigue siendo preferiblemente vía JWT (stateless), 
-// pero dejamos las funciones por si el servicio las requiere.
-const validTokens = new Map();
-
-const saveToken = async (token, userId) => {
-  validTokens.set(token, userId);
-};
-
-const validateToken = async (token) => {
-  return validTokens.get(token) || null;
+/**
+ * Crea un nuevo usuario en la base de datos y le asigna el rol de 'User' por defecto.
+ * @param {Object} userData 
+ * @returns {Promise<number>} El ID del nuevo usuario creado.
+ */
+const createUser = async (userData) => {
+  const pool = await poolPromise;
+  
+  // 1. Insertamos el usuario
+  const result = await pool.request()
+    .input('name', sql.VarChar, userData.name)
+    .input('surname', sql.VarChar, userData.lastName)
+    .input('phone', sql.VarChar, userData.phone)
+    .input('email', sql.VarChar, userData.email)
+    .input('idDoc', sql.VarChar, userData.documentId)
+    .input('date', sql.Date, userData.birthDate)
+    .input('region', sql.VarChar, userData.country)
+    .input('pass', sql.VarChar, userData.password_hash)
+    .query(`
+      INSERT INTO users (user_name, user_surname, user_phone, user_email, user_IdDocument, user_date, user_region, password_hash)
+      OUTPUT INSERTED.user_id
+      VALUES (@name, @surname, @phone, @email, @idDoc, @date, @region, @pass)
+    `);
+  
+  const userId = result.recordset[0].user_id;
+  
+  // 2. Asignamos rol de 'User' (ID 3 según mock/schema)
+  await pool.request()
+    .input('userId', sql.Int, userId)
+    .input('roleId', sql.Int, 3)
+    .query('INSERT INTO user_roles (user_id, role_id) VALUES (@userId, @roleId)');
+  
+  return userId;
 };
 
 module.exports = {
   findUserByEmail,
+  createUser,
   saveToken,
   validateToken
 };

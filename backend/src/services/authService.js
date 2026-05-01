@@ -53,12 +53,39 @@ const login = async (email, password) => {
   return { token, userId: user.user_id, role: payload.role };
 };
 
+const register = async (userData) => {
+  const { email, password, name, lastName } = userData;
+  
+  if (!email || !password || !name || !lastName) {
+    const error = new Error('Faltan datos obligatorios (Nombre, Apellido, Email, Password)');
+    error.status = 400;
+    throw error;
+  }
+
+  // 1. Verificar si el usuario ya existe
+  const existingUser = await authRepository.findUserByEmail(email);
+  if (existingUser) {
+    const error = new Error('El correo electrónico ya está registrado');
+    error.status = 409;
+    throw error;
+  }
+
+  // 2. Hashear la contraseña con bcrypt
+  const saltRounds = 10;
+  userData.password_hash = await bcrypt.hash(password, saltRounds);
+
+  // 3. Crear el usuario en la BBDD
+  const userId = await authRepository.createUser(userData);
+
+  return { message: 'Registro completado con éxito', userId };
+};
+
 const validateToken = async (token) => {
-  // Delegado directamente porque no hay mucha lógica de negocio extra por ahora
   return await authRepository.validateToken(token);
 };
 
 module.exports = {
   login,
+  register,
   validateToken
 };

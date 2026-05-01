@@ -39,7 +39,19 @@ const validateToken = async (req, res) => {
   }
 }
 
+const register = async (req, res) => {
+  try {
+    const userData = req.body;
+    const result = await authService.register(userData);
+    return res.status(201).json(result);
+  } catch (error) {
+    const statusCode = error.status || 500;
+    return res.status(statusCode).json({ error: error.message });
+  }
+}
+
 module.exports = {
   login,
+  register,
   validateToken
 };

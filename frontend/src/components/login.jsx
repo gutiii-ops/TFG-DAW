@@ -5,11 +5,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
-import { useNotification } from '../context/NotificationContext'
+import { useNotification } from '../context/NotificationContext.js'
 // Import de iconos SVG
 import LockIcon from '../assets/icons/lock-login_icon.svg?react'
 // Import de la función de autenticación (servicio mock/real)
-import { authUser } from '../api/authService.js'
+import { authUser, registerUser } from '../api/authService.js'
 // Import del componente reutilizable para la selección de fecha
 import { CustomDatePicker } from './CustomDatePicker.jsx'
 // Import de estilos específicos para el modal de login
@@ -127,9 +127,24 @@ export const Login = () => {
           setIsOpen(false)
           navigate('/dashboard')
         } else {
-          // Registro offline temporal
-          console.log('Registro simulado con datos:', { name, lastName, email })
-          setIsOpen(false)
+          // Registro real en BBDD
+          const regResult = await registerUser({
+            name,
+            lastName,
+            phone,
+            documentId,
+            birthDate,
+            country,
+            email,
+            password
+          });
+
+          if (regResult.error) {
+            throw new Error(regResult.error);
+          }
+
+          addNotification('¡Registro completado! Ya puedes iniciar sesión.', 'success');
+          setIsOpen(false);
         }
         setLoading(false)
       } catch (err) {
