@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { SubViewHeader } from './SubViewHeader';
 import { PaginatedTable } from './PaginatedTable';
+import { getSupportTickets } from '../../api/adminService';
 
 export const AdminSupport = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const totalPages = 2;
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simular fetch al backend con paginación
-    const mockData = [
-      { id: '#502', subject: 'Problema con acceso', user: 'Laura Torres', status: 'Abierto' },
-      { id: '#503', subject: 'Cobro duplicado', user: 'Miguel Ángel', status: 'En Progreso' },
-    ];
-    setData(mockData);
+    const fetchTickets = async () => {
+      setLoading(true);
+      const result = await getSupportTickets(page);
+      
+      // Mapeamos los datos de la DB a lo que espera la tabla
+      const formattedData = result.data.map(t => ({
+        id: `#${t.ticket_id}`,
+        subject: t.subject,
+        user: t.user_full_name,
+        status: t.status === 1 ? 'Abierto' : t.status === 2 ? 'En Progreso' : 'Cerrado'
+      }));
+
+      setData(formattedData);
+      setTotalPages(result.totalPages);
+      setLoading(false);
+    };
+
+    fetchTickets();
   }, [page]);
 
   const columns = [

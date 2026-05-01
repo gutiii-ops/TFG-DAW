@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { SubViewHeader } from './SubViewHeader';
 import { PaginatedTable } from './PaginatedTable';
+import { getSubscriptions } from '../../api/adminService';
 
 export const AdminSubscriptions = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const totalPages = 5;
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simular fetch al backend con paginación
-    const mockData = [
-      { id: 101, user: 'Lucía García', plan: 'Premium', status: 'Activa' },
-      { id: 102, user: 'Miguel Ángel', plan: 'Básico', status: 'Expirada' },
-      { id: 103, user: 'Laura Torres', plan: 'Pro', status: 'Activa' },
-    ];
-    setData(mockData);
+    const fetchSubscriptions = async () => {
+      setLoading(true);
+      const result = await getSubscriptions(page);
+      
+      const formattedData = result.data.map(s => ({
+        id: s.subscription_id,
+        user: s.user_name,
+        plan: s.plan,
+        status: s.status === 1 ? 'Activa' : 'Expirada'
+      }));
+
+      setData(formattedData);
+      setTotalPages(result.totalPages);
+      setLoading(false);
+    };
+
+    fetchSubscriptions();
   }, [page]);
 
   const columns = [

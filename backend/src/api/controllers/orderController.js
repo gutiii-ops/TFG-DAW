@@ -1,39 +1,31 @@
-const { orders, order_details, products } = require('../data/mockData')
+const orderService = require('../services/orderService');
 
-const getUserOrders = (req, res) => {
-  const userId = Number(req.params.userId)
-  const userOrders = orders.filter((order) => order.user_id === userId)
-
-  return res.json(userOrders)
-}
-
-const getOrderById = (req, res) => {
-  const orderId = Number(req.params.orderId)
-  const order = orders.find((item) => item.order_id === orderId)
-
-  if (!order) {
-    return res.status(404).json({ error: 'Orden no encontrada' })
+const getUserOrders = async (req, res) => {
+  try {
+    const userId = Number(req.params.userId);
+    const userOrders = await orderService.getUserHistory(userId);
+    return res.json(userOrders);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
+};
 
-  const details = order_details
-    .filter((detail) => detail.order_id === orderId)
-    .map((detail) => {
-      const product = products.find(
-        (item) => item.product_id === detail.product_id
-      )
-      return {
-        detail_id: detail.detail_id,
-        product_id: detail.product_id,
-        product_name: product ? product.product_name : 'Producto desconocido',
-        quantity: detail.quantity,
-        unit_price: detail.unit_price
-      }
-    })
+const getOrderById = async (req, res) => {
+  try {
+    const orderId = Number(req.params.orderId);
+    const order = await orderService.getFullOrderDetail(orderId);
 
-  return res.json({ ...order, details })
-}
+    if (!order) {
+      return res.status(404).json({ error: 'Orden no encontrada' });
+    }
+
+    return res.json(order);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   getUserOrders,
   getOrderById
-}
+};

@@ -1,38 +1,41 @@
-const { users } = require('../api/data/mockData');
+const { poolPromise, sql } = require('../config/dbConfig');
 
 /**
- * Busca un usuario por su ID numérico.
+ * Busca un usuario por su ID numérico en la BBDD real.
  * @param {number} userId 
  * @returns {Promise<Object|null>}
  */
 const findById = async (userId) => {
-  // En el futuro: return await db.query('SELECT * FROM users WHERE user_id = ?', [userId]);
-  const user = users.find((item) => item.user_id === userId);
-  return user || null;
+  const pool = await poolPromise;
+  const result = await pool.request()
+    .input('userId', sql.Int, userId)
+    .query('SELECT * FROM users WHERE user_id = @userId');
+  
+  return result.recordset[0] || null;
 };
 
 /**
- * Actualiza los datos de un usuario en el sistema de mocks.
- * Devuelve el usuario modificado resultante.
+ * Actualiza los datos de un usuario en SQL Server.
  * 
  * @param {number} userId 
  * @param {Object} updates 
  * @returns {Promise<Object|null>}
  */
 const updateUser = async (userId, updates) => {
-  const userIndex = users.findIndex((item) => item.user_id === userId);
+  const pool = await poolPromise;
   
-  if (userIndex === -1) {
-    return null;
-  }
+  // Construcción dinámica de la query de update (simplificada)
+  const fields = Object.keys(updates).map(key => `${key} = @${key}`).join(', ');
+  
+  const request = pool.request();
+  request.input('userId', sql.Int, userId);
+  Object.keys(updates).forEach(key => {
+    request.input(key, updates[key]);
+  });
 
-  // Modificamos el objeto internamente
-  users[userIndex] = {
-    ...users[userIndex],
-    ...updates
-  };
+  await request.query(`UPDATE users SET ${fields} WHERE user_id = @userId`);
 
-  return users[userIndex];
+  return findById(userId);
 };
 
 module.exports = {

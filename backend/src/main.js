@@ -3,11 +3,13 @@
               Punto de entrada del backend (orquestador)
    ================================================================== */
 
-// Cargar las variables de entorno desde el archivo .env lo primero de todo
-require('dotenv').config()
-
+// Carga de dependencias
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
+
+// Cargar variables de entorno
+require('dotenv').config({ path: path.join(__dirname, '/config/.env') });
 
 const app = express()
 
@@ -17,13 +19,14 @@ app.use(express.json())
 
 // Habilitar CORS para permitir peticiones del cliente (React usualmente en 5173 o 3000)
 app.use(cors())
+
+// 1. Importamos los archivos de rutas
 const authRoutes = require('./api/routes/authRoutes')
 const userRoutes = require('./api/routes/userRoutes')
 const productRoutes = require('./api/routes/productRoutes')
 const orderRoutes = require('./api/routes/orderRoutes')
 const reservationRoutes = require('./api/routes/reservationRoutes')
-
-// 1. Importamos los archivos de rutas
+const supportRoutes = require('./api/routes/supportRoutes')
 
 // 2. ENCHUFAMOS LAS RUTAS (Aquí está la magia)
 app.use('/api/login', authRoutes)
@@ -31,6 +34,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/reservations', reservationRoutes)
+app.use('/api/support', supportRoutes)
 
 // 3. MIDDLEWARE: MANEJADOR DE RUTAS INEXISTENTES (404)
 app.use((req, res, next) => {
@@ -47,5 +51,5 @@ app.use((err, req, res, next) => {
 // 5. INICIAR EL SERVIDOR
 const PORT = process.env.PORT || 8000
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor backend corriendo en puerto ${PORT}`)
+  console.log(`Servidor backend corriendo en puerto ${PORT}`)
 })
