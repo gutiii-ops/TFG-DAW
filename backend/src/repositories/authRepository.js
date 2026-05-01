@@ -48,10 +48,10 @@ const createUser = async (userData) => {
   
   const userId = result.recordset[0].user_id;
   
-  // 2. Asignamos rol de 'User' (ID 3 según mock/schema)
+  // 2. Asignamos rol de 'User' (ID 1 según requerimiento del usuario)
   await pool.request()
     .input('userId', sql.Int, userId)
-    .input('roleId', sql.Int, 3)
+    .input('roleId', sql.Int, 1)
     .query('INSERT INTO user_roles (user_id, role_id) VALUES (@userId, @roleId)');
   
   return userId;
