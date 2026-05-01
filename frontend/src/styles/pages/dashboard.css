@@ -139,6 +139,47 @@
   color: var(--muted);
 }
 
+/* Grid de Tarjetas */
+.status-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.recent-activity-placeholder {
+  background: color-mix(in srgb, var(--bg2) 40%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Spinner Minimalista */
+.dashboard-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1.5rem;
+  color: var(--muted);
+}
+
+.minimal-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid color-mix(in srgb, var(--y) 20%, transparent);
+  border-top-color: var(--y);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Responsivo */
 @media (max-width: 900px) {
   .dashboard-container {

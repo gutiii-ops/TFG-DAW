@@ -1,0 +1,69 @@
+.dashboard-card {
+  background: color-mix(in srgb, var(--bg2) 60%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 240px;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--y) 30%, var(--border));
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-icon {
+  background: color-mix(in srgb, var(--y) 15%, transparent);
+  color: var(--y);
+  padding: 0.75rem;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+}
+
+.card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.card-trend {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.card-body h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.card-value {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+
+.card-subtext {
+  font-size: 0.85rem;
+  color: var(--muted);
+}

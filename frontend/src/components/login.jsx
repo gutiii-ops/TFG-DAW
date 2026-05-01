@@ -123,7 +123,6 @@ export const Login = () => {
           contextLogin(authResult.token)
           setEmail(''); setPassword('')
           setIsOpen(false)
-          navigate('/dashboard')
         } else {
           const regResult = await registerUser({
             name, lastName, phone, documentId, birthDate, country, email, password

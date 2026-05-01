@@ -38,9 +38,10 @@ const login = async (email, password) => {
     throw error;
   }
 
-  // 4. Generación de JWT real incluyendo el rol
+  // 4. Generación de JWT real incluyendo el rol y el nombre
   const payload = {
     userId: user.user_id,
+    userName: user.user_name,
     role: user.role_name || 'User'
   };
 
