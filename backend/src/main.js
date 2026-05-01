@@ -29,7 +29,7 @@ const reservationRoutes = require('./api/routes/reservationRoutes')
 const supportRoutes = require('./api/routes/supportRoutes')
 
 // 2. ENCHUFAMOS LAS RUTAS (Aquí está la magia)
-app.use('/api/login', authRoutes)
+app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)

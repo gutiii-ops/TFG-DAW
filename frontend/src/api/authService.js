@@ -3,9 +3,14 @@
         Servicio para manejar la autenticación de usuarios.
 ================================================================ */
 
+const BASE_URL = 'http://localhost:8000/api/auth';
+
+/**
+ * Inicia sesión en el sistema.
+ */
 export const authUser = async (email, password) => {
   try {
-    const response = await fetch('http://localhost:8000/api/login', {
+    const response = await fetch(`${BASE_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -24,9 +29,13 @@ export const authUser = async (email, password) => {
     return { error: error.message }
   }
 }
+
+/**
+ * Registra un nuevo usuario en la BBDD real.
+ */
 export const registerUser = async (userData) => {
   try {
-    const response = await fetch('http://localhost:8000/api/login/register', {
+    const response = await fetch(`${BASE_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
