@@ -1,7 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-// Decodifica manualmente el payload de un JWT (no valida firma, solo lee)
 const decodeJWT = (token) => {
   try {
     const base64Url = token.split('.')[1];
@@ -22,49 +20,50 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Inicializa el estado leyendo el localStorage
   useEffect(() => {
-    const token = localStorage.getItem('jwt_token');
-    if (token) {
-      const decoded = decodeJWT(token);
+    const savedToken = localStorage.getItem('jwt_token');
+    if (savedToken) {
+      const decoded = decodeJWT(savedToken);
       if (decoded && decoded.exp * 1000 > Date.now()) {
         setUser({ id: decoded.userId, name: decoded.userName });
         setRole(decoded.role);
+        setToken(savedToken);
         setIsAuthenticated(true);
       } else {
-        // Token expirado
         logout();
       }
     }
     setLoading(false);
   }, []);
 
-  const login = (token) => {
-    localStorage.setItem('jwt_token', token);
-    const decoded = decodeJWT(token);
+  const login = (newToken) => {
+    localStorage.setItem('jwt_token', newToken);
+    const decoded = decodeJWT(newToken);
     if (decoded) {
       setUser({ id: decoded.userId, name: decoded.userName });
       setRole(decoded.role);
+      setToken(newToken);
       setIsAuthenticated(true);
     }
   };
 
   const logout = () => {
-    // Eliminación segura de cualquier rastro de la sesión
     localStorage.removeItem('jwt_token');
-    localStorage.removeItem('token'); // Por si quedó de la versión anterior
-    localStorage.removeItem('userId'); // Por si quedó de la versión anterior
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     
     setUser(null);
     setRole(null);
+    setToken(null);
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, isAuthenticated, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, role, token, isAuthenticated, login, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );
