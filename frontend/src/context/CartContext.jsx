@@ -4,7 +4,7 @@ import { NotificationContext } from './NotificationContext'
 export const CartContext = createContext()
 
 export const CartProvider = ({ children }) => {
-  const { showNotification } = useContext(NotificationContext)
+  const { addNotification } = useContext(NotificationContext)
   
   // Cargar estado inicial desde localStorage
   const [cartItems, setCartItems] = useState(() => {
@@ -25,7 +25,7 @@ export const CartProvider = ({ children }) => {
       const existingItem = prevItems.find((item) => item.id === product.id)
       
       if (existingItem) {
-        showNotification(`${product.name} actualizado en el carrito`, 'success')
+        addNotification(`${product.name} actualizado en el carrito`, 'success')
         return prevItems.map((item) =>
           item.id === product.id 
             ? { ...item, quantity: item.quantity + 1 } 
@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
         )
       }
 
-      showNotification(`${product.name} añadido al carrito`, 'success')
+      addNotification(`${product.name} añadido al carrito`, 'success')
       return [...prevItems, { ...product, quantity: 1 }]
     })
   }

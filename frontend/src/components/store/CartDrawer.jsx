@@ -25,12 +25,12 @@ const CartDrawer = () => {
   } = useContext(CartContext)
 
   const { isAuthenticated, token } = useContext(AuthContext)
-  const { showNotification } = useContext(NotificationContext)
+  const { addNotification } = useContext(NotificationContext)
   const [isProcessing, setIsProcessing] = useState(false)
 
   const handleCheckout = async () => {
     if (!isAuthenticated) {
-      showNotification('Debes iniciar sesión para finalizar el pedido', 'warning')
+      addNotification('Debes iniciar sesión para finalizar el pedido', 'warning')
       setIsCartOpen(false)
       document.dispatchEvent(new Event('openLoginModal'))
       return
@@ -50,14 +50,14 @@ const CartDrawer = () => {
       const data = await response.json()
 
       if (response.ok) {
-        showNotification('¡Pedido realizado con éxito!', 'success')
+        addNotification('¡Pedido realizado con éxito!', 'success')
         clearCart()
         setIsCartOpen(false)
       } else {
         throw new Error(data.error || 'Error al procesar el pedido')
       }
     } catch (error) {
-      showNotification(error.message, 'error')
+      addNotification(error.message, 'error')
     } finally {
       setIsProcessing(false)
     }
