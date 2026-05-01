@@ -4,6 +4,7 @@ import { Navbar } from '../../components/navbar';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar';
 import DashboardCard from '../../components/dashboard/DashboardCard';
 import ProfileSection from '../../components/dashboard/ProfileSection';
+import OrdersSection from '../../components/dashboard/OrdersSection';
 import '../../styles/pages/dashboard.css';
 
 const Dashboard = () => {
@@ -92,6 +93,9 @@ const Dashboard = () => {
 
       case 'profile':
         return <ProfileSection user={user} />;
+
+      case 'orders':
+        return <OrdersSection user={user} />;
 
       default:
         return (
