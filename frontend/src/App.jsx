@@ -43,8 +43,17 @@ function App() {
                   </ProtectedRoute>
                 } 
               />
+
+              <Route 
+                path='/panel/*' 
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
               
-              {/* Redirección temporal de /user a /dashboard por retrocompatibilidad */}
+              {/* Redirección temporal */}
               <Route path='/user' element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </BrowserRouter>

@@ -1,0 +1,150 @@
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 4em);
+  margin-top: 4em;
+}
+
+/* Sidebar Estilo Premium */
+.dashboard-sidebar {
+  background: color-mix(in srgb, var(--bg2) 80%, transparent);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: sticky;
+  top: 4em;
+  height: calc(100vh - 4em);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  background: var(--y);
+  color: var(--bg);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px rgba(240, 224, 0, 0.2);
+}
+
+.user-text h3 {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.user-text span {
+  font-size: 0.75rem;
+  color: var(--y);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-group label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.nav-group button {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-group button:hover {
+  background: color-mix(in srgb, var(--y) 10%, transparent);
+  color: var(--y);
+}
+
+.nav-group button.active {
+  background: var(--y);
+  color: var(--bg);
+}
+
+/* Área de Contenido */
+.dashboard-content {
+  padding: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.content-header {
+  margin-bottom: 3rem;
+}
+
+.content-header h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+.content-header p {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  background: var(--bg2);
+  border: 2px dashed var(--border);
+  border-radius: 20px;
+  padding: 4rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-sidebar {
+    display: none; /* Aquí implementaríamos un menú móvil después */
+  }
+}

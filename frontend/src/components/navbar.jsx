@@ -46,6 +46,11 @@ export const Navbar = () => {
           <li>
             <Link to='/store'>Tienda</Link>
           </li>
+          {isAuthenticated && (
+            <li>
+              <Link to='/panel'>Perfil</Link>
+            </li>
+          )}
           <li>
             <a href='/#contacto'>Contacto</a>
           </li>
@@ -59,15 +64,9 @@ export const Navbar = () => {
       )}
 
       {isAuthenticated ? (
-        isDashboard ? (
-          <button className='nav-cta' onClick={handleLogout}>
-            Cerrar Sesión
-          </button>
-        ) : (
-          <Link to='/dashboard' className='nav-cta nav-user-link'>
-            Mi Panel
-          </Link>
-        )
+        <button className='nav-cta nav-logout' onClick={handleLogout}>
+          Cerrar Sesión
+        </button>
       ) : (
         <button className='nav-cta' onClick={handleLoginClick}>
           Mi Cuenta
