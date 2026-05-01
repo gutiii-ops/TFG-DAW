@@ -155,7 +155,7 @@ export const Login = () => {
         </button>
 
         <form onSubmit={handleSubmit} className='login-form'>
-          <h2 className="login-title">{isLogin ? 'Iniciar sesión' : 'Crear Cuenta Premium'}</h2>
+          <h2 className="login-title">{isLogin ? 'Iniciar sesión' : 'Registro de Usuario'}</h2>
 
           <div className="form-content-wrapper">
             {/* Panel Izquierdo: Información Personal (Solo en registro) */}

@@ -2,8 +2,7 @@
 .login-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px); /* Reducido para mayor fluidez */
+  background: rgba(0, 0, 0, 0.85); /* Fondo más oscuro para compensar la falta de blur */
   display: grid;
   place-items: center;
   z-index: 2000;
@@ -12,24 +11,18 @@
 
 .login-container {
   background: var(--card);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Borde más definido */
   border-radius: 2rem;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.6);
   padding: 2.5rem;
   position: relative;
-  transition: width 0.3s ease-out; /* Más rápido */
+  transition: width 0.25s ease-out;
   width: min(30rem, 100%);
 }
 
 /* ... resto de estilos ... */
 
-/* Ajuste específico para selects */
-.floating-input-group select {
-  cursor: pointer;
-  appearance: none;
-}
-
-/* Evitar que el calendario se mueva con el scroll del modal */
+/* Calendario base */
 .cal-dropdown {
   position: absolute;
   top: 100%;
@@ -37,6 +30,17 @@
   z-index: 100;
   margin-top: 0.5rem;
 }
+
+/* ─── CALENDARIO A LA IZQUIERDA EN PANTALLAS HORIZONTALES ─── */
+@media (orientation: landscape) and (max-height: 700px) {
+  .cal-dropdown {
+    top: -50%; /* Se alinea verticalmente con el input */
+    left: auto;
+    right: 105%; /* Aparece a la izquierda */
+    margin-top: 0;
+  }
+}
+
 
 /* Modo Libro: Se ensancha para mostrar los dos paneles */
 .login-container.book-mode {
