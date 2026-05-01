@@ -21,21 +21,21 @@ export const CartProvider = ({ children }) => {
 
   // Acción: Añadir al carrito
   const addToCart = (product) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === product.id)
-      
-      if (existingItem) {
-        addNotification(`${product.name} actualizado en el carrito`, 'success')
-        return prevItems.map((item) =>
+    const isExisting = cartItems.find((item) => item.id === product.id)
+    
+    if (isExisting) {
+      addNotification(`${product.name} actualizado en el carrito`, 'success')
+      setCartItems(prevItems => 
+        prevItems.map((item) =>
           item.id === product.id 
             ? { ...item, quantity: item.quantity + 1 } 
             : item
         )
-      }
-
+      )
+    } else {
       addNotification(`${product.name} añadido al carrito`, 'success')
-      return [...prevItems, { ...product, quantity: 1 }]
-    })
+      setCartItems(prevItems => [...prevItems, { ...product, quantity: 1 }])
+    }
   }
 
   // Acción: Quitar una unidad (o el item si es 1)
