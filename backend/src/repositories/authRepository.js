@@ -57,6 +57,17 @@ const createUser = async (userData) => {
   return userId;
 };
 
+// --- Gestión de Tokens (En memoria por ahora) ---
+const validTokens = new Map();
+
+const saveToken = async (token, userId) => {
+  validTokens.set(token, userId);
+};
+
+const validateToken = async (token) => {
+  return validTokens.get(token) || null;
+};
+
 module.exports = {
   findUserByEmail,
   createUser,
