@@ -1,3 +1,7 @@
+/* ==========================================================================
+   DASHBOARD - ESTILOS GLOBALES & CONTENIDO (Originales)
+   ========================================================================== */
+
 .dashboard-wrapper {
   min-height: 100vh;
   background: var(--bg);
@@ -6,44 +10,49 @@
 
 .dashboard-container {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: auto 1fr;
   min-height: calc(100vh - 4.5rem);
   margin-top: 4.5rem;
 }
 
-/* Sidebar Estilo Premium */
-.dashboard-sidebar {
+/* ==========================================================================
+   SIDEBAR - RECTIFICACIÓN (Inmune a solapamientos)
+   ========================================================================== */
+.sidebar-main-wrapper {
   background: color-mix(in srgb, var(--bg2) 80%, transparent);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
   border-right: 1px solid var(--border);
-  padding: 2rem 1rem;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0 !important; /* Manejaremos el gap con márgenes internos */
+  padding: 2.5rem 1.2rem;
+  
+  display: grid;
+  grid-template-rows: auto 1fr; 
+  gap: 3rem;
+  
   position: sticky;
   top: 4.5rem;
   height: calc(100vh - 4.5rem);
+  width: 280px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: 100;
 }
 
-.user-info {
+.sidebar-profile-block {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2rem;
-  flex-shrink: 0;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.avatar-placeholder {
+.sidebar-avatar-frame {
   width: 48px;
   height: 48px;
   flex-shrink: 0;
   background: var(--y);
   color: var(--bg);
-  border-radius: 12px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
   font-weight: 900;
@@ -51,79 +60,80 @@
   box-shadow: 0 4px 15px rgba(240, 224, 0, 0.3);
 }
 
-.user-text {
-  min-width: 0; /* Permite que el texto se corte */
+.sidebar-user-info {
+  overflow: hidden;
 }
 
-.user-text h3 {
-  font-size: 0.95rem;
+.user-name-label {
+  font-size: 1rem;
   margin: 0;
   font-weight: 700;
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.user-text span {
+.user-role-badge {
   font-size: 0.65rem;
   color: var(--y);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
   font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 2px 0 0 0;
 }
 
-.sidebar-nav {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 1.5rem !important;
-  flex-grow: 1;
-}
-
-.nav-group {
+.sidebar-nav-container {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 2.5rem;
 }
 
-.nav-group label {
-  font-size: 0.7rem;
+.menu-group-title {
+  font-size: 0.75rem;
   text-transform: uppercase;
   color: var(--muted);
   letter-spacing: 0.2em;
-  font-weight: 800;
-  margin-bottom: 0.6rem;
+  font-weight: 900;
+  margin-bottom: 1.2rem;
   padding-left: 0.5rem;
 }
 
-.nav-group button {
-  background: transparent;
-  border: none;
-  color: var(--text);
-  text-align: left;
-  padding: 0.7rem 1rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
+.menu-items-list {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  position: relative;
-  z-index: 1;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.nav-group button:hover {
-  background: color-mix(in srgb, var(--y) 10%, transparent);
+.sidebar-action-btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-action-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
   color: var(--y);
 }
 
-.nav-group button.active {
+.sidebar-action-btn.is-active {
   background: var(--y);
   color: var(--bg);
+  box-shadow: 0 8px 20px rgba(240, 224, 0, 0.2);
 }
 
-/* Área de Contenido */
+/* ==========================================================================
+   ÁREA DE CONTENIDO (Originales Restaurados)
+   ========================================================================== */
 .dashboard-content {
   padding: 3rem;
   max-width: 1200px;
@@ -155,7 +165,6 @@
   color: var(--muted);
 }
 
-/* Grid de Tarjetas */
 .status-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -172,7 +181,6 @@
   color: var(--muted);
 }
 
-/* Spinner Minimalista */
 .dashboard-loader {
   display: flex;
   flex-direction: column;
@@ -196,12 +204,140 @@
   to { transform: rotate(360deg); }
 }
 
-/* Responsivo */
-@media (max-width: 900px) {
+/* ==========================================================================
+   SECCIÓN DE PERFIL
+   ========================================================================== */
+
+.profile-container {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 2rem;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+}
+
+.profile-avatar-large {
+  width: 100px;
+  height: 100px;
+  background: var(--y);
+  color: var(--bg);
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  font-size: 3rem;
+  font-weight: 900;
+  box-shadow: 0 10px 30px rgba(240, 224, 0, 0.3);
+}
+
+.profile-title-block h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-role-tag {
+  background: rgba(240, 224, 0, 0.1);
+  color: var(--y);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.profile-info-card {
+  background: var(--bg2);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+.profile-info-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.info-group {
+  margin-bottom: 1.5rem;
+}
+
+.info-group:last-child {
+  margin-bottom: 0;
+}
+
+.info-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.info-group p {
+  font-size: 1.1rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.edit-profile-btn {
+  background: var(--y);
+  color: var(--bg);
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.edit-profile-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(240, 224, 0, 0.2);
+}
+
+@media (max-width: 1000px) {
   .dashboard-container {
     grid-template-columns: 1fr;
   }
-  .dashboard-sidebar {
-    display: none; /* Aquí implementaríamos un menú móvil después */
+  .sidebar-main-wrapper {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
   }
 }

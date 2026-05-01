@@ -29,40 +29,45 @@ const DashboardSidebar = ({ user, role, activeSection, onSectionChange }) => {
   ];
 
   return (
-    <aside className="dashboard-sidebar">
-      <div className="user-info">
-        <div className="avatar-placeholder">{user?.name?.[0] || 'U'}</div>
-        <div className="user-text">
-          <h3>{user?.name || 'Usuario'}</h3>
-          <span>{role}</span>
+    <div className="sidebar-main-wrapper">
+      {/* SECCIÓN 1: PERFIL DEL USUARIO */}
+      <div className="sidebar-profile-block">
+        <div className="sidebar-avatar-frame">
+          {user?.name?.[0] || 'U'}
+        </div>
+        <div className="sidebar-user-info">
+          <p className="user-name-label">{user?.name || 'Usuario'}</p>
+          <p className="user-role-badge">{role}</p>
         </div>
       </div>
-      
-      <nav className="sidebar-nav">
+
+      {/* SECCIÓN 2: MENÚ DE NAVEGACIÓN */}
+      <div className="sidebar-nav-container">
         {menuGroups.map((group, idx) => {
-          // Si el grupo es exclusivo de ciertos roles y el usuario no lo tiene, saltar
           if (group.roles && !group.roles.includes(role)) return null;
 
           return (
-            <div key={idx} className="nav-group">
-              <label>{group.label}</label>
-              {group.items.map((item) => {
-                if (!item.roles.includes(role)) return null;
-                return (
-                  <button 
-                    key={item.id}
-                    className={activeSection === item.id ? 'active' : ''}
-                    onClick={() => onSectionChange(item.id)}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
+            <div key={idx} className="nav-menu-group">
+              <span className="menu-group-title">{group.label}</span>
+              <div className="menu-items-list">
+                {group.items.map((item) => {
+                  if (!item.roles.includes(role)) return null;
+                  return (
+                    <button 
+                      key={item.id}
+                      className={`sidebar-action-btn ${activeSection === item.id ? 'is-active' : ''}`}
+                      onClick={() => onSectionChange(item.id)}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           );
         })}
-      </nav>
-    </aside>
+      </div>
+    </div>
   );
 };
 
