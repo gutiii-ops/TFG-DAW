@@ -19,8 +19,10 @@ const ProductCard = ({ product }) => {
             {product.price.toFixed(2)}€
           </span>
         </div>
-        <h3>{product.name}</h3>
-        <p>{product.description}</p>
+        <h3 className='product-card-title'>{product.name}</h3>
+        <div className='product-card-description'>
+          <p>{product.description}</p>
+        </div>
         <button type='button' className='product-card-button'>
           Añadir al carrito
         </button>
