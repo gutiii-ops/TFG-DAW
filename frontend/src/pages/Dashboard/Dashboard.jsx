@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import Navbar from '../../components/navbar';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { Navbar } from '../../components/navbar';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar';
 import DashboardCard from '../../components/dashboard/DashboardCard';
 import ProfileSection from '../../components/dashboard/ProfileSection';
 import '../../styles/pages/dashboard.css';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, role } = useContext(AuthContext);
   const [activeSection, setActiveSection] = useState('overview');
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -15,7 +15,7 @@ const Dashboard = () => {
     lastOrder: 'N/A'
   });
 
-  const role = user?.role || 'User';
+  const userRole = role || 'User';
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -110,7 +110,7 @@ const Dashboard = () => {
       <div className="dashboard-container">
         <DashboardSidebar 
           user={user} 
-          role={role} 
+          role={userRole} 
           activeSection={activeSection}
           onSectionChange={setActiveSection}
         />
