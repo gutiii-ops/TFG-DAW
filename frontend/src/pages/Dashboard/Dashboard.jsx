@@ -23,7 +23,7 @@ const Dashboard = () => {
         const token = localStorage.getItem('jwt_token');
         if (!token || !user?.id) return;
 
-        const response = await fetch(`http://localhost:3000/api/orders/user/${user.id}`, {
+        const response = await fetch(`http://localhost:8000/api/orders/user/${user.id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 

@@ -10,7 +10,7 @@ const ProfileSection = ({ user: authUser }) => {
       try {
         setLoading(true);
         const token = localStorage.getItem('jwt_token');
-        const response = await fetch(`http://localhost:3000/api/users/${authUser.id}`, {
+        const response = await fetch(`http://localhost:8000/api/users/${authUser.id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
