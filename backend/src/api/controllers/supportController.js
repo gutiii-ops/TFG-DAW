@@ -1,4 +1,4 @@
-const supportService = require('../services/supportService');
+const supportService = require('../../services/supportService');
 
 const getTickets = async (req, res) => {
     try {
