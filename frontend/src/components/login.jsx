@@ -2,7 +2,9 @@
           login.jsx - Componente funcional que gestiona el modal flotante de inicio de sesión y registro
 ======================================================================================================================= */
 // Import base de React y hooks necesarios
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 // Import de iconos SVG
 import LockIcon from '../assets/icons/lock-login_icon.svg?react'
 // Import de la función de autenticación (servicio mock/real)
@@ -91,87 +93,84 @@ const EU_COUNTRIES = [
   'Suecia'
 ]
 
-// Componente funcional principal que encapsula ambas pantallas: Inicio de sesión y Registro
-export const Login = () => {
-  const [isLogin, setIsLogin] = useState(true)
-  const [name, setName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [documentId, setDocumentId] = useState('')
-  const [birthDate, setBirthDate] = useState('')
-  const [country, setCountry] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  useEffect(() => {
-    // Verificar si hay sesión activa al montar
-    const checkAuthStatus = () => {
-      const token = localStorage.getItem('token')
-      setIsAuthenticated(!!token)
+  export const Login = () => {
+    const { login: contextLogin, isAuthenticated } = useContext(AuthContext)
+    const navigate = useNavigate()
+  
+    const [isLogin, setIsLogin] = useState(true)
+    const [name, setName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [documentId, setDocumentId] = useState('')
+    const [birthDate, setBirthDate] = useState('')
+    const [country, setCountry] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
+  
+    useEffect(() => {
+      // Escuchar el evento customizado del navbar para abrir modal
+      const handleOpenLogin = () => {
+        setIsOpen(true)
+      }
+  
+      // Si la URL actual es /login, abrimos el modal automáticamente
+      if (window.location.pathname === '/login') {
+        setIsOpen(true)
+      }
+  
+      document.addEventListener('openLoginModal', handleOpenLogin)
+  
+      return () => {
+        document.removeEventListener('openLoginModal', handleOpenLogin)
+      }
+    }, [])
+  
+    const toggleMode = () => {
+      setIsLogin(!isLogin)
+      setError('')
+      setPassword('')
+      setConfirmPassword('')
+      setName('')
+      setLastName('')
+      setPhone('')
+      setDocumentId('')
+      setBirthDate('')
+      setCountry('')
     }
-    
-    checkAuthStatus()
-
-    // Escuchar cambios de estado desde otras partes
-    window.addEventListener('auth-change', checkAuthStatus)
-
-    // Escuchar el evento customizado del navbar para abrir modal
-    const handleOpenLogin = () => {
-      setIsOpen(true)
-    }
-
-    document.addEventListener('openLoginModal', handleOpenLogin)
-
-    return () => {
-      window.removeEventListener('auth-change', checkAuthStatus)
-      document.removeEventListener('openLoginModal', handleOpenLogin)
-    }
-  }, [])
-
-  const toggleMode = () => {
-    setIsLogin(!isLogin)
-    setError('')
-    setPassword('')
-    setConfirmPassword('')
-    setName('')
-    setLastName('')
-    setPhone('')
-    setDocumentId('')
-    setBirthDate('')
-    setCountry('')
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError('')
-
-    if (!isLogin && password !== confirmPassword) {
-      setError('Las contraseñas no coinciden.')
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      if (isLogin) {
-        const authResult = await authUser(email, password)
-
-        if (authResult.error) {
-          throw new Error(authResult.error)
-        }
-
-        localStorage.setItem('token', authResult.token)
-        localStorage.setItem('userId', authResult.userId)
-        setIsAuthenticated(true)
-        window.dispatchEvent(new Event('auth-change'))
-        setEmail('')
-        setPassword('')
-      } else {
+  
+    const handleSubmit = async (event) => {
+      event.preventDefault()
+      setError('')
+  
+      if (!isLogin && password !== confirmPassword) {
+        setError('Las contraseñas no coinciden.')
+        return
+      }
+  
+      setLoading(true)
+  
+      try {
+        if (isLogin) {
+          const authResult = await authUser(email, password)
+  
+          if (authResult.error) {
+            throw new Error(authResult.error)
+          }
+  
+          // Llamamos al AuthContext para actualizar la app entera
+          contextLogin(authResult.token)
+          
+          setEmail('')
+          setPassword('')
+          
+          // Cerramos el modal y navegamos al dashboard
+          setIsOpen(false)
+          navigate('/dashboard')
+        } else {
         // Registro offline temporal: todavía no hay endpoint de registro completo.
         console.log('Registro simulado con datos:', {
           name,

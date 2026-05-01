@@ -1,0 +1,137 @@
+/* Estilos para el panel de administración */
+
+.admin-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.dashboard-card {
+  background-color: var(--card);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid var(--border);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(240, 224, 0, 0.1);
+  border-color: var(--y);
+}
+
+.dashboard-card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--y);
+}
+
+.dashboard-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.dashboard-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* SubView Header */
+.subview-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--y);
+  cursor: pointer;
+  margin-right: 1.5rem;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: var(--y2);
+  text-decoration: underline;
+}
+
+.subview-header h2 {
+  margin: 0;
+  color: var(--text);
+}
+
+/* Paginated Table */
+.table-container {
+  overflow-x: auto;
+  background: var(--card);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.admin-table th {
+  background-color: var(--bg2);
+  font-weight: 600;
+  color: var(--y);
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--bg2);
+  border-top: 1px solid var(--border);
+}
+
+.pagination-controls button {
+  padding: 0.5rem 1rem;
+  background-color: var(--card);
+  color: var(--y);
+  border: 1px solid var(--y);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: var(--y);
+  color: var(--bg);
+}
+
+.pagination-controls button:disabled {
+  background-color: var(--bg3);
+  color: var(--muted);
+  border-color: var(--border);
+  cursor: not-allowed;
+}

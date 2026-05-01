@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
 const authRepository = require('../repositories/authRepository');
 
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'mi-secreto-super-seguro';
+
 /**
  * Servicio encargado de gestionar la lógica de negocio para la autenticación.
  * 
@@ -35,13 +38,19 @@ const login = async (email, password) => {
     throw error;
   }
 
-  // 4. Generación de token (acá crearemos el JWT en el futuro)
-  const token = `mock-token-user-${user.user_id}`;
+  // 4. Generación de JWT real incluyendo el rol
+  const payload = {
+    userId: user.user_id,
+    role: user.role_name || 'User'
+  };
+
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
   
-  // 5. Guardar token en el repositorio
+  // 5. Guardar token en el repositorio (opcional, si mantenemos el control de tokens válidos)
   await authRepository.saveToken(token, user.user_id);
 
-  return { token, userId: user.user_id };
+  // Devolvemos el token, el id y también el ROL para el frontend
+  return { token, userId: user.user_id, role: payload.role };
 };
 
 const validateToken = async (token) => {

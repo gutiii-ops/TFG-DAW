@@ -2,8 +2,9 @@
           navbar.jsx - Componente funcional que muestra la barra de navegación en la parte superior de la página
 ======================================================================================================================= */
 // Import base de React
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 // Import de estilos específicos para la barra de navegación
 import '../styles/components/navbar.css'
 // Import de iconos necesarios para la barra de navegación
@@ -11,60 +12,72 @@ import CartIcon from '../assets/icons/shopping-cart_icon.svg?react'
 
 // Componente funcional que representa la barra de navegación
 export const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('token'))
+  const { isAuthenticated, logout, role } = useContext(AuthContext)
+  const location = useLocation()
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    // Escuchar cambios de autenticación locales o entre pestañas
-    const handleAuthChange = () => {
-      const token = localStorage.getItem('token')
-      setIsAuthenticated(!!token)
-    }
-
-    window.addEventListener('auth-change', handleAuthChange)
-    window.addEventListener('storage', handleAuthChange) // Por si cambia en otra pestaña
-    return () => {
-      window.removeEventListener('auth-change', handleAuthChange)
-      window.removeEventListener('storage', handleAuthChange)
-    }
-  }, [])
+  const isDashboard = location.pathname.startsWith('/dashboard')
 
   const handleLoginClick = () => {
     document.dispatchEvent(new Event('openLoginModal'))
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
   return (
     <nav>
-      <a className='nav-logo' href='/'>
+      <Link className='nav-logo' to={isDashboard ? '/dashboard' : '/'}>
         <span>Gym</span>Mgmt
-      </a>
-      <ul className='nav-links'>
-        <li>
-          <a href='/'>Sobre Nosotros</a>
-        </li>
-        <li>
-          <a href='/services'>Servicios</a>
-        </li>
-        <li>
-          <a href='/store'>Tienda</a>
-        </li>
-        <li>
-          <a href='/#contacto'>Contacto</a>
-        </li>
-      </ul>
+      </Link>
+      
+      {!isDashboard ? (
+        <ul className='nav-links'>
+          <li>
+            <Link to='/'>Sobre Nosotros</Link>
+          </li>
+          <li>
+            <Link to='/services'>Servicios</Link>
+          </li>
+          <li>
+            <Link to='/store'>Tienda</Link>
+          </li>
+          <li>
+            <a href='/#contacto'>Contacto</a>
+          </li>
+        </ul>
+      ) : (
+        <ul className='nav-links'>
+          <li>
+            <span style={{ color: 'var(--muted)', fontWeight: 'bold' }}>PANEL DE {role?.toUpperCase()}</span>
+          </li>
+        </ul>
+      )}
 
       {isAuthenticated ? (
-        <Link to='/user' className='nav-cta nav-user-link'>
-          Mi Cuenta
-        </Link>
+        isDashboard ? (
+          <button className='nav-cta' onClick={handleLogout}>
+            Cerrar Sesión
+          </button>
+        ) : (
+          <Link to='/dashboard' className='nav-cta nav-user-link'>
+            Mi Panel
+          </Link>
+        )
       ) : (
         <button className='nav-cta' onClick={handleLoginClick}>
           Mi Cuenta
         </button>
       )}
-      <button className='nav-cart'>
-        <CartIcon className='nav-cart-icon' />
-        <span className='nav-cart-badge'>0</span>
-      </button>
+      
+      {!isDashboard && (
+        <button className='nav-cart'>
+          <CartIcon className='nav-cart-icon' />
+          <span className='nav-cart-badge'>0</span>
+        </button>
+      )}
     </nav>
   )
 }

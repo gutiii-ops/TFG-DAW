@@ -16,6 +16,16 @@ const users = [
   }
 ]
 
+const roles = [
+  { role_id: 1, role_name: 'Admin', role_description: 'Administrador del sistema' },
+  { role_id: 2, role_name: 'Coach', role_description: 'Entrenador' },
+  { role_id: 3, role_name: 'User', role_description: 'Usuario regular' }
+];
+
+const user_roles = [
+  { user_id: 1, role_id: 1 } // Lucía tiene rol 1 (Admin)
+];
+
 const products = [
   {
     product_id: 1,
@@ -91,6 +101,8 @@ const order_details = [
 
 module.exports = {
   users,
+  roles,
+  user_roles,
   products,
   orders,
   order_details
