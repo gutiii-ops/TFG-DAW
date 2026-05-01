@@ -19,18 +19,8 @@
   z-index: 2000;
 }
 
-/* ─── POSICIONAMIENTO LATERAL EN LANDSCAPE ─── */
-@media (orientation: landscape) and (max-height: 650px) {
-  .cal-dropdown {
-    top: -100px; /* Sube un poco para centrarse con el input */
-    left: auto;
-    right: 105%; /* Aparece a la izquierda del campo */
-    margin-top: 0;
-  }
-}
-
 .animate-fade-up {
-  animation: fadeUp 0.2s ease-out both; /* Más rápida */
+  animation: fadeUp 0.2s ease-out both;
 }
 
 /* Base calendar styles adapted from the landing page */

@@ -11,35 +11,29 @@
 
 .login-container {
   background: var(--card);
-  border: 1px solid rgba(255, 255, 255, 0.15); /* Borde más definido */
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 2rem;
   box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.6);
   padding: 2.5rem;
   position: relative;
   transition: width 0.25s ease-out;
   width: min(30rem, 100%);
+  /* Quitamos overflow: hidden para que el calendario pueda salir por la izquierda */
 }
 
-/* ... resto de estilos ... */
-
-/* Calendario base */
-.cal-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 100;
-  margin-top: 0.5rem;
-}
+/* ... */
 
 /* ─── CALENDARIO A LA IZQUIERDA EN PANTALLAS HORIZONTALES ─── */
-@media (orientation: landscape) and (max-height: 700px) {
+@media (orientation: landscape) {
   .cal-dropdown {
-    top: -50%; /* Se alinea verticalmente con el input */
-    left: auto;
-    right: 105%; /* Aparece a la izquierda */
-    margin-top: 0;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    left: auto !important;
+    right: 105% !important;
+    margin-top: 0 !important;
   }
 }
+
 
 
 /* Modo Libro: Se ensancha para mostrar los dos paneles */
