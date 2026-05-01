@@ -70,11 +70,16 @@ const register = async (userData) => {
     throw error;
   }
 
-  // 2. Hashear la contraseña con bcrypt
   const saltRounds = 10;
   userData.password_hash = await bcrypt.hash(password, saltRounds);
 
-  // 3. Crear el usuario en la BBDD
+  // 3. Formatear fecha para SQL Server (de DD/MM/YYYY a YYYY-MM-DD)
+  if (userData.birthDate && userData.birthDate.includes('/')) {
+    const [day, month, year] = userData.birthDate.split('/');
+    userData.birthDate = `${year}-${month}-${day}`;
+  }
+
+  // 4. Crear el usuario en la BBDD
   const userId = await authRepository.createUser(userData);
 
   return { message: 'Registro completado con éxito', userId };
