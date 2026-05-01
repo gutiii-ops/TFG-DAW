@@ -4,7 +4,13 @@ const ProductCard = ({ product }) => {
   return (
     <article className='product-card'>
       <div className='product-card-image'>
-        <span>{product.category.toUpperCase()}</span>
+        {product.image ? (
+          <img src={product.image} alt={product.name} />
+        ) : (
+          <div className="image-placeholder">
+            <span>{product.category.toUpperCase()}</span>
+          </div>
+        )}
       </div>
       <div className='product-card-body'>
         <div className='product-card-meta'>

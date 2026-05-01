@@ -15,8 +15,10 @@ Notas:
 CREATE TABLE [dbo].[products] (
 	[product_id] INT IDENTITY(1,1) PRIMARY KEY,
 	[product_name] VARCHAR(150) NOT NULL,
+	[product_description] VARCHAR(MAX),
 	[product_category] TINYINT NOT NULL, 
-	[product_price] DECIMAL(10, 2) NOT NULL 
+	[product_price] DECIMAL(10, 2) NOT NULL,
+	[product_image_url] VARCHAR(255)
 );
 
 /* Tabla: orders (Cabecera del Pedido)

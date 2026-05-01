@@ -23,9 +23,8 @@ const normalizeProduct = (raw) => ({
   category: categoryMap[raw.product_category] || 'otro',
   price: Number(raw.product_price),
   badge: badgeMap[raw.product_category] || 'PRODUCTO',
-  description:
-    raw.product_description ||
-    `Artículo de ${categoryMap[raw.product_category] || 'categoría general'}`
+  description: raw.product_description || 'Sin descripción disponible',
+  image: raw.product_image_url || null
 })
 
 export const getStoreProducts = async () => {
