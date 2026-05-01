@@ -1,244 +1,184 @@
-.login-open-button {
-  appearance: none;
-  border: none;
-  background: linear-gradient(135deg, var(--y), var(--y2));
-  color: var(--bg3);
-  font-weight: 700;
-  padding: 0.95rem 1.6rem;
-  border-radius: 999px;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.login-open-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0.875rem 1.875rem rgba(0, 0, 0, 0.18);
-}
-
+/* ─── Estilos Base del Modal ─── */
 .login-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
-  z-index: 1200;
-  padding: 1.5rem;
+  z-index: 2000;
+  padding: 1rem;
 }
 
 .login-container {
-  width: min(32rem, 100%);
   background: var(--card);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1.75rem;
-  box-shadow: 0 1.75rem 4.375rem rgba(0, 0, 0, 0.4);
-  padding: 2.5rem 2.25rem 2rem;
+  border-radius: 2rem;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.5);
+  padding: 3rem;
   position: relative;
-  backdrop-filter: blur(10px);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s;
+  width: min(30rem, 100%);
+  overflow: hidden;
+}
+
+/* Modo Libro (Ancho expandido) */
+.login-container.register-mode {
+  width: min(60rem, 100%);
 }
 
 .login-close-button {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: none;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
+  border: none;
   border-radius: 50%;
+  color: var(--muted);
   display: grid;
   place-items: center;
   cursor: pointer;
+  z-index: 10;
   transition: all 0.2s;
 }
 
 .login-close-button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--y);
   transform: rotate(90deg);
 }
 
-.close-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--y);
+.form-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
-.login-form {
-  display: grid;
-  gap: 1.25rem;
+.form-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to bottom, #fff, #aaa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.form-sections {
+.form-subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ─── Layout de Libro ─── */
+.book-layout {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+.book-page {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  animation: fadeIn 0.5s ease-out;
 }
 
+.book-divider {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+/* ─── Estilos de Secciones ─── */
 .section-tag {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.15em;
   color: var(--y);
-  opacity: 0.85;
-  margin-top: 0.5rem;
-  margin-bottom: -0.5rem;
-  border-left: 2px solid var(--y);
-  padding-left: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
-.login-form h2 {
-  font-size: clamp(1.7rem, 2vw, 2.2rem);
-}
-
-.login-form label {
-  font-size: 0.95rem;
-  color: var(--muted);
-}
-
-.login-form input,
-.login-form select {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text);
-  outline: none;
-  font-family: inherit;
-  font-size: 0.95rem;
-}
-
-.login-form select option {
-  background: var(--bg3);
-  color: var(--text);
-}
-
-.login-form input:focus,
-.login-form select:focus {
-  border-color: var(--y2);
-  box-shadow: 0 0 0 0.25rem rgba(255, 208, 0, 0.12);
-}
-
-.login-error {
-  color: var(--red);
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.login-submit-button {
-  width: 100%;
-  border: none;
-  border-radius: 1rem;
-  padding: 0.875rem 0;
-  background: linear-gradient(135deg, var(--y), var(--y2));
-  color: var(--bg3);
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.login-submit-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.login-submit-button:not(:disabled):hover {
-  transform: translateY(-2px);
-  background-color: var(--y2);
-}
-
-@media (max-width: 500px) {
-  .login-container {
-    padding: 1.5rem 1.25rem 1.25rem;
-    border-radius: 1.375rem;
-  }
-
-  .login-close-button {
-    top: 0.875rem;
-    right: 0.875rem;
-  }
-}
-
-.input-group {
+.login-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  width: 100%;
-}
-
-.
-
-/* ─── Estilos para usuario autenticado ─── */
-.login-authenticated {
-  display: flex;
-  align-items: center;
   gap: 1rem;
 }
 
-.login-user-link {
-  appearance: none;
-  border: none;
-  background: linear-gradient(135deg, var(--y), var(--y2));
-  color: var(--bg3);
-  font-weight: 700;
-  padding: 0.95rem 1.6rem;
-  border-radius: 999px;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.login-user-link:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0.875rem 1.875rem rgba(0, 0, 0, 0.18);
-}
-
-.login-logout-button {
-  appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: transparent;
-  color: var(--muted);
-  font-weight: 600;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
-  font-size: 0.9rem;
-}
-
-.login-logout-button:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
-}
-login-row {
-  display: flex;
-  gap: 1.125rem;
+/* ─── FLOATING LABELS (La clave del diseño) ─── */
+.input-group {
+  position: relative;
   width: 100%;
 }
 
-.login-row > * {
-  flex: 1;
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 1.2rem 1rem 0.8rem; /* Padding superior extra para dejar sitio al label */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s;
 }
 
-@media (max-width: 500px) {
-  .login-row {
-    flex-direction: column;
-  }
+.input-group label {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto de flotación al enfocar o tener valor */
+.input-group input:focus ~ label,
+.input-group input:not(:placeholder-shown) ~ label,
+.input-group.has-value label {
+  top: 0.4rem;
+  left: 1rem;
+  font-size: 0.7rem;
+  color: var(--y);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input-group input:focus {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--y);
+  box-shadow: 0 0 15px rgba(255, 208, 0, 0.1);
+}
+
+/* ─── Botones y Toggles ─── */
+.login-submit-button {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+  background: linear-gradient(135deg, var(--y), var(--y2));
+  color: var(--bg3);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.login-submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 208, 0, 0.2);
 }
 
 .login-toggle-text {
   text-align: center;
-  font-size: 0.9rem;
+  margin-top: 1.5rem;
   color: var(--muted);
-  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .login-toggle-btn {
@@ -247,12 +187,53 @@ login-row {
   color: var(--y);
   font-weight: 700;
   cursor: pointer;
-  padding: 0;
-  font-size: 1em;
   text-decoration: underline;
-  transition: color 0.15s;
 }
 
-.login-toggle-btn:hover {
-  color: var(--y2);
+/* ─── Visual en modo Login ─── */
+.login-visual-hint {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--muted);
+}
+
+.glow-orb {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, var(--y) 0%, transparent 70%);
+  filter: blur(40px);
+  opacity: 0.3;
+  animation: pulse 4s infinite alternate;
+  margin-bottom: 1rem;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); opacity: 0.2; }
+  to { transform: scale(1.2); opacity: 0.4; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 850px) {
+  .login-container.register-mode {
+    width: min(30rem, 100%);
+  }
+  .book-layout {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .book-divider {
+    display: none;
+  }
+  .login-row {
+    flex-direction: column;
+  }
 }
