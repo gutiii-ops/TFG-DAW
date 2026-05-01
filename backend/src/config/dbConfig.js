@@ -1,14 +1,20 @@
 const sql = require('mssql');
-require('dotenv').config();
+const path = require('path');
+const getLogger = require('../utils/logger');
+
+require('dotenv').config({ path: path.join(__dirname, '../config/.env') });
+
+const logger = getLogger('config', 'dbConfig');
 
 const dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     server: process.env.DB_SERVER,
     database: process.env.DB_NAME,
+    port: parseInt(process.env.DB_PORT),
     options: {
-        encrypt: true, // Para Azure
-        trustServerCertificate: true // Para desarrollo local
+        encrypt: false,
+        trustServerCertificate: true
     },
     pool: {
         max: 10,
@@ -20,12 +26,12 @@ const dbConfig = {
 let poolPromise = new sql.ConnectionPool(dbConfig)
     .connect()
     .then(pool => {
-        console.log('✅ Conectado a SQL Server');
+        logger.info('Conectado a SQL Server');
         return pool;
     })
     .catch(err => {
-        console.error('❌ Error de conexión a la base de datos:', err);
-        process.exit(1);
+        logger.error(`Error de conexión a la base de datos: ${err.message}`);
+        throw err;
     });
 
 module.exports = {
