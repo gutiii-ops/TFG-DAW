@@ -16,45 +16,47 @@
   background: color-mix(in srgb, var(--bg2) 80%, transparent);
   backdrop-filter: blur(10px);
   border-right: 1px solid var(--border);
-  padding: 2.5rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
+  padding: 2rem 1rem;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important; /* Manejaremos el gap con márgenes internos */
   position: sticky;
   top: 4.5rem;
   height: calc(100vh - 4.5rem);
-  overflow-y: auto; /* Permite scroll si hay muchos botones */
+  overflow-y: auto;
+  z-index: 10;
 }
 
 .user-info {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding-bottom: 2rem;
+  padding: 1rem;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  flex-shrink: 0;
 }
 
 .avatar-placeholder {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
   background: var(--y);
   color: var(--bg);
-  border-radius: 14px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   font-weight: 900;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   box-shadow: 0 4px 15px rgba(240, 224, 0, 0.3);
 }
 
 .user-text {
-  overflow: hidden; /* Evita que nombres largos rompan el layout */
+  min-width: 0; /* Permite que el texto se corte */
 }
 
 .user-text h3 {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   margin: 0;
   font-weight: 700;
   white-space: nowrap;
@@ -63,7 +65,7 @@
 }
 
 .user-text span {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--y);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -71,15 +73,16 @@
 }
 
 .sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+  flex-grow: 1;
 }
 
 .nav-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .nav-group label {
@@ -88,7 +91,7 @@
   color: var(--muted);
   letter-spacing: 0.2em;
   font-weight: 800;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   padding-left: 0.5rem;
 }
 
@@ -97,15 +100,17 @@
   border: none;
   color: var(--text);
   text-align: left;
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 1rem;
   border-radius: 10px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  position: relative;
+  z-index: 1;
 }
 
 .nav-group button:hover {
