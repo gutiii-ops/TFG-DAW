@@ -3,10 +3,12 @@ const router = express.Router()
 const { authUserToken } = require('../middlewares/authMiddleware')
 const {
   getUserOrders,
-  getOrderById
+  getOrderById,
+  createOrder
 } = require('../controllers/orderController')
 
 router.get('/user/:userId', authUserToken, getUserOrders)
 router.get('/:orderId', authUserToken, getOrderById)
+router.post('/', authUserToken, createOrder)
 
 module.exports = router

@@ -9,10 +9,12 @@ import { AuthContext } from '../context/AuthContext'
 import '../styles/components/navbar.css'
 // Import de iconos necesarios para la barra de navegación
 import CartIcon from '../assets/icons/shopping-cart_icon.svg?react'
+import { CartContext } from '../context/CartContext'
 
 // Componente funcional que representa la barra de navegación
 export const Navbar = () => {
   const { isAuthenticated, logout, role } = useContext(AuthContext)
+  const { cartCount, setIsCartOpen } = useContext(CartContext)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -73,9 +75,9 @@ export const Navbar = () => {
       )}
       
       {!isDashboard && (
-        <button className='nav-cart'>
+        <button className='nav-cart' onClick={() => setIsCartOpen(true)}>
           <CartIcon className='nav-cart-icon' />
-          <span className='nav-cart-badge'>0</span>
+          {cartCount > 0 && <span className='nav-cart-badge'>{cartCount}</span>}
         </button>
       )}
     </nav>
