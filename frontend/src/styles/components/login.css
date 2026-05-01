@@ -28,42 +28,68 @@
 }
 
 .login-container {
-  width: min(28.75rem, 100%);
+  width: min(32rem, 100%);
   background: var(--card);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1.75rem;
-  box-shadow: 0 1.75rem 4.375rem rgba(0, 0, 0, 0.3);
-  padding: 2rem 2rem 1.75rem;
+  box-shadow: 0 1.75rem 4.375rem rgba(0, 0, 0, 0.4);
+  padding: 2.5rem 2.25rem 2rem;
   position: relative;
+  backdrop-filter: blur(10px);
 }
 
 .login-close-button {
   position: absolute;
-  top: 1.125rem;
-  right: 1.125rem;
+  top: 1.25rem;
+  right: 1.25rem;
   width: 2.25rem;
   height: 2.25rem;
   border: none;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text);
   border-radius: 50%;
-  font-size: 1.4rem;
+  display: grid;
+  place-items: center;
   cursor: pointer;
+  transition: all 0.2s;
 }
+
+.login-close-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg);
+}
+
 .close-icon {
-  width: 2rem;
-  height: 2rem;
-  padding: 0.05rem;
-  background-color: var(--y2);
-  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--y);
 }
+
 .login-form {
   display: grid;
-  gap: 1.125rem;
+  gap: 1.25rem;
+}
+
+.form-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.section-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--y);
+  opacity: 0.85;
+  margin-top: 0.5rem;
+  margin-bottom: -0.5rem;
+  border-left: 2px solid var(--y);
+  padding-left: 0.6rem;
 }
 
 .login-form h2 {
-  margin-bottom: 0.25rem;
   font-size: clamp(1.7rem, 2vw, 2.2rem);
 }
 

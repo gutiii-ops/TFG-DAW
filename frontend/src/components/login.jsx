@@ -143,18 +143,20 @@ export const Login = () => {
             throw new Error(regResult.error);
           }
 
-          addNotification('¡Registro completado! Ya puedes iniciar sesión.', 'success');
+          addNotification('Registro exitoso', 'success');
           setIsOpen(false);
+          // Opcional: Volver al modo login para que el usuario entre
+          setIsLogin(true);
         }
         setLoading(false)
       } catch (err) {
         setLoading(false)
+        // Disparamos la notificación roja para cualquier error (login o registro)
+        addNotification(err.message || 'Error en la operación', 'error')
+        
+        // Si es un error de login, cerramos el modal para que el usuario vea el toast
         if (isLogin) {
-          // CERRAMOS EL MODAL y disparamos la notificación roja
           setIsOpen(false)
-          addNotification(err.message, 'error')
-        } else {
-          setError('Hubo un error al crear tu cuenta. Verifica tus datos.')
         }
       }
     }
@@ -173,7 +175,8 @@ export const Login = () => {
           {error && <p className='login-error'>{error}</p>}
 
           {!isLogin && (
-            <>
+            <div className="form-sections">
+              <p className="section-tag">Información Personal</p>
               <div className='login-row'>
                 <InputField id='register-name' label='Nombre' type='text' placeholder='Tu nombre' value={name} onChange={(e) => setName(e.target.value)} />
                 <InputField id='register-lastname' label='Apellido' type='text' placeholder='Tu apellido' value={lastName} onChange={(e) => setLastName(e.target.value)} />
@@ -186,18 +189,21 @@ export const Login = () => {
                 <CustomDatePicker id='register-birth' label='Fech. Nacimiento' placeholder='dd/mm/aaaa' value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
                 <SelectField id='register-country' label='País' value={country} onChange={(e) => setCountry(e.target.value)} options={EU_COUNTRIES} defaultOption='Elegir país...' />
               </div>
-            </>
+
+              <p className="section-tag">Credenciales de Acceso</p>
+            </div>
           )}
 
           <InputField id='login-email' label='Email' type='email' placeholder='correo@ejemplo.com' value={email} onChange={(e) => setEmail(e.target.value)} />
-          <InputField id='login-password' label='Contraseña' type='password' placeholder='Tu contraseña' value={password} onChange={(e) => setPassword(e.target.value)} />
-
-          {!isLogin && (
-            <InputField id='register-confirm-password' label='Confirmar Contraseña' type='password' placeholder='Repite tu contraseña' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-          )}
+          <div className={!isLogin ? 'login-row' : ''}>
+            <InputField id='login-password' label='Contraseña' type='password' placeholder='Tu contraseña' value={password} onChange={(e) => setPassword(e.target.value)} />
+            {!isLogin && (
+              <InputField id='register-confirm-password' label='Confirmar' type='password' placeholder='Repite' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+            )}
+          </div>
 
           <button type='submit' disabled={loading} className='login-submit-button'>
-            {loading ? 'Procesando...' : isLogin ? 'Entrar' : 'Registrarse'}
+            {loading ? 'Procesando...' : isLogin ? 'Entrar' : 'Crear Cuenta Premium'}
           </button>
 
           <div className='login-toggle-text'>
