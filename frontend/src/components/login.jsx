@@ -5,6 +5,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
+import { useNotification } from '../context/NotificationContext'
 // Import de iconos SVG
 import LockIcon from '../assets/icons/lock-login_icon.svg?react'
 // Import de la función de autenticación (servicio mock/real)
@@ -64,37 +65,15 @@ const SelectField = ({
 
 // Constante estática con los países de la UE para el SelectField del registro
 const EU_COUNTRIES = [
-  'Alemania',
-  'Austria',
-  'Bélgica',
-  'Bulgaria',
-  'Chipre',
-  'Croacia',
-  'Dinamarca',
-  'Eslovaquia',
-  'Eslovenia',
-  'España',
-  'Estonia',
-  'Finlandia',
-  'Francia',
-  'Grecia',
-  'Hungría',
-  'Irlanda',
-  'Italia',
-  'Letonia',
-  'Lituania',
-  'Luxemburgo',
-  'Malta',
-  'Países Bajos',
-  'Polonia',
-  'Portugal',
-  'República Checa',
-  'Rumanía',
-  'Suecia'
+  'Alemania', 'Austria', 'Bélgica', 'Bulgaria', 'Chipre', 'Croacia', 'Dinamarca',
+  'Eslovaquia', 'Eslovenia', 'España', 'Estonia', 'Finlandia', 'Francia', 'Grecia',
+  'Hungría', 'Irlanda', 'Italia', 'Letonia', 'Lituania', 'Luxemburgo', 'Malta',
+  'Países Bajos', 'Polonia', 'Portugal', 'República Checa', 'Rumanía', 'Suecia'
 ]
 
-  export const Login = () => {
+export const Login = () => {
     const { login: contextLogin, isAuthenticated } = useContext(AuthContext)
+    const { addNotification } = useNotification()
     const navigate = useNavigate()
   
     const [isLogin, setIsLogin] = useState(true)
@@ -112,34 +91,16 @@ const EU_COUNTRIES = [
     const [isOpen, setIsOpen] = useState(false)
   
     useEffect(() => {
-      // Escuchar el evento customizado del navbar para abrir modal
-      const handleOpenLogin = () => {
-        setIsOpen(true)
-      }
-  
-      // Si la URL actual es /login, abrimos el modal automáticamente
-      if (window.location.pathname === '/login') {
-        setIsOpen(true)
-      }
-  
+      const handleOpenLogin = () => { setIsOpen(true) }
+      if (window.location.pathname === '/login') { setIsOpen(true) }
       document.addEventListener('openLoginModal', handleOpenLogin)
-  
-      return () => {
-        document.removeEventListener('openLoginModal', handleOpenLogin)
-      }
+      return () => { document.removeEventListener('openLoginModal', handleOpenLogin) }
     }, [])
   
     const toggleMode = () => {
       setIsLogin(!isLogin)
-      setError('')
-      setPassword('')
-      setConfirmPassword('')
-      setName('')
-      setLastName('')
-      setPhone('')
-      setDocumentId('')
-      setBirthDate('')
-      setCountry('')
+      setError(''); setPassword(''); setConfirmPassword(''); setName('');
+      setLastName(''); setPhone(''); setDocumentId(''); setBirthDate(''); setCountry('');
     }
   
     const handleSubmit = async (event) => {
@@ -161,171 +122,77 @@ const EU_COUNTRIES = [
             throw new Error(authResult.error)
           }
   
-          // Llamamos al AuthContext para actualizar la app entera
           contextLogin(authResult.token)
-          
-          setEmail('')
-          setPassword('')
-          
-          // Cerramos el modal y navegamos al dashboard
+          setEmail(''); setPassword('')
           setIsOpen(false)
           navigate('/dashboard')
         } else {
-        // Registro offline temporal: todavía no hay endpoint de registro completo.
-        console.log('Registro simulado con datos:', {
-          name,
-          lastName,
-          phone,
-          documentId,
-          birthDate,
-          country,
-          email
-        })
+          // Registro offline temporal
+          console.log('Registro simulado con datos:', { name, lastName, email })
+          setIsOpen(false)
+        }
+        setLoading(false)
+      } catch (err) {
+        setLoading(false)
+        if (isLogin) {
+          // CERRAMOS EL MODAL y disparamos la notificación roja
+          setIsOpen(false)
+          addNotification(err.message, 'error')
+        } else {
+          setError('Hubo un error al crear tu cuenta. Verifica tus datos.')
+        }
       }
-
-      setLoading(false)
-      setIsOpen(false)
-    } catch (err) {
-      setLoading(false)
-      setError(
-        isLogin
-          ? `No se pudo iniciar sesión. ${err.message}`
-          : 'Hubo un error al crear tu cuenta. Verifica tus datos.'
-      )
     }
-  }
 
-  // Componente estrictamente visual (Modal Portal).
-  // Si no está abierto o ya iniciaste sesión, no se pinta nada.
   if (isAuthenticated || !isOpen) return null
 
   return (
     <div className='login-overlay' onClick={() => setIsOpen(false)}>
-      <div
-        className='login-container'
-        onClick={(event) => event.stopPropagation()}
-      >
-        <button
-          type='button'
-          className='login-close-button'
-          onClick={() => setIsOpen(false)}
-        >
+      <div className='login-container' onClick={(event) => event.stopPropagation()}>
+        <button type='button' className='login-close-button' onClick={() => setIsOpen(false)}>
           <LockIcon className='close-icon' />
         </button>
 
-            <form onSubmit={handleSubmit} className='login-form'>
-              <h2>{isLogin ? 'Iniciar sesión' : 'Crea tu cuenta'}</h2>
-              {error && <p className='login-error'>{error}</p>}
+        <form onSubmit={handleSubmit} className='login-form'>
+          <h2>{isLogin ? 'Iniciar sesión' : 'Crea tu cuenta'}</h2>
+          {error && <p className='login-error'>{error}</p>}
 
-              {!isLogin && (
-                <>
-                  <div className='login-row'>
-                    <InputField
-                      id='register-name'
-                      label='Nombre'
-                      type='text'
-                      placeholder='Tu nombre'
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    <InputField
-                      id='register-lastname'
-                      label='Apellido'
-                      type='text'
-                      placeholder='Tu apellido'
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
-                  </div>
-                  <div className='login-row'>
-                    <InputField
-                      id='register-phone'
-                      label='Teléfono'
-                      type='tel'
-                      placeholder='+34 ...'
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
-                    <InputField
-                      id='register-document'
-                      label='DNI/NIE/Pas. '
-                      type='text'
-                      placeholder='Documento'
-                      value={documentId}
-                      onChange={(e) => setDocumentId(e.target.value)}
-                    />
-                  </div>
-                  <div className='login-row'>
-                    <CustomDatePicker
-                      id='register-birth'
-                      label='Fech. Nacimiento'
-                      placeholder='dd/mm/aaaa'
-                      value={birthDate}
-                      onChange={(e) => setBirthDate(e.target.value)}
-                    />
-                    <SelectField
-                      id='register-country'
-                      label='País'
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      options={EU_COUNTRIES}
-                      defaultOption='Elegir país...'
-                    />
-                  </div>
-                </>
-              )}
-
-              <InputField
-                id='login-email'
-                label='Email'
-                type='email'
-                placeholder='correo@ejemplo.com'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-
-              <InputField
-                id='login-password'
-                label='Contraseña'
-                type='password'
-                placeholder='Tu contraseña'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-
-              {!isLogin && (
-                <InputField
-                  id='register-confirm-password'
-                  label='Confirmar Contraseña'
-                  type='password'
-                  placeholder='Repite tu contraseña'
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              )}
-
-              <button
-                type='submit'
-                disabled={loading}
-                className='login-submit-button'
-              >
-                {loading ? 'Procesando...' : isLogin ? 'Entrar' : 'Registrarse'}
-              </button>
-
-              <div className='login-toggle-text'>
-                {isLogin ? '¿No tienes cuenta? ' : '¿Ya eres miembro? '}
-                <button
-                  type='button'
-                  className='login-toggle-btn'
-                  onClick={toggleMode}
-                >
-                  {isLogin ? 'Regístrate aquí' : 'Inicia sesión'}
-                </button>
+          {!isLogin && (
+            <>
+              <div className='login-row'>
+                <InputField id='register-name' label='Nombre' type='text' placeholder='Tu nombre' value={name} onChange={(e) => setName(e.target.value)} />
+                <InputField id='register-lastname' label='Apellido' type='text' placeholder='Tu apellido' value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
-            </form>
+              <div className='login-row'>
+                <InputField id='register-phone' label='Teléfono' type='tel' placeholder='+34 ...' value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <InputField id='register-document' label='DNI/NIE/Pas.' type='text' placeholder='Documento' value={documentId} onChange={(e) => setDocumentId(e.target.value)} />
+              </div>
+              <div className='login-row'>
+                <CustomDatePicker id='register-birth' label='Fech. Nacimiento' placeholder='dd/mm/aaaa' value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+                <SelectField id='register-country' label='País' value={country} onChange={(e) => setCountry(e.target.value)} options={EU_COUNTRIES} defaultOption='Elegir país...' />
+              </div>
+            </>
+          )}
+
+          <InputField id='login-email' label='Email' type='email' placeholder='correo@ejemplo.com' value={email} onChange={(e) => setEmail(e.target.value)} />
+          <InputField id='login-password' label='Contraseña' type='password' placeholder='Tu contraseña' value={password} onChange={(e) => setPassword(e.target.value)} />
+
+          {!isLogin && (
+            <InputField id='register-confirm-password' label='Confirmar Contraseña' type='password' placeholder='Repite tu contraseña' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          )}
+
+          <button type='submit' disabled={loading} className='login-submit-button'>
+            {loading ? 'Procesando...' : isLogin ? 'Entrar' : 'Registrarse'}
+          </button>
+
+          <div className='login-toggle-text'>
+            {isLogin ? '¿No tienes cuenta? ' : '¿Ya eres miembro? '}
+            <button type='button' className='login-toggle-btn' onClick={toggleMode}>
+              {isLogin ? 'Regístrate aquí' : 'Inicia sesión'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )
 }
-
-
