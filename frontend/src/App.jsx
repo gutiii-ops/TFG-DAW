@@ -6,7 +6,7 @@ import React from 'react'
 // Import de los módulos necesarios para el enrutamiento
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
-import { NotificationProvider } from './context/NotificationContext'
+import { NotificationProvider } from './context/NotificationProvider.jsx'
 import { ProtectedRoute } from './components/ProtectedRoute'
 // Import de las páginas a mostrar
 import Home from './pages/Public/home.jsx'
