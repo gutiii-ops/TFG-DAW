@@ -1,4 +1,5 @@
 const { poolPromise, sql } = require('../config/dbConfig');
+const { generateOrderCode } = require('../utils/orderUtils');
 
 /**
  * Obtiene los pedidos de un usuario específico.
@@ -54,19 +55,24 @@ const createOrder = async (userId, totalPrice, items) => {
     try {
         await transaction.begin();
 
+        // Generar el código de pedido profesional
+        const orderCode = generateOrderCode();
+
         // 1. Insertar la cabecera del pedido (orders)
         const orderRequest = new sql.Request(transaction);
         const orderResult = await orderRequest
             .input('userId', sql.Int, userId)
             .input('orderDate', sql.DateTime, new Date())
             .input('totalPrice', sql.Decimal(10, 2), totalPrice)
+            .input('orderCode', sql.VarChar(20), orderCode)
             .query(`
-                INSERT INTO orders (user_id, order_date, total_price)
-                OUTPUT INSERTED.order_id
-                VALUES (@userId, @orderDate, @totalPrice)
+                INSERT INTO orders (user_id, order_date, total_price, order_code)
+                OUTPUT INSERTED.order_id, INSERTED.order_code
+                VALUES (@userId, @orderDate, @totalPrice, @orderCode)
             `);
         
         const orderId = orderResult.recordset[0].order_id;
+        const savedOrderCode = orderResult.recordset[0].order_code;
 
         // 2. Insertar los detalles (order_details)
         for (const item of items) {
@@ -83,7 +89,7 @@ const createOrder = async (userId, totalPrice, items) => {
         }
 
         await transaction.commit();
-        return { orderId, success: true };
+        return { orderId, orderCode: savedOrderCode, success: true };
 
     } catch (error) {
         if (transaction) await transaction.rollback();

@@ -33,6 +33,7 @@ CREATE TABLE [dbo].[orders] (
 	[user_id] INT NOT NULL,
 	[order_date] DATETIME NOT NULL,
 	[total_price] DECIMAL(10, 2) NOT NULL, 
+	[order_code] VARCHAR(20) NOT NULL UNIQUE,
 	FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 

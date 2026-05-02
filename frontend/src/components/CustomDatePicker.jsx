@@ -72,7 +72,7 @@ export const CustomDatePicker = ({ id, label, placeholder, value, onChange, requ
         id={id}
         type='text'
         readOnly
-        placeholder=" "
+        placeholder={placeholder || " "}
         value={value}
         onClick={togglePicker}
         required={required}

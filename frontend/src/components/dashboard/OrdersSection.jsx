@@ -87,7 +87,7 @@ const OrdersSection = ({ user }) => {
             <div className="order-main-info" onClick={() => toggleOrderDetails(order.order_id)}>
               <div className="order-id-block">
                 <span className="label">PEDIDO</span>
-                <span className="value">#{order.order_id}</span>
+                <span className="value">{order.order_code || `#${order.order_id}`}</span>
               </div>
               <div className="order-date-block">
                 <span className="label">FECHA</span>
