@@ -60,7 +60,11 @@
 
 .login-close-button:hover {
   background: rgba(255, 255, 255, 0.15);
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.1);
+}
+
+.login-close-button:active {
+  transform: rotate(90deg) scale(0.95);
 }
 
 .close-icon {
@@ -179,8 +183,12 @@
 }
 
 .login-submit-button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 1rem 2rem rgba(255, 208, 0, 0.2);
+}
+
+.login-submit-button:active {
+  transform: translateY(0);
 }
 
 .login-toggle-text {

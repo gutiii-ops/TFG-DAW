@@ -115,7 +115,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text);
-  transition: all 0.2s ease;
+  transition: background 0.2s, transform 0.1s, color 0.2s;
   display: flex;
   align-items: center;
 }
@@ -123,6 +123,11 @@
 .sidebar-action-btn:hover {
   background: rgba(255, 255, 255, 0.05);
   color: var(--y);
+  transform: translateY(-1px);
+}
+
+.sidebar-action-btn:active {
+  transform: translateY(0);
 }
 
 .sidebar-action-btn.is-active {
@@ -315,12 +320,16 @@
   border-radius: 12px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
 }
 
 .edit-profile-btn:hover {
-  transform: translateY(-3px);
+  transform: translateY(-1px);
   box-shadow: 0 10px 20px rgba(240, 224, 0, 0.2);
+}
+
+.edit-profile-btn:active {
+  transform: translateY(0);
 }
 
 /* ==========================================================================
@@ -466,7 +475,16 @@
   border-radius: 12px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.go-store-btn:hover {
+  transform: translateY(-1px);
+  background: var(--y2);
+}
+
+.go-store-btn:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 800px) {
@@ -524,12 +542,17 @@
   border-radius: 12px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
 }
 
 .new-ticket-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  background: var(--y2);
   box-shadow: 0 5px 15px rgba(240, 224, 0, 0.2);
+}
+
+.new-ticket-btn:active {
+  transform: translateY(0);
 }
 
 .tickets-scroll-area {
@@ -703,6 +726,17 @@
   border-radius: 12px;
   font-weight: 800;
   cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.chat-input-area button:hover {
+  transform: translateY(-1px);
+  background: var(--y2);
+  box-shadow: 0 5px 15px rgba(240, 224, 0, 0.2);
+}
+
+.chat-input-area button:active {
+  transform: translateY(0);
 }
 
 /* MODAL NUEVO TICKET */
@@ -789,12 +823,16 @@
   border-radius: 14px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
 }
 
 .submit-ticket-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 10px 20px rgba(240, 224, 0, 0.3);
+}
+
+.submit-ticket-btn:active {
+  transform: translateY(0);
 }
 
 .cancel-btn {
@@ -807,14 +845,18 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
   box-shadow: 0 4px 15px rgba(255, 68, 68, 0.2);
 }
 
 .cancel-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   background: linear-gradient(135deg, #ff5555, #dd0000);
   box-shadow: 0 8px 20px rgba(255, 68, 68, 0.4);
+}
+
+.cancel-btn:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 900px) {
