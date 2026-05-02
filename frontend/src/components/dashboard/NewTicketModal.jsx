@@ -14,7 +14,7 @@ const NewTicketModal = ({ onClose, onSubmit }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="support-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Nueva Consulta</h2>
+          <h2>Crear Ticket</h2>
           <button className="close-modal-btn" onClick={onClose}>&times;</button>
         </div>
         <form onSubmit={handleSubmit}>

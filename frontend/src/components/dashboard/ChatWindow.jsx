@@ -19,6 +19,18 @@ const ChatWindow = ({ ticket, messages, onSend, loading, currentUserId }) => {
     setInputText('');
   };
 
+  const formatMessageTime = (dateStr) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    
+    if (isToday) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else {
+      return `${date.toLocaleDateString([], { day: '2-digit', month: '2-digit' })} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+  };
+
   if (!ticket) {
     return (
       <div className="chat-window-empty">
@@ -50,7 +62,7 @@ const ChatWindow = ({ ticket, messages, onSend, loading, currentUserId }) => {
               <div className="message-bubble">
                 <p>{msg.message_text}</p>
                 <span className="message-time">
-                  {new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {formatMessageTime(msg.sent_at)}
                 </span>
               </div>
               <span className="message-author">
