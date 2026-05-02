@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { NotificationContext } from '../../context/NotificationContext';
 import TicketList from './TicketList';
@@ -17,7 +17,7 @@ const SupportSection = () => {
   const [loadingChat, setLoadingChat] = useState(false);
 
   // 1. Cargar tickets del usuario
-  const fetchTickets = async () => {
+  const fetchTickets = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('http://localhost:8000/api/support/my-tickets', {
@@ -28,15 +28,16 @@ const SupportSection = () => {
         setTickets(data);
       }
     } catch (error) {
+      console.error('Error fetching tickets:', error);
       addNotification('Error al cargar tickets', 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, addNotification]);
 
   useEffect(() => {
     if (token) fetchTickets();
-  }, [token]);
+  }, [token, fetchTickets]);
 
   // 2. Cargar mensajes al seleccionar un ticket
   useEffect(() => {
@@ -52,6 +53,7 @@ const SupportSection = () => {
           setMessages(data);
         }
       } catch (error) {
+        console.error('Error fetching messages:', error);
         addNotification('Error al cargar la conversación', 'error');
       } finally {
         setLoadingChat(false);
@@ -59,7 +61,7 @@ const SupportSection = () => {
     };
 
     fetchMessages();
-  }, [selectedTicket, token]);
+  }, [selectedTicket, token, addNotification]);
 
   // 3. Enviar un mensaje
   const handleSendMessage = async (text) => {
@@ -85,6 +87,7 @@ const SupportSection = () => {
         setMessages([...messages, newMessage]);
       }
     } catch (error) {
+      console.error('Error sending message:', error);
       addNotification('Error al enviar mensaje', 'error');
     }
   };
@@ -107,6 +110,7 @@ const SupportSection = () => {
         fetchTickets(); // Recargar lista
       }
     } catch (error) {
+      console.error('Error creating ticket:', error);
       addNotification('Error al crear ticket', 'error');
     }
   };
