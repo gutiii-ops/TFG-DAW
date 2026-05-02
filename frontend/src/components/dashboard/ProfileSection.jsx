@@ -2,24 +2,30 @@ import React, { useState, useEffect } from 'react';
 
 const ProfileSection = ({ user: authUser }) => {
   const [userData, setUserData] = useState(null);
+  const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('jwt_token');
-        const response = await fetch(`http://localhost:8000/api/users/${authUser.id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) throw new Error('No se pudo cargar el perfil');
         
-        const data = await response.json();
-        setUserData(data);
+        // Cargar Perfil
+        const userRes = await fetch(`http://localhost:8000/api/users/${authUser.id}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const profileData = await userRes.json();
+        setUserData(profileData);
+
+        // Cargar Suscripción
+        const subRes = await fetch(`http://localhost:8000/api/subscriptions/me`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const subData = await subRes.json();
+        if (subData.subscription_id) setSubscription(subData);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -28,9 +34,28 @@ const ProfileSection = ({ user: authUser }) => {
     };
 
     if (authUser?.id) {
-      fetchUserProfile();
+      fetchData();
     }
   }, [authUser]);
+
+  const handleCancelSubscription = async () => {
+    if (!window.confirm('¿Estás seguro de que quieres cancelar tu suscripción? Mantendrás el acceso hasta el final del periodo.')) return;
+    
+    try {
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch(`http://localhost:8000/api/subscriptions/cancel/${subscription.subscription_id}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        alert('Suscripción cancelada correctamente');
+        window.location.reload();
+      }
+    } catch (err) {
+      alert('Error al cancelar: ' + err.message);
+    }
+  };
 
   if (loading) {
     return (
@@ -88,6 +113,40 @@ const ProfileSection = ({ user: authUser }) => {
             <label>Fecha de Registro</label>
             <p>{userData?.user_date ? new Date(userData.user_date).toLocaleDateString() : 'N/A'}</p>
           </div>
+        </div>
+
+        <div className="profile-info-card membership-card">
+          <h3>Tu Membresía</h3>
+          {subscription ? (
+            <>
+              <div className="info-group">
+                <label>Plan Actual</label>
+                <p className="plan-name-highlight">{subscription.plan_name}</p>
+              </div>
+              <div className="info-group">
+                <label>Vence el</label>
+                <p>{new Date(subscription.end_date).toLocaleDateString()}</p>
+              </div>
+              <div className="info-group">
+                <label>Estado</label>
+                <span className={`status-badge ${subscription.subscription_status ? 'active' : 'cancelled'}`}>
+                  {subscription.subscription_status ? 'Activa' : 'Cancelada (Pendiente de cierre)'}
+                </span>
+              </div>
+              {subscription.subscription_status && (
+                <button className="cancel-sub-link" onClick={handleCancelSubscription}>
+                  Cancelar renovación
+                </button>
+              )}
+            </>
+          ) : (
+            <div className="no-membership">
+              <p>No tienes ningún plan activo.</p>
+              <button className="get-plan-btn" onClick={() => window.location.href='/servicios'}>
+                Ver Planes
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

@@ -101,5 +101,12 @@ CREATE TABLE [dbo].[user_roles] (
 	FOREIGN KEY (role_id) REFERENCES roles(role_id)
 );
 
+-- SEMILLAS DE DATOS
+INSERT INTO [dbo].[plans] (plan_name, plan_duration, plan_price, plan_description)
+VALUES 
+('Basic', 30, 29.90, 'Acceso completo a sala, zonas cardio y vestuarios.'),
+('Fitness', 30, 49.90, 'Acceso completo + Clases dirigidas ilimitadas + App de seguimiento.'),
+('Premium', 30, 89.90, 'Todo lo anterior + 1 sesión coaching/mes + Fisioterapia + Zona VIP.');
+
 -- ROLLBACK TRANSACTION;
 -- COMMIT TRANSACTION;

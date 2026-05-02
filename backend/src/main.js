@@ -27,6 +27,8 @@ const productRoutes = require('./api/routes/productRoutes')
 const orderRoutes = require('./api/routes/orderRoutes')
 const reservationRoutes = require('./api/routes/reservationRoutes')
 const supportRoutes = require('./api/routes/supportRoutes')
+const subscriptionRoutes = require('./api/routes/subscriptionRoutes')
+const planRoutes = require('./api/routes/planRoutes')
 
 // 2. ENCHUFAMOS LAS RUTAS (Aquí está la magia)
 app.use('/api/auth', authRoutes)
@@ -35,6 +37,8 @@ app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/reservations', reservationRoutes)
 app.use('/api/support', supportRoutes)
+app.use('/api/subscriptions', subscriptionRoutes)
+app.use('/api/plans', planRoutes)
 
 // 3. MIDDLEWARE: MANEJADOR DE RUTAS INEXISTENTES (404)
 app.use((req, res, next) => {

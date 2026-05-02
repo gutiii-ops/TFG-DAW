@@ -1,48 +1,43 @@
 /* =======================================================================================================================
           SubscriptionsSection.jsx - Módulo encargado de gestionar y renderizar el catálogo de planes de gimnasio
 ======================================================================================================================= */
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { PricingCard } from './PricingCard.jsx'
 import '../../styles/components/services/SubscriptionsSection.css'
 
 export const SubscriptionsSection = () => {
-  // Matriz de datos paramétrica de los planes, siguiendo las reglas DRY (sin repetir código JSX)
-  const plansData = [
-    {
-      tierName: 'Basic',
-      price: '29',
-      features: [
-        'Acceso completo a la sala de musculación',
-        'Zonas cardio y estiramientos',
-        'Vestuario y duchas estándar',
-        'Mátricula gratuita'
-      ],
-      isPopular: false
-    },
-    {
-      tierName: 'Fitness',
-      price: '49',
-      features: [
-        'Todo lo del plan Basic',
-        'Clases dirigidas ilimitadas (Yoga, CrossFit...)',
-        'App de seguimiento y rutinas',
-        'Toalla y taquilla diaria'
-      ],
-      isPopular: true
-    },
-    {
-      tierName: 'Premium',
-      price: '89',
-      features: [
-        'Todo lo del plan Fitness',
-        '1 sesión de coaching personal al mes',
-        'Fisioterapia y masajes (1 vez/mes)',
-        'Suplemento pre/post entreno incluido',
-        'Acceso a zona VIP'
-      ],
-      isPopular: false
-    }
-  ]
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/plans');
+        if (!response.ok) throw new Error('Error al cargar planes');
+        const data = await response.json();
+        
+        // Mapeamos los datos de la DB al formato que espera PricingCard
+        const formattedPlans = data.map(p => ({
+          id: p.plan_id,
+          tierName: p.plan_name,
+          price: p.plan_price,
+          // Split de descripción por comas para sacar las features si se guardan así
+          features: p.plan_description.split('+').map(f => f.trim()),
+          isPopular: p.plan_name === 'Fitness' // Marcamos Fitness como popular por defecto
+        }));
+
+        setPlans(formattedPlans);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
+
+  if (loading) return <div className="loader-container"><div className="minimal-spinner"></div></div>;
 
   return (
     <section className="subscriptions-section">
@@ -52,9 +47,10 @@ export const SubscriptionsSection = () => {
       </div>
       
       <div className="pricing-grid">
-        {plansData.map((plan, index) => (
+        {plans.map((plan) => (
           <PricingCard 
-            key={index}
+            key={plan.id}
+            planId={plan.id}
             tierName={plan.tierName}
             price={plan.price}
             features={plan.features}
