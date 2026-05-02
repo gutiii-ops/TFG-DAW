@@ -23,7 +23,7 @@ const processOrder = async (userId, items) => {
     for (const item of items) {
         if (item.type === 'plan') {
             // Validar que el plan existe y obtener su precio real
-            const plan = await planRepository.getById(item.id);
+            const plan = await planRepository.getPlanById(item.id);
             if (!plan) throw new Error(`Plan con ID ${item.id} no encontrado`);
             
             totalPrice += parseFloat(plan.plan_price);
