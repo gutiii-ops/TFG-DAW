@@ -95,12 +95,10 @@ nav {
 .nav-logout {
   background: linear-gradient(135deg, #ff4444, #cc0000);
   color: white;
-  box-shadow: 0 4px 15px rgba(255, 68, 68, 0.2);
 }
 
 .nav-logout:hover {
   background: linear-gradient(135deg, #ff5555, #dd0000);
-  box-shadow: 0 8px 20px rgba(255, 68, 68, 0.4);
 }
 
 .nav-logout:active {

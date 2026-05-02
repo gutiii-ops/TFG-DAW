@@ -133,7 +133,6 @@
 .sidebar-action-btn.is-active {
   background: var(--y);
   color: var(--bg);
-  box-shadow: 0 8px 20px rgba(240, 224, 0, 0.2);
 }
 
 /* ==========================================================================
@@ -325,7 +324,6 @@
 
 .edit-profile-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(240, 224, 0, 0.2);
 }
 
 .edit-profile-btn:active {
@@ -548,7 +546,6 @@
 .new-ticket-btn:hover {
   transform: translateY(-1px);
   background: var(--y2);
-  box-shadow: 0 5px 15px rgba(240, 224, 0, 0.2);
 }
 
 .new-ticket-btn:active {
@@ -828,7 +825,6 @@
 
 .submit-ticket-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(240, 224, 0, 0.3);
 }
 
 .submit-ticket-btn:active {
@@ -845,14 +841,12 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-  box-shadow: 0 4px 15px rgba(255, 68, 68, 0.2);
+  transition: background 0.2s, transform 0.1s;
 }
 
 .cancel-btn:hover {
   transform: translateY(-1px);
   background: linear-gradient(135deg, #ff5555, #dd0000);
-  box-shadow: 0 8px 20px rgba(255, 68, 68, 0.4);
 }
 
 .cancel-btn:active {

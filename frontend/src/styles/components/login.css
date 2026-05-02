@@ -178,13 +178,12 @@
   font-weight: 800;
   font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s;
   margin-top: 0.5rem;
 }
 
 .login-submit-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 1rem 2rem rgba(255, 208, 0, 0.2);
 }
 
 .login-submit-button:active {
