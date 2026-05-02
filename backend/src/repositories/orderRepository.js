@@ -87,7 +87,7 @@ const createOrder = async (userId, totalPrice, items) => {
             await detailRequest
                 .input('orderId', sql.BigInt, orderId)
                 .input('productId', sql.Int, productId)
-                .input('planId', sql.Int, planId)
+                .input('planId', sql.SmallInt, planId)
                 .input('quantity', sql.SmallInt, item.quantity)
                 .input('unitPrice', sql.Decimal(10, 2), item.price)
                 .query(`
