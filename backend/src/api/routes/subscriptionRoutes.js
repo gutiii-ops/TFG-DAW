@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const subscriptionController = require('../controllers/subscriptionController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const { authUserToken } = require('../middlewares/authMiddleware');
 
 // Rutas de usuario
-router.get('/me', authMiddleware, subscriptionController.getMySubscription);
-router.post('/subscribe', authMiddleware, subscriptionController.subscribe);
-router.put('/cancel/:id', authMiddleware, subscriptionController.cancel);
+router.get('/me', authUserToken, subscriptionController.getMySubscription);
+router.post('/subscribe', authUserToken, subscriptionController.subscribe);
+router.put('/cancel/:id', authUserToken, subscriptionController.cancel);
 
 // Rutas de admin (paginadas)
 router.get('/', subscriptionController.getSubscriptions);

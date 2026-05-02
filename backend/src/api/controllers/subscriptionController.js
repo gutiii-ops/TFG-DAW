@@ -2,7 +2,7 @@ const subscriptionService = require('../../services/subscriptionService');
 
 const getMySubscription = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.userId;
         const subscription = await subscriptionService.getUserSubscription(userId);
         res.json(subscription || { message: 'Sin suscripción activa' });
     } catch (error) {
@@ -12,7 +12,7 @@ const getMySubscription = async (req, res) => {
 
 const subscribe = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.userId;
         const { planId } = req.body;
         const result = await subscriptionService.subscribeUser(userId, planId);
         res.status(201).json(result);
@@ -23,7 +23,7 @@ const subscribe = async (req, res) => {
 
 const cancel = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.userId;
         const { id } = req.params;
         await subscriptionService.cancelUserSubscription(userId, id);
         res.json({ message: 'Suscripción cancelada correctamente' });
