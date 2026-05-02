@@ -16,8 +16,27 @@ const CoachingSection = () => {
     const [sessions, setSessions] = useState([]);
     const [userReservations, setUserReservations] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedDay, setSelectedDay] = useState(new Date().getDay() || 7);
-    
+    // Generar los próximos 7 días a partir de hoy
+    const getNextSevenDays = () => {
+        const days = [];
+        const names = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        for (let i = 0; i < 7; i++) {
+            const d = new Date();
+            d.setDate(d.getDate() + i);
+            days.push({
+                id: d.getDay() === 0 ? 7 : d.getDay(), // Mapear 0 (Dom) a 7 para compatibilidad con DB
+                name: names[d.getDay()],
+                number: d.getDate(),
+                fullDate: d.toISOString().split('T')[0]
+            });
+        }
+        return days;
+    };
+
+    const [weekDays] = useState(getNextSevenDays());
+    const [selectedDate, setSelectedDate] = useState(weekDays[0].fullDate);
+    const [selectedDay, setSelectedDay] = useState(weekDays[0].id);
+
     // Estado para el modal de confirmación
     const [modalConfig, setModalConfig] = useState({ 
         isOpen: false, 
@@ -26,16 +45,6 @@ const CoachingSection = () => {
         onConfirm: () => {}, 
         actionType: '' 
     });
-
-    const weekDays = [
-        { id: 1, name: 'Lun' },
-        { id: 2, name: 'Mar' },
-        { id: 3, name: 'Mié' },
-        { id: 4, name: 'Jue' },
-        { id: 5, name: 'Vie' },
-        { id: 6, name: 'Sáb' },
-        { id: 7, name: 'Dom' }
-    ];
 
     const fetchData = useCallback(async () => {
         try {
@@ -88,7 +97,7 @@ const CoachingSection = () => {
                 },
                 body: JSON.stringify({
                     sessionId: session.session_id,
-                    reservationDate: new Date().toISOString().split('T')[0]
+                    reservationDate: selectedDate
                 })
             });
 
@@ -153,12 +162,15 @@ const CoachingSection = () => {
             <div className="days-selector">
                 {weekDays.map(day => (
                     <button 
-                        key={day.id}
-                        className={`day-btn ${selectedDay === day.id ? 'is-active' : ''}`}
-                        onClick={() => setSelectedDay(day.id)}
+                        key={day.fullDate}
+                        className={`day-btn ${selectedDate === day.fullDate ? 'is-active' : ''}`}
+                        onClick={() => {
+                            setSelectedDate(day.fullDate);
+                            setSelectedDay(day.id);
+                        }}
                     >
                         <span className="day-name">{day.name}</span>
-                        <span className="day-number">{day.id}</span>
+                        <span className="day-number">{day.number}</span>
                     </button>
                 ))}
             </div>
