@@ -19,9 +19,9 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('gym_cart', JSON.stringify(cartItems))
   }, [cartItems])
 
-  // Acción: Añadir al carrito
+  // Acción: Añadir producto normal al carrito
   const addToCart = (product) => {
-    const isExisting = cartItems.find((item) => item.id === product.id)
+    const isExisting = cartItems.find((item) => item.id === product.id && item.type !== 'plan')
     
     if (isExisting) {
       addNotification(`${product.name} actualizado en el carrito`, 'success')
@@ -34,8 +34,19 @@ export const CartProvider = ({ children }) => {
       )
     } else {
       addNotification(`${product.name} añadido al carrito`, 'success')
-      setCartItems(prevItems => [...prevItems, { ...product, quantity: 1 }])
+      setCartItems(prevItems => [...prevItems, { ...product, quantity: 1, type: 'product' }])
     }
+  }
+
+  // Acción: Añadir plan de suscripción (Solo uno permitido)
+  const addPlanToCart = (plan) => {
+    // Eliminamos cualquier plan previo que haya en el carrito
+    setCartItems(prevItems => {
+      const filteredItems = prevItems.filter(item => item.type !== 'plan');
+      addNotification(`Plan ${plan.name} seleccionado`, 'success');
+      return [...filteredItems, { ...plan, quantity: 1, type: 'plan' }];
+    });
+    setIsCartOpen(true); // Abrimos el carrito para que el usuario vea el cambio
   }
 
   // Acción: Quitar una unidad (o el item si es 1)
@@ -74,6 +85,7 @@ export const CartProvider = ({ children }) => {
         isCartOpen,
         setIsCartOpen,
         addToCart,
+        addPlanToCart,
         removeFromCart,
         deleteFromCart,
         clearCart,

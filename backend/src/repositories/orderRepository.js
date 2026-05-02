@@ -30,9 +30,11 @@ const getOrderWithDetails = async (orderId) => {
     const detailsResult = await pool.request()
         .input('orderId', sql.BigInt, orderId)
         .query(`
-            SELECT od.*, p.product_name 
+            SELECT od.*, 
+                   COALESCE(p.product_name, pl.plan_name) as item_name
             FROM order_details od
-            JOIN products p ON od.product_id = p.product_id
+            LEFT JOIN products p ON od.product_id = p.product_id
+            LEFT JOIN plans pl ON od.plan_id = pl.plan_id
             WHERE od.order_id = @orderId
         `);
 
@@ -77,14 +79,20 @@ const createOrder = async (userId, totalPrice, items) => {
         // 2. Insertar los detalles (order_details)
         for (const item of items) {
             const detailRequest = new sql.Request(transaction);
+            
+            // Definimos qué ID inyectar según si es plan o producto
+            const productId = item.isPlan ? null : item.id;
+            const planId = item.isPlan ? item.id : null;
+
             await detailRequest
                 .input('orderId', sql.BigInt, orderId)
-                .input('productId', sql.Int, item.id)
+                .input('productId', sql.Int, productId)
+                .input('planId', sql.Int, planId)
                 .input('quantity', sql.SmallInt, item.quantity)
                 .input('unitPrice', sql.Decimal(10, 2), item.price)
                 .query(`
-                    INSERT INTO order_details (order_id, product_id, quantity, unit_price)
-                    VALUES (@orderId, @productId, @quantity, @unitPrice)
+                    INSERT INTO order_details (order_id, product_id, plan_id, quantity, unit_price)
+                    VALUES (@orderId, @productId, @planId, @quantity, @unitPrice)
                 `);
         }
 

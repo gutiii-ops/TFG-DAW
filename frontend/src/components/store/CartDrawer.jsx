@@ -87,21 +87,29 @@ const CartDrawer = () => {
                   {item.image ? (
                     <img src={item.image} alt={item.name} />
                   ) : (
-                    <div className="img-placeholder">{item.category[0]}</div>
+                    <div className="img-placeholder">{item.type === 'plan' ? '★' : (item.category?.[0] || 'P')}</div>
                   )}
                 </div>
                 <div className="item-details">
-                  <h3>{item.name}</h3>
-                  <p>{item.price.toFixed(2)}€</p>
-                  <div className="item-controls">
-                    <button onClick={() => removeFromCart(item.id)}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => addToCart(item)}>+</button>
+                  <div className="item-title-row">
+                    <h3>{item.name}</h3>
+                    <button className="delete-item-icon" onClick={() => deleteFromCart(item.id)}>
+                      <TrashIcon />
+                    </button>
+                  </div>
+                  <p className="item-price-row">{item.price.toFixed(2)}€</p>
+                  <div className="cart-item-controls">
+                    {item.type === 'plan' ? (
+                      <span className="cart-item-type-tag">Membresía</span>
+                    ) : (
+                      <div className="quantity-controls">
+                        <button onClick={() => removeFromCart(item.id)}>-</button>
+                        <span>{item.quantity}</span>
+                        <button onClick={() => addToCart(item)}>+</button>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <button className="delete-item" onClick={() => deleteFromCart(item.id)}>
-                  <TrashIcon />
-                </button>
               </div>
             ))
           )}

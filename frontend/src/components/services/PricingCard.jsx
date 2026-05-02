@@ -2,41 +2,19 @@
           PricingCard.jsx - Tarjeta de precio individual reutilizable para los planes de suscripción
 ======================================================================================================================= */
 import React, { useContext } from 'react'
-import { AuthContext } from '../../context/AuthContext'
-import { useNotification } from '../../context/NotificationContext'
+import { CartContext } from '../../context/CartContext'
 import '../../styles/components/services/PricingCard.css'
 
 export const PricingCard = ({ planId, tierName, price, features, isPopular }) => {
-  const { user, login } = useContext(AuthContext); // Asumimos que login abre el modal si no hay user
-  const { showNotification } = useNotification();
+  const { addPlanToCart } = useContext(CartContext);
 
-  const handleSubscribe = async () => {
-    if (!user) {
-      showNotification('Debes iniciar sesión para suscribirte', 'info');
-      // Aquí podrías disparar el evento para abrir el login si tienes un gestor global
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('jwt_token');
-      const response = await fetch('http://localhost:8000/api/subscriptions/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ planId })
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Error al procesar la suscripción');
-      }
-
-      showNotification(`¡Bienvenido al plan ${tierName}! Suscripción activada.`, 'success');
-    } catch (error) {
-      showNotification(error.message, 'error');
-    }
+  const handleSelectPlan = () => {
+    addPlanToCart({
+      id: planId,
+      name: `Plan ${tierName}`,
+      price: parseFloat(price),
+      image: null, // Podríamos poner un icono de membresía
+    });
   };
 
   return (
@@ -63,7 +41,7 @@ export const PricingCard = ({ planId, tierName, price, features, isPopular }) =>
       <div className="pricing-footer">
         <button 
           className={`pricing-btn ${isPopular ? 'btn-primary' : 'btn-outline'}`}
-          onClick={handleSubscribe}
+          onClick={handleSelectPlan}
         >
           Elegir Plan
         </button>
