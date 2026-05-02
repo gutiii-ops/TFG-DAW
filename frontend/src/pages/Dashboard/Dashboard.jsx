@@ -5,6 +5,7 @@ import DashboardSidebar from '../../components/dashboard/DashboardSidebar';
 import DashboardCard from '../../components/dashboard/DashboardCard';
 import ProfileSection from '../../components/dashboard/ProfileSection';
 import OrdersSection from '../../components/dashboard/OrdersSection';
+import SupportSection from '../../components/dashboard/SupportSection';
 import '../../styles/pages/dashboard.css';
 
 const Dashboard = () => {
@@ -96,6 +97,9 @@ const Dashboard = () => {
 
       case 'orders':
         return <OrdersSection user={user} />;
+
+      case 'support':
+        return <SupportSection />;
 
       default:
         return (
