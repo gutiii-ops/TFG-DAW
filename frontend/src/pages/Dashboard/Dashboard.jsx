@@ -6,6 +6,7 @@ import DashboardCard from '../../components/dashboard/DashboardCard';
 import ProfileSection from '../../components/dashboard/ProfileSection';
 import OrdersSection from '../../components/dashboard/OrdersSection';
 import SupportSection from '../../components/dashboard/SupportSection';
+import MembershipSection from '../../components/dashboard/MembershipSection';
 import '../../styles/pages/dashboard.css';
 
 const Dashboard = () => {
@@ -36,7 +37,18 @@ const Dashboard = () => {
             ? new Date(orders[0].order_date).toLocaleDateString() 
             : 'N/A';
 
-          setStats({ totalSpent: total.toFixed(2), lastOrder: lastDate });
+          // Cargar Suscripción para el resumen
+          const subRes = await fetch(`http://localhost:8000/api/subscriptions/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const subData = await subRes.json();
+
+          setStats({ 
+            totalSpent: total.toFixed(2), 
+            lastOrder: lastDate,
+            planName: subData.plan_name || 'Sin Plan',
+            expiryDate: subData.end_date ? new Date(subData.end_date).toLocaleDateString() : 'N/A'
+          });
         }
       } catch (error) {
         console.error("Error cargando el dashboard:", error);
@@ -75,8 +87,8 @@ const Dashboard = () => {
               />
               <DashboardCard 
                 title="Suscripción" 
-                value="Premium" 
-                subtext="Activa hasta: 20/05" 
+                value={stats.planName} 
+                subtext={stats.expiryDate !== 'N/A' ? `Vence: ${stats.expiryDate}` : 'No tienes planes activos'} 
               />
               <DashboardCard 
                 title="Último Pedido" 
@@ -97,6 +109,9 @@ const Dashboard = () => {
 
       case 'orders':
         return <OrdersSection user={user} />;
+
+      case 'subscriptions':
+        return <MembershipSection user={user} />;
 
       case 'support':
         return <SupportSection />;
