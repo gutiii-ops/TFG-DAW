@@ -15,61 +15,9 @@ import { CustomDatePicker } from './CustomDatePicker.jsx'
 // Import de estilos específicos para el modal de login
 import '../styles/components/login.css'
 
-// Componente InputField rediseñado con etiqueta flotante interna
-const InputField = ({
-  id,
-  label,
-  type,
-  placeholder,
-  value,
-  onChange,
-  required = true
-}) => (
-  <div className={`floating-input-group ${value ? 'has-value' : ''}`}>
-    <input
-      id={id}
-      type={type}
-      placeholder=" " // Espacio necesario para el truco CSS de floating label
-      value={value}
-      onChange={onChange}
-      required={required}
-    />
-    <label htmlFor={id}>{label}</label>
-  </div>
-)
-
-// Componente SelectField rediseñado con etiqueta flotante interna
-const SelectField = ({
-  id,
-  label,
-  value,
-  onChange,
-  options,
-  required = true,
-  defaultOption = 'Selecciona...'
-}) => (
-  <div className={`floating-input-group has-value`}>
-    <select id={id} value={value} onChange={onChange} required={required}>
-      <option value='' disabled>
-        {defaultOption}
-      </option>
-      {options.map((opt) => (
-        <option key={opt} value={opt}>
-          {opt}
-        </option>
-      ))}
-    </select>
-    <label htmlFor={id}>{label}</label>
-  </div>
-)
-
-// Constante estática con los países de la UE
-const EU_COUNTRIES = [
-  'Alemania', 'Austria', 'Bélgica', 'Bulgaria', 'Chipre', 'Croacia', 'Dinamarca',
-  'Eslovaquia', 'Eslovenia', 'España', 'Estonia', 'Finlandia', 'Francia', 'Grecia',
-  'Hungría', 'Irlanda', 'Italia', 'Letonia', 'Lituania', 'Luxemburgo', 'Malta',
-  'Países Bajos', 'Polonia', 'Portugal', 'República Checa', 'Rumanía', 'Suecia'
-]
+import { InputField } from './common/InputField.jsx'
+import { SelectField } from './common/SelectField.jsx'
+import { EU_COUNTRIES } from '../utils/constants.js'
 
 export const Login = () => {
     const { login: contextLogin, isAuthenticated } = useContext(AuthContext)

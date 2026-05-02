@@ -1,155 +1,240 @@
-.membership-section-wrapper {
-    animation: fadeIn 0.5s ease-out;
+.membership-b-wrapper {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 35px;
+    animation: fadeIn 0.4s ease-out;
 }
 
-.membership-hero-card {
-    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
-    border-radius: 20px;
-    padding: 40px;
+.membership-b-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.hero-content h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    margin: 10px 0;
-    background: linear-gradient(90deg, #fff, var(--accent-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.status-pill {
-    background: rgba(46, 213, 115, 0.1);
-    color: #2ed573;
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.expiration-text {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-}
-
-.hero-visual {
-    position: relative;
-    width: 200px;
-    height: 200px;
-}
-
-.glowing-orb {
-    width: 150px;
-    height: 150px;
-    background: var(--accent-color);
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.4;
-    animation: pulse 4s infinite ease-in-out;
-}
-
-.membership-details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    align-items: flex-start;
     margin-bottom: 40px;
 }
 
-.benefit-card {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 30px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: transform 0.3s ease;
+.plan-label {
+    display: block;
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
 }
 
-.benefit-card:hover {
-    transform: translateY(-5px);
+.plan-main-info h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+}
+
+.status-badge-custom {
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-badge-custom.active {
+    background: rgba(46, 213, 115, 0.1);
+    color: #2ed573;
+}
+
+.status-badge-custom.cancelled {
+    background: rgba(255, 71, 87, 0.1);
+    color: #ff4757;
+}
+
+/* BARRA DE PROGRESO */
+.membership-progress-block {
+    margin-bottom: 45px;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.progress-bar-container {
+    height: 8px;
     background: rgba(255, 255, 255, 0.05);
-}
-
-.benefit-icon {
-    font-size: 2rem;
+    border-radius: 10px;
+    overflow: hidden;
     margin-bottom: 15px;
 }
 
-.benefit-card h3 {
-    margin-bottom: 10px;
-    color: white;
+.progress-bar-fill {
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 10px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.benefit-card p {
-    color: var(--text-secondary);
+.days-left-text {
     font-size: 0.9rem;
-    line-height: 1.6;
+    color: var(--text-secondary);
+    font-style: italic;
 }
 
-.upsell-block {
-    text-align: center;
-    padding: 60px;
-    background: rgba(var(--accent-rgb), 0.05);
+/* LISTA DE INFO */
+.membership-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.info-icon {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.2rem;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.info-value {
+    color: white;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+/* ACCIONES */
+.membership-actions-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cancel-membership-btn {
+    background: transparent;
+    color: #ff4757;
+    border: 1px solid rgba(255, 71, 87, 0.3);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cancel-membership-btn:hover {
+    background: #ff4757;
+    color: white;
+    border-color: #ff4757;
+}
+
+.invoice-download-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* MODAL */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.confirm-modal-box {
+    background: #1a1a1a;
+    padding: 40px;
     border-radius: 20px;
-    border: 1px dashed var(--accent-color);
+    max-width: 450px;
+    width: 90%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
 }
 
-.upgrade-cta-btn {
+.confirm-modal-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.confirm-modal-box p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-confirm-cancel {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* EMPTY STATE */
+.membership-empty-state {
+    text-align: center;
+    padding: 80px 40px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.primary-cta-btn {
     background: var(--accent-color);
     color: white;
     border: none;
     padding: 15px 35px;
     border-radius: 10px;
-    font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    margin-top: 20px;
-    transition: all 0.3s;
-}
-
-.management-block {
-    background: rgba(255, 255, 255, 0.02);
-    padding: 30px;
-    border-radius: 16px;
-}
-
-.management-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.secondary-action-btn, .danger-action-btn {
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.secondary-action-btn {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.danger-action-btn {
-    background: transparent;
-    color: #ff4757;
-    border: 1px solid #ff4757;
-}
-
-.danger-action-btn:hover {
-    background: #ff4757;
-    color: white;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.3; }
-    50% { transform: scale(1.2); opacity: 0.5; }
+    margin-top: 25px;
 }

@@ -4,11 +4,10 @@
 
 BEGIN TRANSACTION;
 
-/* Tabla: users (Usuarios)
-Descripción: Es el corazón de la base de datos. Guarda toda la información personal, 
-de contacto y de acceso (contraseña encriptada) de cualquier persona que interactúe 
-con el sistema (clientes, entrenadores, administradores).
-*/
+-- CONFIGURACIÓN DE SEGURIDAD PARA EL SCRIPT
+SET XACT_ABORT ON; -- Si algo falla, revierte todo automáticamente
+
+/* Tabla: users (Usuarios) */
 CREATE TABLE [dbo].[users] (
 	[user_id] INT IDENTITY(1,1) PRIMARY KEY,
 	[user_name] VARCHAR(100) NOT NULL,
@@ -21,10 +20,7 @@ CREATE TABLE [dbo].[users] (
 	[password_hash] NVARCHAR(255) NOT NULL
 );
 
-/* Tabla: plans (Planes)
-Descripción: Catálogo de productos. Define las suscripciones que ofrece el gimnasio 
-(ej. "Mensual VIP", "Anual Básico"), su duración y precio. Es una tabla catálogo.
-*/
+/* Tabla: plans (Planes) */
 CREATE TABLE [dbo].[plans] (
 	[plan_id] SMALLINT IDENTITY(1,1) PRIMARY KEY,
 	[plan_name] VARCHAR(100) NOT NULL,
@@ -33,11 +29,7 @@ CREATE TABLE [dbo].[plans] (
 	[plan_description] VARCHAR(MAX) NOT NULL
 );
 
-/* Tabla: subscriptions (Suscripciones)
-Descripción: Tabla transaccional (puente) que registra el historial de compras.
-Relación (N:M): Resuelve la relación de Muchos a Muchos entre 'users' y 'plans'. 
-Un usuario contrata muchos planes en el tiempo, y un plan es comprado por muchos usuarios.
-*/
+/* Tabla: subscriptions (Suscripciones) */
 CREATE TABLE [dbo].[subscriptions] (
 	[subscription_id] INT IDENTITY(1,1) PRIMARY KEY,
 	[user_id] INT NOT NULL,
@@ -49,15 +41,10 @@ CREATE TABLE [dbo].[subscriptions] (
 	FOREIGN KEY (plan_id) REFERENCES plans(plan_id)
 );
 
-
 -- =========================================================================================
---			MÓDULO 2: SEGURIDAD Y CONTROL DE ACCESO (RBAC - Role-Based Access Control)
+--			MÓDULO 2: SEGURIDAD Y CONTROL DE ACCESO (RBAC)
 -- =========================================================================================
 
-/* Tabla: permissions (Permisos)
-Descripción: Catálogo de acciones granulares que se pueden hacer en la app.
-Ejemplos: "Crear Usuario", "Borrar Clase", "Ver Facturación".
-*/
 CREATE TABLE [dbo].[permissions] (
 	[permission_id] TINYINT IDENTITY(1,1) PRIMARY KEY,
 	[permission_code] TINYINT NOT NULL,
@@ -65,21 +52,12 @@ CREATE TABLE [dbo].[permissions] (
 	[permission_description] VARCHAR(MAX) NOT NULL
 );
 
-/* Tabla: roles (Roles)
-Descripción: Catálogo de perfiles o puestos genéricos dentro del sistema.
-Ejemplos: "Administrador", "Entrenador", "Cliente".
-*/
 CREATE TABLE [dbo].[roles] (
 	[role_id] SMALLINT IDENTITY(1,1) PRIMARY KEY,
 	[role_name] VARCHAR(100) NOT NULL,
 	[role_description] VARCHAR(MAX) NOT NULL
 );
 
-/* Tabla: role_permissions (Permisos por Rol)
-Descripción: Tabla puente que define qué acciones exactas puede realizar cada rol.
-Relación (N:M): Une 'roles' con 'permissions'.
-Nota: Usa clave primaria compuesta para evitar asignar el mismo permiso dos veces al mismo rol.
-*/
 CREATE TABLE [dbo].[role_permissions] (
 	[role_id] SMALLINT NOT NULL,
 	[permission_id] TINYINT NOT NULL,
@@ -88,11 +66,6 @@ CREATE TABLE [dbo].[role_permissions] (
 	FOREIGN KEY (permission_id) REFERENCES permissions(permission_id)
 );
 
-/* Tabla: user_roles (Roles de Usuario)
-Descripción: Tabla puente que define qué perfil(es) tiene asignado cada usuario en la app.
-Relación (N:M): Une 'users' con 'roles'. Un usuario puede tener varios roles (ej. ser 
-Cliente y Entrenador a la vez), y un rol agrupa a muchos usuarios.
-*/
 CREATE TABLE [dbo].[user_roles] (
 	[user_id] INT NOT NULL,
 	[role_id] SMALLINT NOT NULL,
@@ -101,12 +74,65 @@ CREATE TABLE [dbo].[user_roles] (
 	FOREIGN KEY (role_id) REFERENCES roles(role_id)
 );
 
--- SEMILLAS DE DATOS
-INSERT INTO [dbo].[plans] (plan_name, plan_duration, plan_price, plan_description)
-VALUES 
+-- =========================================================================================
+-- SEMILLAS OBLIGATORIAS: LIMPIEZA AGRESIVA (TODOS LOS MÓDULOS)
+-- =========================================================================================
+
+-- 1. Limpiar tablas de tercer nivel (detalles de pedidos y reservas)
+IF OBJECT_ID('[dbo].[order_details]', 'U') IS NOT NULL DELETE FROM [dbo].[order_details];
+IF OBJECT_ID('[dbo].[coaching_reservations]', 'U') IS NOT NULL DELETE FROM [dbo].[coaching_reservations];
+
+-- 2. Limpiar tablas de segundo nivel (pedidos, sesiones, suscripciones, roles)
+IF OBJECT_ID('[dbo].[orders]', 'U') IS NOT NULL DELETE FROM [dbo].[orders];
+IF OBJECT_ID('[dbo].[coaching_sessions]', 'U') IS NOT NULL DELETE FROM [dbo].[coaching_sessions];
+DELETE FROM [dbo].[subscriptions];
+DELETE FROM [dbo].[user_roles];
+DELETE FROM [dbo].[role_permissions];
+
+-- 3. Limpiar tablas maestras
+DELETE FROM [dbo].[users];
+DELETE FROM [dbo].[plans];
+DELETE FROM [dbo].[roles];
+DELETE FROM [dbo].[permissions];
+
+-- 4. Resetear contadores de identidad
+DBCC CHECKIDENT ('[dbo].[users]', RESEED, 0);
+DBCC CHECKIDENT ('[dbo].[plans]', RESEED, 0);
+DBCC CHECKIDENT ('[dbo].[roles]', RESEED, 0);
+DBCC CHECKIDENT ('[dbo].[permissions]', RESEED, 0);
+IF OBJECT_ID('[dbo].[subscriptions]', 'U') IS NOT NULL DBCC CHECKIDENT ('[dbo].[subscriptions]', RESEED, 0);
+
+-- =========================================================================================
+-- INSERCIÓN DE DATOS (SEMILLAS)
+-- =========================================================================================
+
+-- Planes
+INSERT INTO [dbo].[plans] (plan_name, plan_duration, plan_price, plan_description) VALUES 
 ('Basic', 30, 29.90, 'Acceso completo a sala, zonas cardio y vestuarios.'),
-('Fitness', 30, 49.90, 'Acceso completo + Clases dirigidas ilimitadas + App de seguimiento.'),
+('Fitness', 30, 49.90, 'Acceso completo + Clases dirigidas ilimitada.'),
 ('Premium', 30, 89.90, 'Todo lo anterior + 1 sesión coaching/mes + Fisioterapia + Zona VIP.');
 
--- ROLLBACK TRANSACTION;
--- COMMIT TRANSACTION;
+-- Roles
+INSERT INTO [dbo].[roles] (role_name, role_description) VALUES
+('User',  'Cliente estandar del gimnasio. Acceso a reservas, compras y membresia.'),
+('Coach', 'Entrenador personal. Gestiona sus propias sesiones de coaching.'),
+('Admin', 'Administrador con acceso total al sistema de gestion.');
+
+-- Permisos
+INSERT INTO [dbo].[permissions] (permission_code, permission_name, permission_description) VALUES
+(1, 'VIEW_DASHBOARD',       'Acceder al panel de control personal'),
+(2, 'MANAGE_SESSIONS',      'Crear, editar y eliminar sesiones de coaching propias'),
+(3, 'MANAGE_USERS',         'Ver y gestionar todos los usuarios del sistema'),
+(4, 'MANAGE_INVENTORY',     'Gestionar productos e inventario de la tienda'),
+(5, 'VIEW_GLOBAL_SALES',    'Ver informes de ventas globales del gimnasio'),
+(6, 'MANAGE_PLANS',         'Crear, editar y eliminar planes de membresía'),
+(7, 'MANAGE_SUBSCRIPTIONS',  'Ver y gestionar suscripciones de todos los usuarios'),
+(8, 'MANAGE_SUPPORT',       'Ver y responder tickets de soporte técnico');
+
+-- Asignacion permisos -> roles
+INSERT INTO [dbo].[role_permissions] (role_id, permission_id) VALUES
+(1, 1),
+(2, 1), (2, 2),
+(3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8);
+
+COMMIT TRANSACTION;

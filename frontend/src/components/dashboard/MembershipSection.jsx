@@ -1,83 +1,163 @@
 import React, { useState, useEffect } from 'react';
+import { useNotification } from '../../context/NotificationContext';
 import '../../styles/components/dashboard/MembershipSection.css';
 
 const MembershipSection = ({ user }) => {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const { addNotification } = useNotification();
 
   useEffect(() => {
-    const fetchSubscription = async () => {
-      try {
-        const token = localStorage.getItem('jwt_token');
-        const response = await fetch('http://localhost:8000/api/subscriptions/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await response.json();
-        if (data.subscription_id) setSubscription(data);
-      } catch (error) {
-        console.error("Error al cargar membresía:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSubscription();
   }, []);
 
+  const fetchSubscription = async () => {
+    try {
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch('http://localhost:8000/api/subscriptions/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      if (data.subscription_id) setSubscription(data);
+    } catch (error) {
+      console.error("Error al cargar membresía:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    setIsCancelling(true);
+    try {
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch(`http://localhost:8000/api/subscriptions/cancel/${subscription.subscription_id}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        addNotification("Renovación cancelada con éxito", "success");
+        setShowCancelModal(false);
+        fetchSubscription(); // Recargar estado
+      } else {
+        addNotification("Error al cancelar la suscripción", "error");
+      }
+    } catch (error) {
+      console.error("Error al cancelar:", error);
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
+  // Cálculo del progreso de la barra
+  const calculateProgress = () => {
+    if (!subscription) return 0;
+    const start = new Date(subscription.start_date).getTime();
+    const end = new Date(subscription.end_date).getTime();
+    const now = new Date().getTime();
+    
+    if (now >= end) return 100;
+    const total = end - start;
+    const elapsed = now - start;
+    return Math.min(Math.max((elapsed / total) * 100, 0), 100);
+  };
+
   if (loading) {
-    return <div className="section-loader">Cargando membresía...</div>;
+    return (
+      <div className="section-loader-container">
+        <div className="minimal-spinner"></div>
+        <p>Cargando detalles de tu plan...</p>
+      </div>
+    );
+  }
+
+  if (!subscription) {
+    return (
+      <div className="membership-empty-state">
+        <div className="empty-icon">🎖️</div>
+        <h2>No tienes una membresía activa</h2>
+        <p>Suscríbete a uno de nuestros planes para disfrutar de acceso ilimitado al gimnasio y clases exclusivas.</p>
+        <button className="primary-cta-btn" onClick={() => window.location.href='/services'}>
+          Explorar Planes
+        </button>
+      </div>
+    );
   }
 
   return (
-    <div className="membership-section-wrapper">
-      <div className="membership-hero-card">
-        <div className="hero-content">
-          <span className="status-pill">Suscripción {subscription?.subscription_status ? 'Activa' : 'Inactiva'}</span>
-          <h1>{subscription?.plan_name || 'Sin Plan Activo'}</h1>
-          <p className="expiration-text">
-            {subscription 
-              ? `Tu membresía vence el ${new Date(subscription.end_date).toLocaleDateString()}`
-              : 'Suscríbete ahora para desbloquear todos los beneficios.'}
-          </p>
+    <div className="membership-b-wrapper">
+      {/* CABECERA LINEAL */}
+      <div className="membership-b-header">
+        <div className="plan-main-info">
+          <span className="plan-label">Plan Actual</span>
+          <h1>{subscription.plan_name}</h1>
         </div>
-        <div className="hero-visual">
-          <div className="glowing-orb"></div>
+        <div className={`status-badge-custom ${subscription.subscription_status ? 'active' : 'cancelled'}`}>
+          {subscription.subscription_status ? '● Activa' : '● Finaliza pronto'}
         </div>
       </div>
 
-      <div className="membership-details-grid">
-        <div className="benefit-card">
-          <div className="benefit-icon">🏋️</div>
-          <h3>Acceso Total</h3>
-          <p>Entrada ilimitada a todas nuestras instalaciones y zonas de cardio.</p>
+      {/* BARRA DE PROGRESO */}
+      <div className="membership-progress-block">
+        <div className="progress-labels">
+          <span>Iniciado: {new Date(subscription.start_date).toLocaleDateString()}</span>
+          <span>Vence: {new Date(subscription.end_date).toLocaleDateString()}</span>
         </div>
-        <div className="benefit-card">
-          <div className="benefit-icon">📅</div>
-          <h3>Clases Dirigidas</h3>
-          <p>Reserva tu lugar en cualquier clase colectiva (Yoga, HIIT, Spinning).</p>
+        <div className="progress-bar-container">
+          <div className="progress-bar-fill" style={{ width: `${calculateProgress()}%` }}></div>
         </div>
-        <div className="benefit-card">
-          <div className="benefit-icon">📱</div>
-          <h3>App Premium</h3>
-          <p>Acceso a rutinas personalizadas y seguimiento de progreso en tiempo real.</p>
+        <p className="days-left-text">
+          Quedan aproximadamente {Math.ceil((new Date(subscription.end_date) - new Date()) / (1000 * 60 * 60 * 24))} días de acceso.
+        </p>
+      </div>
+
+      {/* DETALLES EN LISTA */}
+      <div className="membership-info-list">
+        <div className="info-row">
+          <span className="info-icon">💳</span>
+          <div className="info-content">
+            <span className="info-label">Precio de suscripción</span>
+            <span className="info-value">{subscription.plan_price}€ / mes</span>
+          </div>
+        </div>
+        <div className="info-row">
+          <span className="info-icon">📅</span>
+          <div className="info-content">
+            <span className="info-label">Próxima renovación</span>
+            <span className="info-value">{new Date(subscription.end_date).toLocaleDateString()}</span>
+          </div>
         </div>
       </div>
 
-      {!subscription && (
-        <div className="upsell-block">
-          <h2>¿Listo para empezar tu transformación?</h2>
-          <button className="upgrade-cta-btn" onClick={() => window.location.href='/servicios'}>
-            Ver Planes de Suscripción
+      {/* ACCIONES */}
+      <div className="membership-actions-footer">
+        {subscription.subscription_status ? (
+          <button className="cancel-membership-btn" onClick={() => setShowCancelModal(true)}>
+            Cancelar Renovación
           </button>
-        </div>
-      )}
+        ) : (
+          <div className="cancellation-notice">
+            La renovación automática está desactivada. Tu acceso finalizará el {new Date(subscription.end_date).toLocaleDateString()}.
+          </div>
+        )}
+      </div>
 
-      {subscription && subscription.subscription_status && (
-        <div className="management-block">
-          <h3>Gestión de Cuenta</h3>
-          <div className="management-actions">
-            <button className="secondary-action-btn">Descargar Facturas</button>
-            <button className="danger-action-btn">Cancelar Suscripción</button>
+      {/* MODAL DE CONFIRMACIÓN (INLINE) */}
+      {showCancelModal && (
+        <div className="modal-overlay">
+          <div className="confirm-modal-box">
+            <h3>¿Confirmar cancelación?</h3>
+            <p>Seguirás teniendo acceso a todas las instalaciones hasta el <strong>{new Date(subscription.end_date).toLocaleDateString()}</strong>. Después de esta fecha, tu acceso será restringido.</p>
+            <div className="modal-actions">
+              <button className="btn-back" onClick={() => setShowCancelModal(false)} disabled={isCancelling}>
+                Volver atrás
+              </button>
+              <button className="btn-confirm-cancel" onClick={handleCancelSubscription} disabled={isCancelling}>
+                {isCancelling ? 'Cancelando...' : 'Confirmar Cancelación'}
+              </button>
+            </div>
           </div>
         </div>
       )}

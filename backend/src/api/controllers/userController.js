@@ -34,7 +34,37 @@ const updateUser = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const { search = '', page = 1, limit = 10 } = req.query;
+    const result = await userService.getAllUsers(search, Number(page), Number(limit));
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+/**
+ * Endpoint para que el Admin cambie el rol de un usuario.
+ */
+const updateRole = async (req, res) => {
+  try {
+    const { userId, roleId } = req.body;
+    
+    if (!userId || !roleId) {
+      return res.status(400).json({ error: 'userId y roleId son requeridos' });
+    }
+
+    await userService.changeUserRole(Number(userId), Number(roleId));
+    return res.json({ message: 'Rol actualizado correctamente' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getUser,
-  updateUser
+  updateUser,
+  getAllUsers,
+  updateRole
 };

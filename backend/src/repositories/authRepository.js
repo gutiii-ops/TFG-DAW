@@ -12,14 +12,29 @@ const findUserByEmail = async (email) => {
   const result = await pool.request()
     .input('email', sql.VarChar, email)
     .query(`
-      SELECT u.*, r.role_name 
+      SELECT 
+        u.*, 
+        r.role_name,
+        p.permission_name
       FROM users u
       LEFT JOIN user_roles ur ON u.user_id = ur.user_id
       LEFT JOIN roles r ON ur.role_id = r.role_id
+      LEFT JOIN role_permissions rp ON r.role_id = rp.role_id
+      LEFT JOIN permissions p ON rp.permission_id = p.permission_id
       WHERE u.user_email = @email
     `);
   
-  return result.recordset[0] || null;
+  if (result.recordset.length === 0) return null;
+
+  // Agrupar permisos en un array limpio
+  const user = {
+    ...result.recordset[0],
+    permissions: result.recordset
+      .map(row => row.permission_name)
+      .filter(p => p != null)
+  };
+
+  return user;
 };
 
 /**

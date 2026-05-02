@@ -114,7 +114,7 @@ const OrdersSection = ({ user }) => {
                   {orderDetails[order.order_id] ? (
                     orderDetails[order.order_id].map((item, idx) => (
                       <div key={idx} className="detail-row">
-                        <span className="product-name">{item.product_name}</span>
+                        <span className="product-name">{item.item_name || 'Artículo'}</span>
                         <span className="product-qty">x{item.quantity}</span>
                         <span className="product-price">{(item.unit_price * item.quantity).toFixed(2)}€</span>
                       </div>

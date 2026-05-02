@@ -29,6 +29,7 @@ const reservationRoutes = require('./api/routes/reservationRoutes')
 const supportRoutes = require('./api/routes/supportRoutes')
 const subscriptionRoutes = require('./api/routes/subscriptionRoutes')
 const planRoutes = require('./api/routes/planRoutes')
+const coachRoutes = require('./api/routes/coachRoutes')
 
 // 2. ENCHUFAMOS LAS RUTAS (Aquí está la magia)
 app.use('/api/auth', authRoutes)
@@ -39,6 +40,7 @@ app.use('/api/reservations', reservationRoutes)
 app.use('/api/support', supportRoutes)
 app.use('/api/subscriptions', subscriptionRoutes)
 app.use('/api/plans', planRoutes)
+app.use('/api/coach/sessions', coachRoutes)
 
 // 3. MIDDLEWARE: MANEJADOR DE RUTAS INEXISTENTES (404)
 app.use((req, res, next) => {

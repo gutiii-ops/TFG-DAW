@@ -112,51 +112,7 @@
   padding-left: 0.75rem;
 }
 
-/* ─── Floating Inputs (Labels dentro) ─── */
-.floating-input-group {
-  position: relative;
-  width: 100%;
-}
-
-.floating-input-group input,
-.floating-input-group select {
-  width: 100%;
-  padding: 1.25rem 1rem 0.75rem; /* Espacio para que la etiqueta flote arriba */
-  border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--text);
-  font-size: 1rem;
-  outline: none;
-  transition: all 0.3s;
-}
-
-.floating-input-group label {
-  position: absolute;
-  left: 1rem;
-  top: 1rem; /* Posición inicial: dentro del input */
-  color: var(--muted);
-  font-size: 1rem;
-  pointer-events: none;
-  transition: all 0.2s ease-out;
-}
-
-/* Animación de la etiqueta al hacer focus o tener valor */
-.floating-input-group input:focus ~ label,
-.floating-input-group input:not(:placeholder-shown) ~ label,
-.floating-input-group.has-value label {
-  top: 0.4rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--y);
-  text-transform: uppercase;
-}
-
-.floating-input-group input:focus {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--y2);
-  box-shadow: 0 0 0 4px rgba(255, 208, 0, 0.1);
-}
+/* Estilos de inputs se movieron a global.css para reutilización */
 
 /* ─── Filas y Botones ─── */
 .login-row {

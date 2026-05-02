@@ -71,7 +71,21 @@ const updateUser = async (targetUserId, requestingUserId, rawData) => {
   return updatedUser;
 };
 
+const getAllUsers = async (search, page, limit) => {
+  return await userRepository.findAll(search, page, limit);
+};
+
+/**
+ * Cambia el rol de un usuario (Acción de Admin).
+ */
+const changeUserRole = async (userId, roleId) => {
+  // Aquí podríamos añadir validaciones extra, ej: no quitarse el rol a uno mismo
+  return await userRepository.updateRole(userId, roleId);
+};
+
 module.exports = {
   getUser,
-  updateUser
+  updateUser,
+  getAllUsers,
+  changeUserRole
 };

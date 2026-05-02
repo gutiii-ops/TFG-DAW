@@ -3,7 +3,8 @@
    ========================================================================== */
 
 .dashboard-wrapper {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
 }
@@ -11,8 +12,16 @@
 .dashboard-container {
   display: grid;
   grid-template-columns: auto 1fr;
-  min-height: calc(100vh - 4.5rem);
-  margin-top: 4.5rem;
+  height: calc(100vh - 4rem);
+  margin-top: 4rem;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .dashboard-container {
+    grid-template-columns: 1fr; /* Una sola columna en móvil */
+    height: calc(100vh - 4rem - 70px); /* Restamos la barra inferior */
+  }
 }
 
 /* ==========================================================================
@@ -28,12 +37,17 @@
   grid-template-rows: auto 1fr; 
   gap: 3rem;
   
-  position: sticky;
-  top: 4.5rem;
-  height: calc(100vh - 4.5rem);
+  position: relative;
+  height: 100%;
   width: 280px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 50;
+}
+
+@media (max-width: 900px) {
+  .sidebar-main-wrapper {
+    display: none; /* Ocultamos el sidebar en móvil */
+  }
 }
 
 .sidebar-profile-block {
@@ -143,6 +157,14 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  overflow-y: auto;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .dashboard-content {
+    padding: 1.5rem; /* Menos padding en móvil */
+  }
 }
 
 .content-header {
@@ -489,10 +511,37 @@
   .order-main-info {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+    padding: 1.25rem;
   }
+  
   .order-chevron {
     grid-column: span 2;
     text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .product-price {
+    text-align: right;
+    color: var(--y);
+  }
+}
+
+@media (max-width: 500px) {
+  .order-main-info {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .order-main-info .label {
+    display: inline-block;
+    width: 80px;
+    margin-bottom: 0;
   }
 }
 

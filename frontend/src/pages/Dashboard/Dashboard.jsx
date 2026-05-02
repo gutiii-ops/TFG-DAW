@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { DashboardNavProvider, useDashboardNav } from '../../context/DashboardNavContext';
 import { Navbar } from '../../components/navbar';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar';
 import DashboardCard from '../../components/dashboard/DashboardCard';
@@ -7,17 +8,18 @@ import ProfileSection from '../../components/dashboard/ProfileSection';
 import OrdersSection from '../../components/dashboard/OrdersSection';
 import SupportSection from '../../components/dashboard/SupportSection';
 import MembershipSection from '../../components/dashboard/MembershipSection';
+import CoachingSection from '../../components/dashboard/CoachingSection';
 import '../../styles/pages/dashboard.css';
 
-const Dashboard = () => {
-  const { user, role } = useContext(AuthContext);
-  const [activeSection, setActiveSection] = useState('overview');
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    totalSpent: 0,
-    lastOrder: 'N/A'
-  });
+import { UserManagement } from '../../components/admin/UserManagement';
+import { AdminSupport } from '../../components/admin/AdminSupport';
 
+// Contenido interno del dashboard (consume el contexto)
+const DashboardContent = () => {
+  const { user, role } = useContext(AuthContext);
+  const { activeSection, setActiveSection } = useDashboardNav();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ totalSpent: 0, lastOrder: 'N/A' });
   const userRole = role || 'User';
 
   useEffect(() => {
@@ -33,18 +35,17 @@ const Dashboard = () => {
         if (response.ok) {
           const orders = await response.json();
           const total = orders.reduce((acc, order) => acc + (Number(order.total_price) || 0), 0);
-          const lastDate = orders.length > 0 
-            ? new Date(orders[0].order_date).toLocaleDateString() 
+          const lastDate = orders.length > 0
+            ? new Date(orders[0].order_date).toLocaleDateString()
             : 'N/A';
 
-          // Cargar Suscripción para el resumen
           const subRes = await fetch(`http://localhost:8000/api/subscriptions/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           const subData = await subRes.json();
 
-          setStats({ 
-            totalSpent: total.toFixed(2), 
+          setStats({
+            totalSpent: total.toFixed(2),
             lastOrder: lastDate,
             planName: subData.plan_name || 'Sin Plan',
             expiryDate: subData.end_date ? new Date(subData.end_date).toLocaleDateString() : 'N/A'
@@ -56,7 +57,6 @@ const Dashboard = () => {
         setTimeout(() => setLoading(false), 600);
       }
     };
-
     fetchDashboardData();
   }, [user]);
 
@@ -78,44 +78,24 @@ const Dashboard = () => {
               <h1>¡Hola, {user?.name || 'Guerrero'}!</h1>
               <p>Aquí tienes un resumen de tu actividad en la plataforma.</p>
             </div>
-
             <div className="status-cards-grid">
-              <DashboardCard 
-                title="Mis Compras" 
-                value={`${stats.totalSpent}€`} 
-                subtext="Gasto total acumulado" 
-              />
-              <DashboardCard 
-                title="Suscripción" 
-                value={stats.planName} 
-                subtext={stats.expiryDate !== 'N/A' ? `Vence: ${stats.expiryDate}` : 'No tienes planes activos'} 
-              />
-              <DashboardCard 
-                title="Último Pedido" 
-                value={stats.lastOrder} 
-                subtext="Fecha de compra" 
-              />
+              <DashboardCard title="Mis Compras" value={`${stats.totalSpent}€`} subtext="Gasto total acumulado" />
+              <DashboardCard title="Suscripción" value={stats.planName} subtext={stats.expiryDate !== 'N/A' ? `Vence: ${stats.expiryDate}` : 'No tienes planes activos'} />
+              <DashboardCard title="Último Pedido" value={stats.lastOrder} subtext="Fecha de compra" />
             </div>
-
             <div className="recent-activity-placeholder">
               <h3>Actividad Reciente</h3>
               <p>Próximamente: Listado detallado de tus últimos movimientos.</p>
             </div>
           </>
         );
-
-      case 'profile':
-        return <ProfileSection user={user} />;
-
-      case 'orders':
-        return <OrdersSection user={user} />;
-
-      case 'subscriptions':
-        return <MembershipSection user={user} />;
-
-      case 'support':
-        return <SupportSection />;
-
+      case 'profile':      return <ProfileSection user={user} />;
+      case 'orders':       return <OrdersSection user={user} />;
+      case 'subscriptions': return <MembershipSection user={user} />;
+      case 'coaching':     return <CoachingSection />;
+      case 'support':      return <SupportSection />;
+      case 'users-admin':   return <UserManagement />;
+      case 'admin-support': return <AdminSupport />;
       default:
         return (
           <div className="empty-state">
@@ -129,15 +109,13 @@ const Dashboard = () => {
   return (
     <div className="dashboard-wrapper">
       <Navbar />
-      
       <div className="dashboard-container">
-        <DashboardSidebar 
-          user={user} 
-          role={userRole} 
+        <DashboardSidebar
+          user={user}
+          role={userRole}
           activeSection={activeSection}
           onSectionChange={setActiveSection}
         />
-
         <main className="dashboard-content">
           {renderContent()}
         </main>
@@ -146,4 +124,12 @@ const Dashboard = () => {
   );
 };
 
+// Wrapper que provee el contexto
+const Dashboard = () => (
+  <DashboardNavProvider>
+    <DashboardContent />
+  </DashboardNavProvider>
+);
+
 export default Dashboard;
+

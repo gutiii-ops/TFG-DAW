@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supportController = require('../controllers/supportController');
-const { authUserToken } = require('../middlewares/authMiddleware');
+const { authUserToken, checkPermission } = require('../middlewares/authMiddleware');
 
 // Rutas protegidas para el usuario (Dashboard)
 router.get('/my-tickets', authUserToken, supportController.getUserTickets);
@@ -10,6 +10,6 @@ router.get('/tickets/:ticketId/messages', authUserToken, supportController.getMe
 router.post('/tickets/:ticketId/messages', authUserToken, supportController.replyTicket);
 
 // Rutas para Admin (Paginadas)
-router.get('/admin/all', authUserToken, supportController.getTickets);
+router.get('/admin/all', authUserToken, checkPermission('MANAGE_SUPPORT'), supportController.getTickets);
 
 module.exports = router;

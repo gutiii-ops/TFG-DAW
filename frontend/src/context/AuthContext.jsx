@@ -20,6 +20,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [permissions, setPermissions] = useState([]);
   const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
       if (decoded && decoded.exp * 1000 > Date.now()) {
         setUser({ id: decoded.userId, name: decoded.userName });
         setRole(decoded.role);
+        setPermissions(decoded.permissions || []);
         setToken(savedToken);
         setIsAuthenticated(true);
       } else {
@@ -46,6 +48,7 @@ export const AuthProvider = ({ children }) => {
     if (decoded) {
       setUser({ id: decoded.userId, name: decoded.userName });
       setRole(decoded.role);
+      setPermissions(decoded.permissions || []);
       setToken(newToken);
       setIsAuthenticated(true);
     }
@@ -58,12 +61,20 @@ export const AuthProvider = ({ children }) => {
     
     setUser(null);
     setRole(null);
+    setPermissions([]);
     setToken(null);
     setIsAuthenticated(false);
   };
 
+  const hasPermission = (code) => {
+    if (role === 'Admin') return true;
+    return permissions.includes(code);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, role, token, isAuthenticated, login, logout, loading }}>
+    <AuthContext.Provider value={{ 
+      user, role, permissions, token, isAuthenticated, login, logout, loading, hasPermission 
+    }}>
       {!loading && children}
     </AuthContext.Provider>
   );

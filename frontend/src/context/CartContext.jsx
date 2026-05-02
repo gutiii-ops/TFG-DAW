@@ -43,9 +43,9 @@ export const CartProvider = ({ children }) => {
     // Eliminamos cualquier plan previo que haya en el carrito
     setCartItems(prevItems => {
       const filteredItems = prevItems.filter(item => item.type !== 'plan');
-      addNotification(`Plan ${plan.name} seleccionado`, 'success');
       return [...filteredItems, { ...plan, quantity: 1, type: 'plan' }];
     });
+    addNotification(`Plan ${plan.name} seleccionado`, 'success');
     setIsCartOpen(true); // Abrimos el carrito para que el usuario vea el cambio
   }
 

@@ -38,20 +38,26 @@ const login = async (email, password) => {
     throw error;
   }
 
-  // 4. Generación de JWT real incluyendo el rol y el nombre
+  // 4. Generación de JWT real incluyendo el rol, nombre y PERMISOS
   const payload = {
     userId: user.user_id,
     userName: user.user_name,
-    role: user.role_name || 'User'
+    role: user.role_name || 'User',
+    permissions: user.permissions || []
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
   
-  // 5. Guardar token en el repositorio (opcional, si mantenemos el control de tokens válidos)
+  // 5. Guardar token en el repositorio
   await authRepository.saveToken(token, user.user_id);
 
-  // Devolvemos el token, el id y también el ROL para el frontend
-  return { token, userId: user.user_id, role: payload.role };
+  // Devolvemos el token, el id, el rol y los permisos para el frontend
+  return { 
+    token, 
+    userId: user.user_id, 
+    role: payload.role, 
+    permissions: payload.permissions 
+  };
 };
 
 const register = async (userData) => {

@@ -9,10 +9,11 @@ const getActiveSubscriptionByUserId = async (userId) => {
     const result = await pool.request()
         .input('userId', sql.Int, userId)
         .query(`
-            SELECT s.*, p.plan_name, p.plan_description, p.plan_price
+            SELECT TOP 1 s.*, p.plan_name, p.plan_description, p.plan_price, p.plan_duration
             FROM subscriptions s
             JOIN plans p ON s.plan_id = p.plan_id
-            WHERE s.user_id = @userId AND s.subscription_status = 1 AND s.end_date >= GETDATE()
+            WHERE s.user_id = @userId AND s.end_date >= GETDATE()
+            ORDER BY s.subscription_status DESC, s.end_date DESC
         `);
     return result.recordset[0];
 };
