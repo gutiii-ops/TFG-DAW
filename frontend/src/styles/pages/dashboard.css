@@ -735,11 +735,12 @@
 }
 
 .modal-header h2 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  background: linear-gradient(to right, #fff, var(--y));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--y);
 }
 
 .form-group {
@@ -800,19 +801,23 @@
 }
 
 .cancel-btn {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+  color: white;
+  border: none;
   padding: 1rem 2rem;
   border-radius: 14px;
-  font-weight: 600;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(255, 68, 68, 0.2);
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ff5555, #dd0000);
+  box-shadow: 0 8px 20px rgba(255, 68, 68, 0.4);
 }
 
 @media (max-width: 900px) {
