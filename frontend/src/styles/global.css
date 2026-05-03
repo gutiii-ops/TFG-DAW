@@ -1,0 +1,122 @@
+/* =======================================================================================================================
+                                      global.css - Estilos globales para toda la aplicación
+======================================================================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --y: #f0e000;
+  --y2: #ffd000;
+  --bg: #0d0d0d;
+  --bg2: #141414;
+  --bg3: #1c1c1c;
+  --card: #1a1a1a;
+  --border: #2a2a2a;
+  --text: #f0f0f0;
+  --muted: #888;
+  --red: #ff3b3b;
+  --green: #39d97a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav {
+    padding: 0 20px;
+  }
+  .nav-links {
+    display: none;
+  }
+  .hero h1 {
+    font-size: clamp(48px, 16vw, 90px);
+  }
+  .hero-stats {
+    gap: 24px;
+  }
+  section {
+    padding: 70px 20px;
+  }
+  .nutrition-layout,
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+  .nutrition-text {
+    position: static;
+  }
+}
+@media (max-width: 600px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+  .shop-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-stats {
+    gap: 20px;
+  }
+  .stat-num {
+    font-size: 32px;
+  }
+}
+
+/* ─── Floating Inputs (Reusable Form Styles) ─── */
+.floating-input-group {
+  position: relative;
+  width: 100%;
+}
+
+.floating-input-group input,
+.floating-input-group select {
+  width: 100%;
+  padding: 1.25rem 1rem 0.75rem; /* Espacio para que la etiqueta flote arriba */
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.floating-input-group label {
+  position: absolute;
+  left: 1rem;
+  top: 1rem; /* Posición inicial: dentro del input */
+  color: var(--muted);
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.2s ease-out;
+}
+
+/* Animación de la etiqueta al hacer focus o tener valor */
+.floating-input-group input:focus ~ label,
+.floating-input-group input:not(:placeholder-shown) ~ label,
+.floating-input-group.has-value label {
+  top: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--y);
+  text-transform: uppercase;
+}
+
+.floating-input-group input:focus {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--y2);
+  box-shadow: 0 0 0 4px rgba(255, 208, 0, 0.1);
+}

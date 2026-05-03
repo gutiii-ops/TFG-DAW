@@ -1,0 +1,178 @@
+/* ─── Estilos Generales del Modal ─── */
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85); /* Fondo más oscuro para compensar la falta de blur */
+  display: grid;
+  place-items: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.login-container {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 2rem;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.6);
+  padding: 2.5rem;
+  position: relative;
+  transition: width 0.25s ease-out;
+  width: min(30rem, 100%);
+  /* Quitamos overflow: hidden para que el calendario pueda salir por la izquierda */
+}
+
+/* ... */
+
+/* ─── CALENDARIO A LA IZQUIERDA EN PANTALLAS HORIZONTALES ─── */
+@media (orientation: landscape) {
+  .cal-dropdown {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    left: auto !important;
+    right: 105% !important;
+    margin-top: 0 !important;
+  }
+}
+
+
+
+/* Modo Libro: Se ensancha para mostrar los dos paneles */
+.login-container.book-mode {
+  width: min(65rem, 100%);
+}
+
+.login-close-button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--y);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 10;
+}
+
+.login-close-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg) scale(1.1);
+}
+
+.login-close-button:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+.close-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* ─── Layout del Formulario ─── */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.login-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  text-align: center;
+}
+
+.form-content-wrapper {
+  display: flex;
+  gap: 3rem;
+  transition: all 0.4s ease;
+}
+
+.form-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--y);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  border-left: 3px solid var(--y);
+  padding-left: 0.75rem;
+}
+
+/* Estilos de inputs se movieron a global.css para reutilización */
+
+/* ─── Filas y Botones ─── */
+.login-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.login-row > * {
+  flex: 1;
+}
+
+.login-submit-button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--y), var(--y2));
+  color: var(--bg3);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 0.5rem;
+}
+
+.login-submit-button:hover {
+  transform: translateY(-1px);
+}
+
+.login-submit-button:active {
+  transform: translateY(0);
+}
+
+.login-toggle-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.login-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--y);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin-left: 0.25rem;
+}
+
+/* ─── Responsive (Plegar el libro) ─── */
+@media (max-width: 900px) {
+  .login-container.book-mode {
+    width: min(32rem, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .form-content-wrapper {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}

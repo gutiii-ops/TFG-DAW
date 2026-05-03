@@ -1,0 +1,185 @@
+/* =======================================================================================================================
+          ProfileSection.css - Estilos para la sección de perfil con soporte para edición in-line
+======================================================================================================================= */
+
+.profile-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 35px;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profile-avatar-large {
+    width: 90px;
+    height: 90px;
+    background: var(--y);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(240, 224, 0, 0.2);
+}
+
+.profile-title-block h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.profile-role-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(240, 224, 0, 0.1);
+    color: var(--y);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* GRID DE INFORMACIÓN */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.profile-info-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.profile-info-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: var(--y);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.info-group {
+    margin-bottom: 20px;
+}
+
+.info-group:last-child {
+    margin-bottom: 0;
+}
+
+.info-group label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.info-group p {
+    font-size: 1.05rem;
+    color: white;
+    font-weight: 500;
+}
+
+.info-group p.readonly {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* INPUTS DE EDICIÓN (Opción A: Focus & Glow) */
+.profile-edit-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1.05rem;
+    padding: 5px 0;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.profile-edit-input:focus {
+    outline: none;
+    border-bottom-color: var(--y);
+    box-shadow: 0 4px 10px -5px rgba(240, 224, 0, 0.3);
+}
+
+.profile-edit-input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* ACCIONES */
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding-top: 20px;
+}
+
+.edit-profile-btn {
+    background: var(--y);
+    color: var(--bg);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.edit-profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(240, 224, 0, 0.3);
+}
+
+.save-profile-btn {
+    background: var(--green);
+    color: var(--bg);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cancel-profile-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cancel-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,152 @@
+.custom-date-picker-container {
+  position: relative;
+}
+
+.date-picker-input {
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23f0e000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+}
+
+.cal-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: min(320px, 90vw);
+  margin-top: 0.5rem;
+  z-index: 2000;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.2s ease-out both;
+}
+
+/* Base calendar styles adapted from the landing page */
+.cal-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+}
+
+.cal-header {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.cal-selectors {
+  display: flex;
+  gap: 8px;
+}
+
+.cal-select, .cal-year-input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.cal-select:focus, .cal-year-input:focus,
+.cal-select:hover, .cal-year-input:hover {
+  border-color: var(--y);
+}
+
+.cal-year-input {
+  width: 72px;
+  cursor: text;
+}
+
+.cal-nav-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.cal-nav {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.cal-nav:hover {
+  background: var(--y);
+  border-color: var(--y);
+  color: #000;
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 12px 12px 8px;
+  gap: 4px;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 4px 12px 16px;
+  gap: 4px;
+}
+
+.day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  position: relative;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  border: 1px solid transparent;
+  color: var(--text);
+}
+
+.day:hover:not(.empty) {
+  background: rgba(240, 224, 0, 0.1);
+  border-color: rgba(240, 224, 0, 0.2);
+  color: var(--y);
+}
+
+.day.empty {
+  cursor: default;
+  opacity: 0;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

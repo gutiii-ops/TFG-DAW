@@ -1,0 +1,74 @@
+/* ==============================================================
+                    notification.css
+   Estilos para el sistema global de Toasts (Notificaciones)
+================================================================ */
+
+.notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none; /* Permite clickar lo que hay debajo si no es el toast */
+}
+
+.notification-toast {
+    pointer-events: auto; /* El toast sí es interactivo */
+    min-width: 280px;
+    max-width: 400px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    /* Animación de entrada */
+    animation: toast-slide-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    transition: all 0.3s ease;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Tipos de notificaciones */
+.notification-toast.error {
+    background: color-mix(in srgb, var(--error-red, #ff4444), transparent 15%);
+    border-left: 5px solid #ff4444;
+    border: 1px solid rgba(255, 68, 68, 0.2);
+}
+
+.notification-toast.success {
+    background: color-mix(in srgb, #00c851, transparent 15%);
+    border-left: 5px solid #00c851;
+    border: 1px solid rgba(0, 200, 81, 0.2);
+}
+
+.notification-toast.info {
+    background: color-mix(in srgb, var(--y, #ffd700), transparent 20%);
+    color: var(--bg, #0a0a0a);
+    border-left: 5px solid var(--y, #ffd700);
+}
+
+/* Keyframes */
+@keyframes toast-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(100%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Soporte para salida (vía JS o CSS si se implementa clase de salida) */
+.notification-toast.fade-out {
+    opacity: 0;
+    transform: scale(0.9);
+}

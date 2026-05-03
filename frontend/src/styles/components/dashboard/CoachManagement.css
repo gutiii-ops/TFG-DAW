@@ -1,0 +1,441 @@
+/* =============================================================================
+   CoachManagement.css
+   Vista de gestión de sesiones para coaches
+============================================================================= */
+
+/* ── Wrapper principal ── */
+.coach-mgmt-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0 0 3rem;
+  max-width: 900px;
+}
+
+/* ── Cabecera ── */
+.coach-mgmt-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.coach-mgmt-header h1 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #f0f0f0;
+  margin: 0 0 0.25rem;
+}
+
+.coach-mgmt-header p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.45);
+  margin: 0;
+}
+
+.create-session-btn {
+  background: var(--y, #f0e000);
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.create-session-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(240, 224, 0, 0.3);
+}
+
+/* ── Selector de días ── */
+.coach-days-selector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.coach-day-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.coach-day-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: #f0f0f0;
+}
+
+.coach-day-btn.is-active {
+  background: var(--y, #f0e000);
+  border-color: var(--y, #f0e000);
+  color: #111;
+}
+
+/* ── Lista de sesiones ── */
+.coach-sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Tarjeta de sesión del coach ── */
+.coach-session-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.coach-session-card:hover {
+  background: rgba(255,255,255,0.055);
+  border-color: rgba(255,255,255,0.13);
+}
+
+.cscard-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 3.5rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--y, #f0e000);
+  font-variant-numeric: tabular-nums;
+}
+
+.cscard-time-sep {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.3);
+}
+
+.cscard-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cscard-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin-bottom: 0.3rem;
+}
+
+.cscard-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
+}
+
+.cscard-badge.personal {
+  background: rgba(240,224,0,0.12);
+  color: var(--y, #f0e000);
+  border: 1px solid rgba(240,224,0,0.25);
+}
+
+.cscard-badge.grupal {
+  background: rgba(100,200,255,0.1);
+  color: #64c8ff;
+  border: 1px solid rgba(100,200,255,0.2);
+}
+
+.cscard-category {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cscard-desc {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cscard-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cscard-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cscard-btn.edit {
+  background: rgba(255,255,255,0.07);
+  color: #f0f0f0;
+}
+
+.cscard-btn.edit:hover {
+  background: rgba(255,255,255,0.13);
+}
+
+.cscard-btn.delete {
+  background: rgba(255, 70, 70, 0.1);
+  color: #ff6b6b;
+}
+
+.cscard-btn.delete:hover {
+  background: rgba(255, 70, 70, 0.2);
+}
+
+/* ── Estados vacío y cargando ── */
+.coach-empty, .coach-loading {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.coach-empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.coach-empty h3 { font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.6); margin: 0 0 0.5rem; }
+.coach-empty p  { font-size: 0.85rem; margin: 0; }
+
+/* =============================================================================
+   MODAL DE FORMULARIO DE SESIÓN
+============================================================================= */
+
+.session-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.session-modal-panel {
+  background: #1a1a1e;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+
+.session-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.session-modal-header h2 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: rgba(255,255,255,0.07);
+  border: none;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.6);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.modal-close-btn:hover { background: rgba(255,255,255,0.12); }
+
+/* ── Formulario ── */
+.session-form {
+  padding: 1.5rem 1.75rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-field.full-width { grid-column: 1 / -1; }
+
+.form-field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #f0f0f0;
+  font-size: 0.9rem;
+  padding: 0.7rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--y, #f0e000);
+}
+
+.form-field select option { background: #1a1a1e; }
+
+/* ── Toggle Grupal / Personal ── */
+.toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: default;
+}
+
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toggle-opt {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.3);
+  transition: color 0.2s;
+}
+
+.toggle-opt.active { color: #f0f0f0; font-weight: 700; }
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  padding: 0;
+}
+
+.toggle-switch.off { background: rgba(255,255,255,0.12); }
+.toggle-switch.on  { background: var(--y, #f0e000); }
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-switch.on .toggle-knob { transform: translateX(20px); }
+
+/* ── Acciones del formulario ── */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.form-btn-cancel {
+  background: rgba(255,255,255,0.07);
+  border: none;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.7);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.form-btn-cancel:hover { background: rgba(255,255,255,0.12); }
+
+.form-btn-save {
+  background: var(--y, #f0e000);
+  border: none;
+  border-radius: 10px;
+  color: #111;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.form-btn-save:hover:not(:disabled) { transform: translateY(-1px); }
+.form-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .form-field.full-width { grid-column: auto; }
+
+  .coach-session-card { flex-wrap: wrap; }
+  .cscard-actions { width: 100%; justify-content: flex-end; }
+
+  .coach-mgmt-header { flex-direction: column; }
+  .create-session-btn { width: 100%; text-align: center; }
+
+  .coach-days-selector { gap: 0.35rem; }
+  .coach-day-btn { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
+}

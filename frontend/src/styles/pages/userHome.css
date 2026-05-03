@@ -1,0 +1,110 @@
+/* =======================================================================================================================
+                                  userHome.css - Estilos base para la página de usuario personal
+======================================================================================================================= */
+
+.user-home {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: calc(100vh - 200px);
+}
+
+/* ── Error y Loading ── */
+.error-banner {
+  background: rgba(255, 59, 59, 0.15);
+  border: 1px solid rgba(255, 59, 59, 0.3);
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--red);
+  font-weight: 600;
+}
+
+.loading-container {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* ── Tabs Navbar ── */
+.user-tabs {
+  margin-bottom: 2rem;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+}
+
+.tab-btn.active {
+  color: var(--y);
+  border-bottom-color: var(--y);
+}
+
+/* ── Contenido de Tabs Main Container ── */
+.tabs-container {
+  display: grid;
+  gap: 2rem;
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive Generico ── */
+@media (max-width: 1000px) {
+  .user-home {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-home {
+    padding: 1rem;
+    margin-top: -5rem;
+  }
+
+  .tab-buttons {
+    gap: 0.5rem;
+  }
+
+  .tab-btn {
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+  }
+}

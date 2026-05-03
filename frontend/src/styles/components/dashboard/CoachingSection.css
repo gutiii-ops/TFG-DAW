@@ -1,0 +1,273 @@
+.coaching-section-wrapper {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.coaching-header {
+    margin-bottom: 2rem;
+}
+
+/* Selector de Días */
+.days-selector {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+}
+
+.days-selector::-webkit-scrollbar {
+    display: none;
+}
+
+.day-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 70px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.day-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-4px);
+    border-color: var(--y);
+}
+
+.day-btn.is-active {
+    background: var(--y);
+    border-color: var(--y);
+    box-shadow: 0 8px 24px rgba(240, 224, 0, 0.2);
+}
+
+.day-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+}
+
+.day-number {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.day-btn.is-active .day-name,
+.day-btn.is-active .day-number {
+    color: #000;
+}
+
+/* Timeline Cards */
+.sessions-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.sessions-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--y), transparent);
+    opacity: 0.2;
+}
+
+.session-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 1.5rem;
+    gap: 2rem;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.session-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(10px);
+}
+
+.session-card.is-booked {
+    border-left: 4px solid var(--y);
+    background: rgba(240, 224, 0, 0.03);
+    box-shadow: 0 0 30px rgba(240, 224, 0, 0.05);
+}
+
+.session-time {
+    min-width: 100px;
+}
+
+.time-start {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--y);
+}
+
+.time-end {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.session-info {
+    flex: 1;
+}
+
+.session-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.session-badge {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.session-badge.coaching {
+    background: rgba(255, 100, 0, 0.2);
+    color: #ff6400;
+}
+
+.session-instructor {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.session-actions {
+    display: flex;
+    align-items: center;
+}
+
+.reserve-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.reserve-btn.primary {
+    background: var(--y);
+    color: #000;
+}
+
+.reserve-btn.primary:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 15px rgba(240, 224, 0, 0.3);
+}
+
+.reserve-btn.cancel {
+    background: transparent;
+    border: 1px solid rgba(255, 50, 50, 0.3);
+    color: #ff3232;
+}
+
+.reserve-btn.cancel:hover {
+    background: rgba(255, 50, 50, 0.1);
+    border-color: #ff3232;
+}
+
+/* Empty State */
+.no-sessions {
+    padding: 4rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    border: 2px dashed rgba(255, 255, 255, 0.05);
+}
+
+.no-sessions h3 {
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.no-sessions p {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .coaching-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .days-selector {
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .day-btn {
+        min-width: 60px;
+        height: 80px;
+    }
+
+    .day-number {
+        font-size: 1.2rem;
+    }
+
+    .sessions-timeline {
+        padding-left: 1rem;
+    }
+
+    .session-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+        padding: 1.25rem;
+    }
+    
+    .session-time {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        min-width: auto;
+    }
+
+    .time-start {
+        font-size: 1.1rem;
+    }
+    
+    .session-actions {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .reserve-btn {
+        width: 100%;
+        padding: 1rem;
+    }
+}
