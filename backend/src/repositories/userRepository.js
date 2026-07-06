@@ -118,10 +118,27 @@ const updateRole = async (userId, roleId) => {
   }
 };
 
+/**
+ * Obtiene el nombre del rol de un usuario específico.
+ */
+const getUserRoleName = async (userId) => {
+  const pool = await poolPromise;
+  const result = await pool.request()
+    .input('userId', sql.Int, userId)
+    .query(`
+      SELECT r.role_name 
+      FROM user_roles ur
+      JOIN roles r ON ur.role_id = r.role_id
+      WHERE ur.user_id = @userId
+    `);
+  return result.recordset[0]?.role_name || null;
+};
+
 module.exports = {
   findById,
   updateUser,
   findAll,
-  updateRole
+  updateRole,
+  getUserRoleName
 };
 

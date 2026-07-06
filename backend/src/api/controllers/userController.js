@@ -50,15 +50,17 @@ const getAllUsers = async (req, res) => {
 const updateRole = async (req, res) => {
   try {
     const { userId, roleId } = req.body;
+    const requestingUserId = req.userId;
     
     if (!userId || !roleId) {
       return res.status(400).json({ error: 'userId y roleId son requeridos' });
     }
 
-    await userService.changeUserRole(Number(userId), Number(roleId));
+    await userService.changeUserRole(Number(userId), Number(roleId), requestingUserId);
     return res.json({ message: 'Rol actualizado correctamente' });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    const statusCode = error.status || 500;
+    return res.status(statusCode).json({ error: error.message });
   }
 };
 

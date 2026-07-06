@@ -17,9 +17,12 @@ const getMyCoachSessions = async (req, res) => {
  */
 const createCoachSession = async (req, res) => {
   try {
+    console.log('Creando sesión para coachId:', req.userId, 'con data:', req.body);
     const result = await coachingService.createCoachSession(req.userId, req.body);
+    console.log('Sesión creada:', result);
     return res.status(201).json(result);
   } catch (error) {
+    console.log('Error creando sesión:', error.message);
     return res.status(400).json({ error: error.message });
   }
 };
@@ -30,7 +33,8 @@ const createCoachSession = async (req, res) => {
 const updateCoachSession = async (req, res) => {
   try {
     const sessionId = Number(req.params.sessionId);
-    const result = await coachingService.updateCoachSession(sessionId, req.userId, req.body);
+    const isAdmin = req.userRole === 'Admin';
+    const result = await coachingService.updateCoachSession(sessionId, req.userId, req.body, isAdmin);
     return res.json(result);
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -43,7 +47,8 @@ const updateCoachSession = async (req, res) => {
 const deleteCoachSession = async (req, res) => {
   try {
     const sessionId = Number(req.params.sessionId);
-    const result = await coachingService.deleteCoachSession(sessionId, req.userId);
+    const isAdmin = req.userRole === 'Admin';
+    const result = await coachingService.deleteCoachSession(sessionId, req.userId, isAdmin);
     return res.json(result);
   } catch (error) {
     return res.status(400).json({ error: error.message });

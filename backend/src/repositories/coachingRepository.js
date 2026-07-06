@@ -56,6 +56,17 @@ const deleteReservation = async (reservationId, userId) => {
 };
 
 /**
+ * Obtiene el nombre de usuario por ID.
+ */
+const getUserNameById = async (userId) => {
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('userId', sql.Int, userId)
+        .query('SELECT user_name FROM users WHERE user_id = @userId');
+    return result.recordset[0]?.user_name;
+};
+
+/**
  * Verifica si ya existe una reserva para evitar duplicados.
  */
 const checkExisting = async (userId, sessionId, reservationDate) => {
@@ -67,10 +78,6 @@ const checkExisting = async (userId, sessionId, reservationDate) => {
         .query('SELECT reservation_id FROM coaching_reservations WHERE user_id = @userId AND session_id = @sessionId AND reservation_date = @reservationDate');
     return result.recordset.length > 0;
 };
-
-/**
- * Obtiene todas las sesiones que pertenecen a un coach específico.
- */
 const getSessionsByCoachId = async (coachId) => {
     const pool = await poolPromise;
     const result = await pool.request()
@@ -82,12 +89,13 @@ const getSessionsByCoachId = async (coachId) => {
 /**
  * Crea una nueva sesión vinculada a un coach.
  */
-const createSession = async (coachId, { title, description, day_of_week, start_time, end_time, is_coaching, category }) => {
+const createSession = async (coachId, { title, description, day_of_week, start_time, end_time, is_coaching, category, instructorName }) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('coachId', sql.Int, coachId)
         .input('title', sql.VarChar(150), title)
         .input('description', sql.VarChar(sql.MAX), description || null)
+        .input('instructorName', sql.VarChar(100), instructorName)
         .input('day_of_week', sql.TinyInt, day_of_week)
         .input('start_time', sql.VarChar(8), start_time)
         .input('end_time', sql.VarChar(8), end_time)
@@ -95,10 +103,8 @@ const createSession = async (coachId, { title, description, day_of_week, start_t
         .input('category', sql.VarChar(50), category || null)
         .query(`
             INSERT INTO coaching_sessions (title, description, instructor_name, day_of_week, start_time, end_time, is_coaching, category, coach_id)
-            OUTPUT INSERTED.session_id
-            SELECT @title, @description,
-                   (SELECT name FROM users WHERE user_id = @coachId),
-                   @day_of_week, @start_time, @end_time, @is_coaching, @category, @coachId
+            VALUES (@title, @description, @instructorName, @day_of_week, @start_time, @end_time, @is_coaching, @category, @coachId);
+            SELECT SCOPE_IDENTITY() AS session_id;
         `);
     return result.recordset[0].session_id;
 };
@@ -106,8 +112,20 @@ const createSession = async (coachId, { title, description, day_of_week, start_t
 /**
  * Actualiza una sesión, verificando que pertenece al coach.
  */
-const updateSession = async (sessionId, coachId, { title, description, day_of_week, start_time, end_time, is_coaching, category }) => {
+const updateSession = async (sessionId, coachId, { title, description, day_of_week, start_time, end_time, is_coaching, category }, isAdmin = false) => {
     const pool = await poolPromise;
+    let queryStr = `
+        UPDATE coaching_sessions
+        SET title = @title, description = @description,
+            day_of_week = @day_of_week, start_time = @start_time,
+            end_time = @end_time, is_coaching = @is_coaching, category = @category
+        WHERE session_id = @sessionId
+    `;
+    
+    if (!isAdmin) {
+        queryStr += ' AND coach_id = @coachId';
+    }
+
     const result = await pool.request()
         .input('sessionId', sql.Int, sessionId)
         .input('coachId', sql.Int, coachId)
@@ -118,25 +136,25 @@ const updateSession = async (sessionId, coachId, { title, description, day_of_we
         .input('end_time', sql.VarChar(8), end_time)
         .input('is_coaching', sql.Bit, is_coaching ? 1 : 0)
         .input('category', sql.VarChar(50), category || null)
-        .query(`
-            UPDATE coaching_sessions
-            SET title = @title, description = @description,
-                day_of_week = @day_of_week, start_time = @start_time,
-                end_time = @end_time, is_coaching = @is_coaching, category = @category
-            WHERE session_id = @sessionId AND coach_id = @coachId
-        `);
+        .query(queryStr);
     return result.rowsAffected[0] > 0;
 };
 
 /**
- * Elimina una sesión, verificando que pertenece al coach.
+ * Elimina una sesión, verificando que pertenece al coach (excepto si es admin).
  */
-const deleteSession = async (sessionId, coachId) => {
+const deleteSession = async (sessionId, coachId, isAdmin = false) => {
     const pool = await poolPromise;
+    let queryStr = 'DELETE FROM coaching_sessions WHERE session_id = @sessionId';
+    
+    if (!isAdmin) {
+        queryStr += ' AND coach_id = @coachId';
+    }
+
     const result = await pool.request()
         .input('sessionId', sql.Int, sessionId)
         .input('coachId', sql.Int, coachId)
-        .query('DELETE FROM coaching_sessions WHERE session_id = @sessionId AND coach_id = @coachId');
+        .query(queryStr);
     return result.rowsAffected[0] > 0;
 };
 
@@ -146,6 +164,7 @@ module.exports = {
     createReservation,
     deleteReservation,
     checkExisting,
+    getUserNameById,
     // --- Coach management ---
     getSessionsByCoachId,
     createSession,

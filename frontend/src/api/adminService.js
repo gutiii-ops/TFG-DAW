@@ -24,12 +24,86 @@ export const getSupportTickets = async (page = 1) => {
  */
 export const getAdminProducts = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/products`);
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`${API_BASE_URL}/products`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         if (!response.ok) throw new Error('Error al cargar productos');
         return await response.json();
     } catch (error) {
         console.error(error);
         return [];
+    }
+};
+
+/**
+ * Crea un nuevo producto en el inventario.
+ */
+export const createAdminProduct = async (productData) => {
+    try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`${API_BASE_URL}/products`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productData)
+        });
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error || 'Error al crear producto');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+/**
+ * Actualiza un producto existente en el inventario.
+ */
+export const updateAdminProduct = async (productId, productData) => {
+    try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productData)
+        });
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error || 'Error al actualizar producto');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+/**
+ * Elimina un producto del inventario.
+ */
+export const deleteAdminProduct = async (productId) => {
+    try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error || 'Error al eliminar producto');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
 };
 
@@ -81,7 +155,10 @@ export const updateUserRole = async (userId, roleId) => {
             },
             body: JSON.stringify({ userId, roleId })
         });
-        if (!response.ok) throw new Error('Error al actualizar el rol');
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || 'Error al actualizar el rol');
+        }
         return await response.json();
     } catch (error) {
         console.error(error);

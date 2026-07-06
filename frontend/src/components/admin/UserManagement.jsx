@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SubViewHeader } from './SubViewHeader';
 import { getUsers, updateUserRole } from '../../api/adminService';
+import { AuthContext } from '../../context/AuthContext';
 import '../../styles/components/admin.css';
 
 export const UserManagement = () => {
+  const { user } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -50,7 +52,7 @@ export const UserManagement = () => {
       // Opcional: Recargar para traer los permisos actualizados del nuevo rol
       fetchUsers();
     } catch (error) {
-      alert("Error al cambiar el rol");
+      alert(error.message || "Error al cambiar el rol");
     }
   };
 
@@ -101,6 +103,8 @@ export const UserManagement = () => {
                       value={u.role_id || ''} 
                       onChange={(e) => handleRoleChange(u.user_id, e.target.value)}
                       className="role-selector-inline"
+                      disabled={u.role_name === 'Admin' || Number(u.user_id) === Number(user?.id)}
+                      title={u.role_name === 'Admin' || Number(u.user_id) === Number(user?.id) ? "No se puede modificar el rol de Administradores ni el propio" : "Cambiar rol"}
                     >
                       <option value="" disabled>Sin Rol</option>
                       {roles.map(r => (

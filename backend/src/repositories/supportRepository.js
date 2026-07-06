@@ -96,12 +96,24 @@ const createMessage = async (ticketId, senderId, messageText) => {
         .query('UPDATE support_tickets SET updated_at = GETDATE() WHERE ticket_id = @ticketId');
 };
 
+/**
+ * Obtiene un ticket por su ID numérico.
+ */
+const getById = async (ticketId) => {
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('ticketId', sql.Int, ticketId)
+        .query('SELECT * FROM support_tickets WHERE ticket_id = @ticketId');
+    return result.recordset[0] || null;
+};
+
 module.exports = {
     getTicketsPaginated,
     getTicketsByUser,
     getMessagesByTicket,
     createTicket,
-    createMessage
+    createMessage,
+    getById
 };
 
 

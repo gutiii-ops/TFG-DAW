@@ -13,13 +13,36 @@ import '../../styles/pages/dashboard.css';
 
 import { UserManagement } from '../../components/admin/UserManagement';
 import { AdminSupport } from '../../components/admin/AdminSupport';
+import { InventoryManagement } from '../../components/admin/InventoryManagement';
+
+const MembershipRequiredAlert = () => {
+  const { setActiveSection } = useDashboardNav();
+  
+  return (
+    <div className="empty-state" style={{ padding: '4rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+      <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🔒</div>
+      <h2 style={{ color: 'var(--text)', marginBottom: '1rem' }}>Acceso Restringido</h2>
+      <p style={{ color: 'var(--muted)', maxWidth: '500px', lineHeight: '1.6', marginBottom: '2rem' }}>
+        Para visualizar y poder usar estas funcionalidades debes poseer una membresía activa en el gimnasio.
+      </p>
+      <button 
+        className="admin-search-btn" 
+        onClick={() => setActiveSection('subscriptions')}
+        style={{ background: 'var(--y)', color: 'var(--bg)', fontWeight: 'bold', padding: '0.8rem 1.5rem', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
+      >
+        Ir a Membresías
+      </button>
+    </div>
+  );
+};
 
 // Contenido interno del dashboard (consume el contexto)
 const DashboardContent = () => {
   const { user, role } = useContext(AuthContext);
   const { activeSection, setActiveSection } = useDashboardNav();
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({ totalSpent: 0, lastOrder: 'N/A' });
+  const [stats, setStats] = useState({ totalSpent: 0, lastOrder: 'N/A', planName: 'Sin Plan', expiryDate: 'N/A' });
+  const [hasActiveSub, setHasActiveSub] = useState(false);
   const userRole = role || 'User';
 
   useEffect(() => {
@@ -28,31 +51,49 @@ const DashboardContent = () => {
         const token = localStorage.getItem('jwt_token');
         if (!token || !user?.id) return;
 
-        const response = await fetch(`http://localhost:8000/api/orders/user/${user.id}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        // 1. Cargar estadísticas de pedidos
+        try {
+          const ordersRes = await fetch(`http://localhost:8000/api/orders/user/${user.id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (ordersRes.ok) {
+            const orders = await ordersRes.json();
+            const total = orders.reduce((acc, order) => acc + (Number(order.total_price) || 0), 0);
+            const lastDate = orders.length > 0
+              ? new Date(orders[0].order_date).toLocaleDateString()
+              : 'N/A';
 
-        if (response.ok) {
-          const orders = await response.json();
-          const total = orders.reduce((acc, order) => acc + (Number(order.total_price) || 0), 0);
-          const lastDate = orders.length > 0
-            ? new Date(orders[0].order_date).toLocaleDateString()
-            : 'N/A';
+            setStats(prev => ({
+              ...prev,
+              totalSpent: total.toFixed(2),
+              lastOrder: lastDate
+            }));
+          }
+        } catch (err) {
+          console.error("Error cargando pedidos:", err);
+        }
 
+        // 2. Cargar suscripción
+        try {
           const subRes = await fetch(`http://localhost:8000/api/subscriptions/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
-          const subData = await subRes.json();
-
-          setStats({
-            totalSpent: total.toFixed(2),
-            lastOrder: lastDate,
-            planName: subData.plan_name || 'Sin Plan',
-            expiryDate: subData.end_date ? new Date(subData.end_date).toLocaleDateString() : 'N/A'
-          });
+          if (subRes.ok) {
+            const subData = await subRes.json();
+            const active = !!subData.subscription_id;
+            setHasActiveSub(active);
+            setStats(prev => ({
+              ...prev,
+              planName: subData.plan_name || 'Sin Plan',
+              expiryDate: subData.end_date ? new Date(subData.end_date).toLocaleDateString() : 'N/A'
+            }));
+          }
+        } catch (err) {
+          console.error("Error cargando suscripción:", err);
         }
+
       } catch (error) {
-        console.error("Error cargando el dashboard:", error);
+        console.error("Error general de dashboard:", error);
       } finally {
         setTimeout(() => setLoading(false), 600);
       }
@@ -92,10 +133,13 @@ const DashboardContent = () => {
       case 'profile':      return <ProfileSection user={user} />;
       case 'orders':       return <OrdersSection user={user} />;
       case 'subscriptions': return <MembershipSection user={user} />;
-      case 'coaching':     return <CoachingSection />;
-      case 'support':      return <SupportSection />;
+      case 'coaching':     
+        return userRole === 'User' && !hasActiveSub ? <MembershipRequiredAlert /> : <CoachingSection />;
+      case 'support':      
+        return userRole === 'User' && !hasActiveSub ? <MembershipRequiredAlert /> : <SupportSection />;
       case 'users-admin':   return <UserManagement />;
       case 'admin-support': return <AdminSupport />;
+      case 'inventory':     return <InventoryManagement />;
       default:
         return (
           <div className="empty-state">

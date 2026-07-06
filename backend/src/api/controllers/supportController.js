@@ -33,10 +33,14 @@ const getUserTickets = async (req, res) => {
 const getMessages = async (req, res) => {
     try {
         const { ticketId } = req.params;
-        const result = await supportService.getTicketMessages(ticketId);
+        const requestingUserId = req.userId;
+        const userRole = req.userRole;
+
+        const result = await supportService.getTicketMessages(ticketId, requestingUserId, userRole);
         res.json(result);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        const statusCode = error.status || 500;
+        res.status(statusCode).json({ error: error.message });
     }
 };
 
@@ -60,12 +64,15 @@ const createTicket = async (req, res) => {
 const replyTicket = async (req, res) => {
     try {
         const senderId = req.userId;
+        const userRole = req.userRole;
         const { ticketId } = req.params;
         const { message } = req.body;
-        const result = await supportService.replyToTicket(ticketId, senderId, message);
+
+        const result = await supportService.replyToTicket(ticketId, senderId, message, userRole);
         res.json(result);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        const statusCode = error.status || 500;
+        res.status(statusCode).json({ error: error.message });
     }
 };
 

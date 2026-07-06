@@ -78,8 +78,22 @@ const getAllUsers = async (search, page, limit) => {
 /**
  * Cambia el rol de un usuario (Acción de Admin).
  */
-const changeUserRole = async (userId, roleId) => {
-  // Aquí podríamos añadir validaciones extra, ej: no quitarse el rol a uno mismo
+const changeUserRole = async (userId, roleId, requestingUserId) => {
+  // 1. Validación: No puedes modificarte el rol a ti mismo
+  if (Number(userId) === Number(requestingUserId)) {
+    const error = new Error('No puedes modificar tu propio rol.');
+    error.status = 400;
+    throw error;
+  }
+
+  // 2. Validación: No puedes modificar el rol de otro usuario que actualmente sea Administrador
+  const currentRoleName = await userRepository.getUserRoleName(userId);
+  if (currentRoleName === 'Admin') {
+    const error = new Error('Acción denegada: No se puede modificar el rol de un Administrador.');
+    error.status = 403;
+    throw error;
+  }
+
   return await userRepository.updateRole(userId, roleId);
 };
 

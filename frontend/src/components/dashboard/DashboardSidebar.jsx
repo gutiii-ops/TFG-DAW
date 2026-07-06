@@ -17,7 +17,7 @@ const DashboardSidebar = ({ user, role, activeSection, onSectionChange }) => {
       items: [
         { id: 'orders', label: 'Mis Compras', permission: 'VIEW_DASHBOARD' },
         { id: 'subscriptions', label: 'Membresía', roles: ['User'] }, // Especial para clientes
-        { id: 'coaching', label: 'Coaching', permission: 'MANAGE_SESSIONS' },
+        { id: 'coaching', label: 'Coaching', roles: ['User', 'Coach', 'Admin'] },
         { id: 'support', label: 'Soporte', permission: 'VIEW_DASHBOARD' },
       ]
     },
@@ -27,7 +27,6 @@ const DashboardSidebar = ({ user, role, activeSection, onSectionChange }) => {
         { id: 'users-admin', label: 'Usuarios', permission: 'MANAGE_USERS' },
         { id: 'admin-support', label: 'Asistencia Admin', permission: 'MANAGE_SUPPORT' },
         { id: 'inventory', label: 'Inventario', permission: 'MANAGE_INVENTORY' },
-        { id: 'sales', label: 'Ventas Globales', permission: 'VIEW_GLOBAL_SALES' },
       ]
     }
   ];

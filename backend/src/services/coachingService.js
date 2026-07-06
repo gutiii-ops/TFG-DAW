@@ -33,21 +33,30 @@ const getCoachSessions = async (coachId) => {
 };
 
 const createCoachSession = async (coachId, data) => {
+    console.log('Validando data:', data);
     if (!data.title || !data.day_of_week || !data.start_time || !data.end_time) {
         throw new Error('Faltan campos obligatorios: título, día, hora inicio y hora fin.');
     }
-    const sessionId = await coachingRepository.createSession(coachId, data);
+    console.log('Obteniendo instructorName para coachId:', coachId);
+    const instructorName = await coachingRepository.getUserNameById(coachId);
+    console.log('InstructorName:', instructorName);
+    if (!instructorName) {
+        throw new Error('Usuario no encontrado.');
+    }
+    console.log('Creando sesión con data:', { ...data, instructorName });
+    const sessionId = await coachingRepository.createSession(coachId, { ...data, instructorName });
+    console.log('SessionId creado:', sessionId);
     return { success: true, sessionId };
 };
 
-const updateCoachSession = async (sessionId, coachId, data) => {
-    const updated = await coachingRepository.updateSession(sessionId, coachId, data);
+const updateCoachSession = async (sessionId, coachId, data, isAdmin = false) => {
+    const updated = await coachingRepository.updateSession(sessionId, coachId, data, isAdmin);
     if (!updated) throw new Error('No se pudo actualizar. La sesión no existe o no te pertenece.');
     return { success: true };
 };
 
-const deleteCoachSession = async (sessionId, coachId) => {
-    const deleted = await coachingRepository.deleteSession(sessionId, coachId);
+const deleteCoachSession = async (sessionId, coachId, isAdmin = false) => {
+    const deleted = await coachingRepository.deleteSession(sessionId, coachId, isAdmin);
     if (!deleted) throw new Error('No se pudo eliminar. La sesión no existe o no te pertenece.');
     return { success: true };
 };

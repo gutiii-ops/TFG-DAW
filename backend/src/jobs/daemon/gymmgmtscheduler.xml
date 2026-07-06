@@ -1,0 +1,31 @@
+<service>
+	<id>gymmgmtscheduler.exe</id>
+	<name>GymMgmt Scheduler</name>
+	<description>Orquestador principal de tareas en segundo plano de GymMgmt</description>
+	<executable>C:\Program Files\nodejs\node.exe</executable>
+	<argument>--harmony</argument>
+	<argument>C:\Users\Alvaro\Documents\GitHub\TFG-DAW\backend\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>C:\Users\Alvaro\Documents\GitHub\TFG-DAW\backend\src\jobs\scheduler.js</argument>
+	<argument>--scriptoptions=</argument>
+	<argument>--log</argument>
+	<argument>GymMgmt Scheduler wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.5</argument>
+	<argument>--wait</argument>
+	<argument>2</argument>
+	<argument>--maxrestarts</argument>
+	<argument>10</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<logmode>rotate</logmode>
+	<stoptimeout>30sec</stoptimeout>
+	<serviceaccount>
+		<domain>P90</domain>
+		<user>LocalSystem</user>
+		<password></password>
+	</serviceaccount>
+	<workingdirectory>C:\Users\Alvaro\Documents\GitHub\TFG-DAW\backend\src\scripts</workingdirectory>
+</service>
